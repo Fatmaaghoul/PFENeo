@@ -21,6 +21,9 @@ axios.interceptors.request.use(
     const token = Cookies.get('token'); // Récupère le token depuis les cookies
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      
+    }
+    if (!(config.data instanceof FormData)) {
       config.headers.Accept = 'application/json';
       config.headers['Content-Type'] = 'application/json';
     }

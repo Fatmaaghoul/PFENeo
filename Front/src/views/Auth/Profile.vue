@@ -196,9 +196,11 @@ export default {
     const submitForm = async () => {
       try {
         const token = Cookies.get('token');
-        const response = await axios.put("/api/profile", editUser.value, {
+        const response = await axios.put("/api/profile", editUser.value,
+         {
           headers: { Authorization: `Bearer ${token}` }
-        });
+        }
+      );
 
         successMessage.value = "Profil mis à jour avec succès !";
         errorMessage.value = "";

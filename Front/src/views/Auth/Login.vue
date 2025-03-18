@@ -59,7 +59,10 @@
          
             <router-link to="/register" class="signup-link">Sign up</router-link>
           </p>
-         
+          <div>
+            <br>
+            <button class="submit-btn-g" @click="loginWithGoogle">Login via Google</button>
+          </div>
         </div>
 
         <!-- Partie illustration -->
@@ -281,6 +284,23 @@ h2 {
   transform: translateY(-1px);
 }
 
+.submit-btn-g {
+  width: 100%;
+  padding: 0.600rem;
+  background-color: #e57846;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submit-btn-g:hover {
+  background-color: #e57846;
+  transform: translateY(-1px);
+}
 
 .social-divider {
   text-align: center;

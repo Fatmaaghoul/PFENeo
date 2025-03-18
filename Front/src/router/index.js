@@ -14,6 +14,9 @@ import ForgotPassword from '@/views/Auth/ForgotPassword.vue';
 import Home from '@/views/Home/Home.vue';
 import ConfirmEmail from '@/views/Auth/ConfirmEmail.vue';
 import Cookies from 'js-cookie'; // Import de js-cookie
+import UploadDocument from '@/views/Documents/UploadDocument.vue';
+import SideBare from '@/views/Documents/SideBare.vue';
+import AddDocument from '@/views/Documents/AddDocument.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,8 +35,30 @@ const router = createRouter({
     {
       path: '/document',
       name: 'Document',
-      component: ListDocument,
-      meta: { requiresAuth: true }
+      component: SideBare,
+      meta: { requiresAuth: true },
+      children :[
+        {
+          path: '',
+          redirect: '/document/list'
+        },
+        {
+          path : 'Upload',
+          name : 'Upload',
+          component : UploadDocument
+        },
+        {
+          path : 'List',
+          name : 'List',
+          component : ListDocument
+        },
+        {
+          path : 'Add',
+          name : 'Add',
+          component : AddDocument
+        }
+
+      ]
     },
     {
       path: '/profile',

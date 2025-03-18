@@ -9,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Docvision.Persistance;
 using Docvision.Models;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 
 namespace Back.Controllers
@@ -27,20 +29,20 @@ namespace Back.Controllers
         }
 
 
-        [HttpPost("upload")]
-        public async Task<IActionResult> UploadDocument(IFormFile file, [FromQuery] Guid? userId)
+        [HttpPost("add")]
+        [Consumes("multipart/form-data")]  // Ajoutez cette ligne
+        public async Task<IActionResult> UploadDocument(IFormFile file)
         {
             try
             {
+               // var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+          //  if (string.IsNullOrEmpty(userId))
+           // {
+           //     return Unauthorized("Utilisateur non authentifié.");
+          //  }
                 if (file == null || file.Length == 0)
                     return BadRequest("Aucun fichier sélectionné.");
-                ApplicationUser? user = null;
-                if (userId.HasValue)
-                {
-                    user = await _context.Users.FindAsync(userId.Value);
-                    if (user == null)
-                        return BadRequest("Utilisateur introuvable.");
-                }
+
                 using var stream = file.OpenReadStream();
 
                 var uploadParams = new RawUploadParams
@@ -56,15 +58,14 @@ namespace Back.Controllers
 
                 if (uploadResult.Error != null)
                     return BadRequest($"Erreur Cloudinary : {uploadResult.Error.Message}");
+
                 var document = new Document
                 {
                     Id = Guid.NewGuid(),
                     Name = file.FileName,
                     UploadDate = DateTime.UtcNow,
                     FileUrl = uploadResult.SecureUrl.ToString(),
-                    UserId = user != null ? user.Id : null,  // Pas besoin de convertir en Guid, car user.Id est déjà un string.
-
-                    User = user,
+                    UserId = "c3cfcd42-689f-4c50-8a4b-5f3bff2f469f",
                 };
 
                 _context.Documents.Add(document);
@@ -77,6 +78,7 @@ namespace Back.Controllers
                 return BadRequest($"Erreur lors de l'upload du document : {ex.Message}");
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllDocuments()
         {

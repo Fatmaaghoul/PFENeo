@@ -97,6 +97,9 @@ namespace Docvision.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("FileUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -116,6 +119,8 @@ namespace Docvision.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("UserId");
 
@@ -280,6 +285,10 @@ namespace Docvision.Migrations
 
             modelBuilder.Entity("Docvision.Models.Document", b =>
                 {
+                    b.HasOne("Docvision.Models.ApplicationUser", null)
+                        .WithMany("Documents")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("Docvision.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -349,6 +358,11 @@ namespace Docvision.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Docvision.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Documents");
                 });
 
             modelBuilder.Entity("Docvision.Models.Document", b =>

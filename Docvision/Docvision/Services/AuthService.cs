@@ -4,7 +4,6 @@ using Docvision.Helpers;
 using Docvision.Models;
 using Docvision.Repositories;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -26,8 +25,6 @@ namespace Docvision.Services
         private readonly IUrlHelperFactory _urlHelperFactory;
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly JwtHelper _jwtHelper;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<ApplicationUser> _userManager; 
 
 
 
@@ -39,10 +36,7 @@ namespace Docvision.Services
             IHttpContextAccessor httpContextAccessor,
             IUrlHelperFactory urlHelperFactory,
             IActionContextAccessor actionContextAccessor,
-            JwtHelper jwtHelper,
-            RoleManager<IdentityRole> roleManager,
-                    UserManager<ApplicationUser> userManager)
-
+            JwtHelper jwtHelper)
         {
             _authRepository = authRepository;
             _emailService = emailService;
@@ -51,11 +45,7 @@ namespace Docvision.Services
             _httpContextAccessor = httpContextAccessor;
             _urlHelperFactory = urlHelperFactory;
             _actionContextAccessor = actionContextAccessor;
-            _jwtHelper = jwtHelper;
-            _roleManager = roleManager;
-            _userManager = userManager;
-
-
+            _jwtHelper = jwtHelper; 
         }
 
         private IUrlHelper GetUrlHelper()
@@ -81,19 +71,6 @@ namespace Docvision.Services
             var result = await _authRepository.CreateUserAsync(user, request.Password);
             if (!result.Succeeded)
                 return new ResponseModel { Success = false, Message = string.Join(", ", result.Errors.Select(e => e.Description)) };
-
-            // Vérifiez si le rôle "User" existe, sinon créez-le
-            if (!await _roleManager.RoleExistsAsync("User"))
-            {
-                await _roleManager.CreateAsync(new IdentityRole("User"));
-            }
-
-            // Attribuez le rôle "User" à l'utilisateur
-            var roleResult = await _userManager.AddToRoleAsync(user, "User");
-            if (!roleResult.Succeeded)
-            {
-                return new ResponseModel { Success = false, Message = "Erreur lors de l'attribution du rôle." };
-            }
 
             var confirmationToken = await _authRepository.GenerateEmailConfirmationTokenAsync(user);
 
