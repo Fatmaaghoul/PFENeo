@@ -1,170 +1,170 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\",
+  "WorkspaceRootPath": "F:\\end\\PFENeo\\Docvision\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\controllers\\documentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\documentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\services\\profileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\services\\profileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\profiles\\mappingprofile .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\profiles\\mappingprofile .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\repositories\\iprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\repositories\\iprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\services\\iprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\services\\iprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\repositories\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\repositories\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\models\\responsemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\models\\responsemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\repositories\\iauthrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\repositories\\iauthrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\models\\document.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\models\\document.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Migrations\\20250317001935_startt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Docvision\\Migrations\\20250317001935_startt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\persistance\\context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\persistance\\context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\repositories\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\repositories\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\helpers\\jwthelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\helpers\\jwthelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\dtos\\resetpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\resetpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\dtos\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\dtos\\refreshtokenrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\refreshtokenrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\dtos\\profileresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\profileresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\dtos\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\dtos\\forgotpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\forgotpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\dtos\\editprofilerequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\editprofilerequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\dtos\\authresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\authresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\models\\image.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\models\\image.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\controllers\\documentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\documentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\services\\profileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\services\\profileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\profiles\\mappingprofile .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\profiles\\mappingprofile .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\repositories\\iprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\repositories\\iprofilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\services\\iprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\services\\iprofileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\repositories\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\repositories\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\models\\responsemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\models\\responsemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\repositories\\iauthrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\repositories\\iauthrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\models\\document.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\models\\document.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\persistance\\context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\persistance\\context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\repositories\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\repositories\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\helpers\\jwthelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\helpers\\jwthelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\dtos\\resetpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\resetpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\dtos\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\registerrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\dtos\\refreshtokenrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\refreshtokenrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\dtos\\profileresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\profileresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\dtos\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\loginrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\dtos\\forgotpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\forgotpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\dtos\\editprofilerequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\editprofilerequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\dtos\\authresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\authresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\models\\image.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\models\\image.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Migrations\\20250316235607_start.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Docvision\\Migrations\\20250316235607_start.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\repositories\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\services\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\services\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\services\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\services\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\services\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\services\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\repositories\\profilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\repositories\\profilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\repositories\\profilerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\migrations\\20250316045407_initialecreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\migrations\\20250316045407_initialecreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\migrations\\20250316045407_initialecreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\docvision.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\docvision.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\docvision.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\services\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\services\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\services\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\docvision\\neoledgepfe-master\\docvision\\docvision\\migrations\\20250316045511_majidentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\migrations\\20250316045511_majidentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\migrations\\20250316045511_majidentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\migrations\\20250317001935_startt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\migrations\\20250317001935_startt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|f:\\end\\pfeneo\\docvision\\docvision\\migrations\\20250316235607_start.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\migrations\\20250316235607_start.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -174,7 +174,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Bookmark",
@@ -194,427 +194,397 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "MappingProfile .cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Profiles\\MappingProfile .cs",
-              "RelativeDocumentMoniker": "Docvision\\Profiles\\MappingProfile .cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Profiles\\MappingProfile .cs",
-              "RelativeToolTip": "Docvision\\Profiles\\MappingProfile .cs",
-              "ViewState": "AQIAAAoAAAAAAAAAAAAQwAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-17T23:48:19.339Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "ApplicationUser.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Models\\ApplicationUser.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Models\\ApplicationUser.cs",
               "RelativeDocumentMoniker": "Docvision\\Models\\ApplicationUser.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Models\\ApplicationUser.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Models\\ApplicationUser.cs",
               "RelativeToolTip": "Docvision\\Models\\ApplicationUser.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T03:03:47.554Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-16T03:03:47.554Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Docvision\\Controllers\\AuthController.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Docvision\\Controllers\\AuthController.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAAB4AAAA2AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T05:38:01.52Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "IProfileRepository.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Repositories\\IProfileRepository.cs",
+              "RelativeDocumentMoniker": "Docvision\\Repositories\\IProfileRepository.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Repositories\\IProfileRepository.cs",
+              "RelativeToolTip": "Docvision\\Repositories\\IProfileRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T15:13:09.885Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "Docvision\\Controllers\\AuthController.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "Docvision\\Controllers\\AuthController.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAAB4AAAA2AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T05:38:01.52Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "IProfileRepository.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Repositories\\IProfileRepository.cs",
-              "RelativeDocumentMoniker": "Docvision\\Repositories\\IProfileRepository.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Repositories\\IProfileRepository.cs",
-              "RelativeToolTip": "Docvision\\Repositories\\IProfileRepository.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T15:13:09.885Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "ProfileService.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\ProfileService.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\ProfileService.cs",
               "RelativeDocumentMoniker": "Docvision\\Services\\ProfileService.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\ProfileService.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\ProfileService.cs",
               "RelativeToolTip": "Docvision\\Services\\ProfileService.cs",
               "ViewState": "AQIAAB4AAAAAAAAAAAAYwB4AAABkAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T15:12:44.827Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-16T15:12:44.827Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProfileController.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Controllers\\ProfileController.cs",
+              "RelativeDocumentMoniker": "Docvision\\Controllers\\ProfileController.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Controllers\\ProfileController.cs",
+              "RelativeToolTip": "Docvision\\Controllers\\ProfileController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T15:12:00.919Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ProfileController.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Controllers\\ProfileController.cs",
-              "RelativeDocumentMoniker": "Docvision\\Controllers\\ProfileController.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Controllers\\ProfileController.cs",
-              "RelativeToolTip": "Docvision\\Controllers\\ProfileController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T15:12:00.919Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
               "Title": "DocumentController.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Controllers\\DocumentController.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Controllers\\DocumentController.cs",
               "RelativeDocumentMoniker": "Docvision\\Controllers\\DocumentController.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Controllers\\DocumentController.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Controllers\\DocumentController.cs",
               "RelativeToolTip": "Docvision\\Controllers\\DocumentController.cs",
-              "ViewState": "AQIAACAAAAAAAAAAAAAuwCkAAAAMAAAA",
+              "ViewState": "AQIAABIAAAAAAAAAAAAAAHoAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-16T04:36:47.174Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "UserController.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Controllers\\UserController.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Controllers\\UserController.cs",
               "RelativeDocumentMoniker": "Docvision\\Controllers\\UserController.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Controllers\\UserController.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Controllers\\UserController.cs",
               "RelativeToolTip": "Docvision\\Controllers\\UserController.cs",
               "ViewState": "AQIAAAYAAAAAAAAAAAAAABMAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T14:05:51.103Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-16T14:05:51.103Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "IProfileService.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\IProfileService.cs",
-              "RelativeDocumentMoniker": "Docvision\\Services\\IProfileService.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\IProfileService.cs",
-              "RelativeToolTip": "Docvision\\Services\\IProfileService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAA5AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T15:12:26.028Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "AuthService.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\AuthService.cs",
-              "RelativeDocumentMoniker": "Docvision\\Services\\AuthService.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\AuthService.cs",
-              "RelativeToolTip": "Docvision\\Services\\AuthService.cs",
-              "ViewState": "AQIAAFkAAAAAAAAAAAAgwJkAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T02:57:22.518Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\UserService.cs",
-              "RelativeDocumentMoniker": "Docvision\\Services\\UserService.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\UserService.cs",
-              "RelativeToolTip": "Docvision\\Services\\UserService.cs",
-              "ViewState": "AQIAAA0AAAAAAAAAAAAQwAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T14:04:17.229Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "AuthRepository.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Repositories\\AuthRepository.cs",
-              "RelativeDocumentMoniker": "Docvision\\Repositories\\AuthRepository.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Repositories\\AuthRepository.cs",
-              "RelativeToolTip": "Docvision\\Repositories\\AuthRepository.cs",
-              "ViewState": "AQIAAA0AAAAAAAAAAAAQwAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T05:23:23.305Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "ResponseModel.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Models\\ResponseModel.cs",
-              "RelativeDocumentMoniker": "Docvision\\Models\\ResponseModel.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Models\\ResponseModel.cs",
-              "RelativeToolTip": "Docvision\\Models\\ResponseModel.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T23:57:51.774Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "IAuthRepository.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Repositories\\IAuthRepository.cs",
-              "RelativeDocumentMoniker": "Docvision\\Repositories\\IAuthRepository.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Repositories\\IAuthRepository.cs",
-              "RelativeToolTip": "Docvision\\Repositories\\IAuthRepository.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T19:50:36.631Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "Document.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Models\\Document.cs",
-              "RelativeDocumentMoniker": "Docvision\\Models\\Document.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Models\\Document.cs",
-              "RelativeToolTip": "Docvision\\Models\\Document.cs",
-              "ViewState": "AQIAAAcAAAAAAAAAAAA6wBYAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T04:00:26.959Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "20250317001935_startt.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Migrations\\20250317001935_startt.cs",
-              "RelativeDocumentMoniker": "Docvision\\Migrations\\20250317001935_startt.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Migrations\\20250317001935_startt.cs",
-              "RelativeToolTip": "Docvision\\Migrations\\20250317001935_startt.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-17T00:19:35.971Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "Context.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Persistance\\Context.cs",
-              "RelativeDocumentMoniker": "Docvision\\Persistance\\Context.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Persistance\\Context.cs",
-              "RelativeToolTip": "Docvision\\Persistance\\Context.cs",
-              "ViewState": "AQIAAA0AAAAAAAAAAAAQwAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T03:04:47.683Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "IUserRepository.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Repositories\\IUserRepository.cs",
-              "RelativeDocumentMoniker": "Docvision\\Repositories\\IUserRepository.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Repositories\\IUserRepository.cs",
-              "RelativeToolTip": "Docvision\\Repositories\\IUserRepository.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAYwAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T14:03:50.916Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "JwtHelper.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Helpers\\JwtHelper.cs",
-              "RelativeDocumentMoniker": "Docvision\\Helpers\\JwtHelper.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Helpers\\JwtHelper.cs",
-              "RelativeToolTip": "Docvision\\Helpers\\JwtHelper.cs",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T03:04:20.118Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "ResetPasswordRequest.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\ResetPasswordRequest.cs",
-              "RelativeDocumentMoniker": "Docvision\\Dtos\\ResetPasswordRequest.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\ResetPasswordRequest.cs",
-              "RelativeToolTip": "Docvision\\Dtos\\ResetPasswordRequest.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T04:02:51.506Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "RegisterRequest.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\RegisterRequest.cs",
-              "RelativeDocumentMoniker": "Docvision\\Dtos\\RegisterRequest.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\RegisterRequest.cs",
-              "RelativeToolTip": "Docvision\\Dtos\\RegisterRequest.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T04:01:47.396Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "RefreshTokenRequest.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\RefreshTokenRequest.cs",
-              "RelativeDocumentMoniker": "Docvision\\Dtos\\RefreshTokenRequest.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\RefreshTokenRequest.cs",
-              "RelativeToolTip": "Docvision\\Dtos\\RefreshTokenRequest.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T04:03:19.624Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "ProfileResponse.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\ProfileResponse.cs",
-              "RelativeDocumentMoniker": "Docvision\\Dtos\\ProfileResponse.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\ProfileResponse.cs",
-              "RelativeToolTip": "Docvision\\Dtos\\ProfileResponse.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T04:03:53.704Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "LoginRequest.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\LoginRequest.cs",
-              "RelativeDocumentMoniker": "Docvision\\Dtos\\LoginRequest.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\LoginRequest.cs",
-              "RelativeToolTip": "Docvision\\Dtos\\LoginRequest.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T04:02:07.881Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "ForgotPasswordRequest.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\ForgotPasswordRequest.cs",
-              "RelativeDocumentMoniker": "Docvision\\Dtos\\ForgotPasswordRequest.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\ForgotPasswordRequest.cs",
-              "RelativeToolTip": "Docvision\\Dtos\\ForgotPasswordRequest.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T04:02:22.723Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
-              "Title": "EditProfileRequest.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\EditProfileRequest.cs",
-              "RelativeDocumentMoniker": "Docvision\\Dtos\\EditProfileRequest.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\EditProfileRequest.cs",
-              "RelativeToolTip": "Docvision\\Dtos\\EditProfileRequest.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T04:03:06.799Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "AuthResponse.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\AuthResponse.cs",
-              "RelativeDocumentMoniker": "Docvision\\Dtos\\AuthResponse.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Dtos\\AuthResponse.cs",
-              "RelativeToolTip": "Docvision\\Dtos\\AuthResponse.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T04:03:37.691Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "Image.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Models\\Image.cs",
-              "RelativeDocumentMoniker": "Docvision\\Models\\Image.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Models\\Image.cs",
-              "RelativeToolTip": "Docvision\\Models\\Image.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T04:00:17.497Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 28,
-              "Title": "ImageController.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Controllers\\ImageController.cs",
-              "RelativeDocumentMoniker": "Docvision\\Controllers\\ImageController.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Controllers\\ImageController.cs",
-              "RelativeToolTip": "Docvision\\Controllers\\ImageController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T04:40:37.027Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Program.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Program.cs",
               "RelativeDocumentMoniker": "Docvision\\Program.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Program.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Program.cs",
               "RelativeToolTip": "Docvision\\Program.cs",
-              "ViewState": "AQIAAIkAAAAAAAAAAAAAwAAAAAAAAAAA",
+              "ViewState": "AQIAAD8AAAAAAAAAAAAAAE0AAABGAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-16T02:59:45.202Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 7,
+              "Title": "MappingProfile .cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Profiles\\MappingProfile .cs",
+              "RelativeDocumentMoniker": "Docvision\\Profiles\\MappingProfile .cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Profiles\\MappingProfile .cs",
+              "RelativeToolTip": "Docvision\\Profiles\\MappingProfile .cs",
+              "ViewState": "AQIAAAoAAAAAAAAAAAAQwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-17T23:48:19.339Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "IProfileService.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\IProfileService.cs",
+              "RelativeDocumentMoniker": "Docvision\\Services\\IProfileService.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\IProfileService.cs",
+              "RelativeToolTip": "Docvision\\Services\\IProfileService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAA5AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T15:12:26.028Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "Docvision\\Services\\AuthService.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\AuthService.cs",
+              "RelativeToolTip": "Docvision\\Services\\AuthService.cs",
+              "ViewState": "AQIAAFkAAAAAAAAAAAAgwJkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T02:57:22.518Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "Docvision\\Services\\UserService.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\UserService.cs",
+              "RelativeToolTip": "Docvision\\Services\\UserService.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAQwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T14:04:17.229Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AuthRepository.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Repositories\\AuthRepository.cs",
+              "RelativeDocumentMoniker": "Docvision\\Repositories\\AuthRepository.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Repositories\\AuthRepository.cs",
+              "RelativeToolTip": "Docvision\\Repositories\\AuthRepository.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAQwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T05:23:23.305Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ResponseModel.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Models\\ResponseModel.cs",
+              "RelativeDocumentMoniker": "Docvision\\Models\\ResponseModel.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Models\\ResponseModel.cs",
+              "RelativeToolTip": "Docvision\\Models\\ResponseModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T23:57:51.774Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IAuthRepository.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Repositories\\IAuthRepository.cs",
+              "RelativeDocumentMoniker": "Docvision\\Repositories\\IAuthRepository.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Repositories\\IAuthRepository.cs",
+              "RelativeToolTip": "Docvision\\Repositories\\IAuthRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T19:50:36.631Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Document.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Models\\Document.cs",
+              "RelativeDocumentMoniker": "Docvision\\Models\\Document.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Models\\Document.cs",
+              "RelativeToolTip": "Docvision\\Models\\Document.cs",
+              "ViewState": "AQIAAAcAAAAAAAAAAAA6wBYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T04:00:26.959Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "20250317001935_startt.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Migrations\\20250317001935_startt.cs",
+              "RelativeDocumentMoniker": "Docvision\\Migrations\\20250317001935_startt.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Migrations\\20250317001935_startt.cs",
+              "RelativeToolTip": "Docvision\\Migrations\\20250317001935_startt.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-17T00:19:35.971Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Context.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Persistance\\Context.cs",
+              "RelativeDocumentMoniker": "Docvision\\Persistance\\Context.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Persistance\\Context.cs",
+              "RelativeToolTip": "Docvision\\Persistance\\Context.cs",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAQwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T03:04:47.683Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "IUserRepository.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Repositories\\IUserRepository.cs",
+              "RelativeDocumentMoniker": "Docvision\\Repositories\\IUserRepository.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Repositories\\IUserRepository.cs",
+              "RelativeToolTip": "Docvision\\Repositories\\IUserRepository.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAYwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T14:03:50.916Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "JwtHelper.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Helpers\\JwtHelper.cs",
+              "RelativeDocumentMoniker": "Docvision\\Helpers\\JwtHelper.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Helpers\\JwtHelper.cs",
+              "RelativeToolTip": "Docvision\\Helpers\\JwtHelper.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T03:04:20.118Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ResetPasswordRequest.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\ResetPasswordRequest.cs",
+              "RelativeDocumentMoniker": "Docvision\\Dtos\\ResetPasswordRequest.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\ResetPasswordRequest.cs",
+              "RelativeToolTip": "Docvision\\Dtos\\ResetPasswordRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T04:02:51.506Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "RegisterRequest.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\RegisterRequest.cs",
+              "RelativeDocumentMoniker": "Docvision\\Dtos\\RegisterRequest.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\RegisterRequest.cs",
+              "RelativeToolTip": "Docvision\\Dtos\\RegisterRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T04:01:47.396Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "RefreshTokenRequest.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\RefreshTokenRequest.cs",
+              "RelativeDocumentMoniker": "Docvision\\Dtos\\RefreshTokenRequest.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\RefreshTokenRequest.cs",
+              "RelativeToolTip": "Docvision\\Dtos\\RefreshTokenRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T04:03:19.624Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "ProfileResponse.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\ProfileResponse.cs",
+              "RelativeDocumentMoniker": "Docvision\\Dtos\\ProfileResponse.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\ProfileResponse.cs",
+              "RelativeToolTip": "Docvision\\Dtos\\ProfileResponse.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T04:03:53.704Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "LoginRequest.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\LoginRequest.cs",
+              "RelativeDocumentMoniker": "Docvision\\Dtos\\LoginRequest.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\LoginRequest.cs",
+              "RelativeToolTip": "Docvision\\Dtos\\LoginRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T04:02:07.881Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "ForgotPasswordRequest.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\ForgotPasswordRequest.cs",
+              "RelativeDocumentMoniker": "Docvision\\Dtos\\ForgotPasswordRequest.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\ForgotPasswordRequest.cs",
+              "RelativeToolTip": "Docvision\\Dtos\\ForgotPasswordRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T04:02:22.723Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "EditProfileRequest.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\EditProfileRequest.cs",
+              "RelativeDocumentMoniker": "Docvision\\Dtos\\EditProfileRequest.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\EditProfileRequest.cs",
+              "RelativeToolTip": "Docvision\\Dtos\\EditProfileRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T04:03:06.799Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "AuthResponse.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\AuthResponse.cs",
+              "RelativeDocumentMoniker": "Docvision\\Dtos\\AuthResponse.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Dtos\\AuthResponse.cs",
+              "RelativeToolTip": "Docvision\\Dtos\\AuthResponse.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T04:03:37.691Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Image.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Models\\Image.cs",
+              "RelativeDocumentMoniker": "Docvision\\Models\\Image.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Models\\Image.cs",
+              "RelativeToolTip": "Docvision\\Models\\Image.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T04:00:17.497Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "ImageController.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Controllers\\ImageController.cs",
+              "RelativeDocumentMoniker": "Docvision\\Controllers\\ImageController.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Controllers\\ImageController.cs",
+              "RelativeToolTip": "Docvision\\Controllers\\ImageController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-16T04:40:37.027Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
               "Title": "appsettings.json",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\appsettings.json",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\appsettings.json",
               "RelativeDocumentMoniker": "Docvision\\appsettings.json",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\appsettings.json",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\appsettings.json",
               "RelativeToolTip": "Docvision\\appsettings.json",
               "ViewState": "AQIAAA8AAAAAAAAAAAAAABAAAAC4AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-03-16T03:21:08.745Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-16T03:21:08.745Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 40,
               "Title": "20250316235607_start.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Migrations\\20250316235607_start.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Migrations\\20250316235607_start.cs",
               "RelativeDocumentMoniker": "Docvision\\Migrations\\20250316235607_start.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Migrations\\20250316235607_start.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Migrations\\20250316235607_start.cs",
               "RelativeToolTip": "Docvision\\Migrations\\20250316235607_start.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-16T23:56:07.677Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-16T23:56:07.677Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 30,
               "Title": "UserRepository.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Repositories\\UserRepository.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Repositories\\UserRepository.cs",
               "RelativeDocumentMoniker": "Docvision\\Repositories\\UserRepository.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Repositories\\UserRepository.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Repositories\\UserRepository.cs",
               "RelativeToolTip": "Docvision\\Repositories\\UserRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -622,11 +592,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 31,
               "Title": "IUserService.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\IUserService.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\IUserService.cs",
               "RelativeDocumentMoniker": "Docvision\\Services\\IUserService.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\IUserService.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\IUserService.cs",
               "RelativeToolTip": "Docvision\\Services\\IUserService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -634,11 +604,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 32,
               "Title": "IAuthService.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\IAuthService.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\IAuthService.cs",
               "RelativeDocumentMoniker": "Docvision\\Services\\IAuthService.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\IAuthService.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\IAuthService.cs",
               "RelativeToolTip": "Docvision\\Services\\IAuthService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -646,11 +616,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 33,
               "Title": "ProfileRepository.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Repositories\\ProfileRepository.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Repositories\\ProfileRepository.cs",
               "RelativeDocumentMoniker": "Docvision\\Repositories\\ProfileRepository.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Repositories\\ProfileRepository.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Repositories\\ProfileRepository.cs",
               "RelativeToolTip": "Docvision\\Repositories\\ProfileRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -658,11 +628,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 34,
               "Title": "EmailService.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\EmailService.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\EmailService.cs",
               "RelativeDocumentMoniker": "Docvision\\Services\\EmailService.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\EmailService.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\EmailService.cs",
               "RelativeToolTip": "Docvision\\Services\\EmailService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -670,11 +640,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 38,
               "Title": "20250316045511_MajIdentity.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Migrations\\20250316045511_MajIdentity.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Migrations\\20250316045511_MajIdentity.cs",
               "RelativeDocumentMoniker": "Docvision\\Migrations\\20250316045511_MajIdentity.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Migrations\\20250316045511_MajIdentity.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Migrations\\20250316045511_MajIdentity.cs",
               "RelativeToolTip": "Docvision\\Migrations\\20250316045511_MajIdentity.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -682,11 +652,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 35,
               "Title": "20250316045407_InitialeCreate.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Migrations\\20250316045407_InitialeCreate.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Migrations\\20250316045407_InitialeCreate.cs",
               "RelativeDocumentMoniker": "Docvision\\Migrations\\20250316045407_InitialeCreate.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Migrations\\20250316045407_InitialeCreate.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Migrations\\20250316045407_InitialeCreate.cs",
               "RelativeToolTip": "Docvision\\Migrations\\20250316045407_InitialeCreate.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -694,11 +664,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 36,
               "Title": "Docvision.csproj",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Docvision.csproj",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Docvision.csproj",
               "RelativeDocumentMoniker": "Docvision\\Docvision.csproj",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Docvision.csproj",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Docvision.csproj",
               "RelativeToolTip": "Docvision\\Docvision.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
@@ -706,11 +676,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 37,
               "Title": "IEmailService.cs",
-              "DocumentMoniker": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\IEmailService.cs",
+              "DocumentMoniker": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\IEmailService.cs",
               "RelativeDocumentMoniker": "Docvision\\Services\\IEmailService.cs",
-              "ToolTip": "F:\\DocVision\\NeoledgePFE-master\\Docvision\\Docvision\\Services\\IEmailService.cs",
+              "ToolTip": "F:\\end\\PFENeo\\Docvision\\Docvision\\Services\\IEmailService.cs",
               "RelativeToolTip": "Docvision\\Services\\IEmailService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",

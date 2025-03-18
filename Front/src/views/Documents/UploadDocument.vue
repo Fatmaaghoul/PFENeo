@@ -59,7 +59,6 @@
 
     <!-- Documents List -->
     <div class="documents-list">
-      <h3>Documents Without Description</h3>
       <div v-if="loading" class="loading-container">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
@@ -81,11 +80,7 @@
               <div class="document-meta">
                 <span class="document-date">
                   <i class="bi bi-calendar3"></i>
-                  {{ new Date(doc.createdAt).toLocaleDateString() }}
-                </span>
-                <span class="document-size">
-                  <i class="bi bi-hdd"></i>
-                  {{ formatFileSize(doc.size) }}
+                  {{ formatDate(doc.uploadDate) }}
                 </span>
               </div>
             </div>
@@ -105,7 +100,6 @@
         <div class="empty-icon">
           <i class="bi bi-check-circle-fill text-success"></i>
         </div>
-        <h3>All Documents Have Descriptions</h3>
         <p>No documents to process</p>
       </div>
     </div>
@@ -237,6 +231,17 @@ export default {
         console.error("Error downloading file", error);
         alert("Failed to download file");
       }
+    },
+    formatDate(date) {
+      if (!date) return 'N/A';
+      const uploadDate = new Date(date);
+      return uploadDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     }
   },
   mounted() {

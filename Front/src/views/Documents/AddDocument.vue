@@ -1,16 +1,13 @@
 <template>
   <div class="add-document-container">
-    <div class="card shadow-sm drop-zone"
-      @dragover.prevent="dragOver"
-      @dragleave="dragLeave"
-      @drop.prevent="handleDrop"
+    <div class="card shadow-sm drop-zone" @dragover.prevent="dragOver" @dragleave="dragLeave" @drop.prevent="handleDrop"
       :class="{ 'dragging': isDragging }">
       <div class="card-body">
         <div class="upload-content">
           <div class="upload-icon-container">
             <i class="bi bi-cloud-upload upload-icon"></i>
           </div>
-          
+
           <h5 class="upload-title">Ajouter un document</h5>
           <p class="upload-subtitle">Glissez-déposez votre fichier PDF ici ou</p>
 
@@ -21,13 +18,8 @@
                 Sélectionner un fichier
               </label>
 
-              <input
-                id="file-upload"
-                type="file"
-                class="form-control d-none"
-                @change="handleFileUpload"
-                accept=".pdf"
-              />
+              <input id="file-upload" type="file" class="form-control d-none" @change="handleFileUpload"
+                accept=".pdf" />
 
               <div v-if="file" class="selected-file">
                 <div class="file-info">
@@ -42,7 +34,10 @@
 
             <button type="submit" class="btn btn-primary upload-btn" :disabled="!file">
               <i class="bi bi-cloud-upload me-2"></i>
-              Uploader le document
+              Add document
+              <span v-if="loading" class="spinner-border spinner-border-sm ms-2" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </span>
             </button>
           </form>
         </div>
@@ -53,7 +48,7 @@
 
 <script>
 import axios from "axios";
-import { mapState,useStore } from "vuex";
+import { mapState, useStore } from "vuex";
 import SideBare from "./SideBare.vue";
 import { ref, onMounted } from 'vue';
 
@@ -72,6 +67,7 @@ export default {
     return {
       file: null,
       isDragging: false,
+      loading: false,
     };
   },
   methods: {
@@ -116,14 +112,17 @@ export default {
         return;
       }
 
+      this.loading = true;
       const formData = new FormData();
       formData.append("file", this.file);
 
       try {
         const token = Cookies.get('token');
-        const response = await axios.post(`api/documents/add`, formData,{
- headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await axios.post(`api/documents/add`, formData,
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
         console.log("✅ Document uploadé :", response.data);
         alert("✅ Document PDF uploadé avec succès !");
         this.removeFile();
@@ -131,6 +130,8 @@ export default {
       } catch (error) {
         console.error("❌ Erreur lors de l'upload", error);
         this.showError(error.response?.data || "Échec de l'upload du document.");
+      } finally {
+        this.loading = false;
       }
     },
   },
@@ -295,4 +296,3 @@ export default {
   }
 }
 </style>
-  

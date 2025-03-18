@@ -37,12 +37,12 @@
             <div class="document-meta">
               <span class="document-date">
                 <i class="bi bi-calendar3"></i>
-                {{ new Date(doc.createdAt).toLocaleDateString() }}
+                {{ formatDate(doc.uploadDate) }}
               </span>
-              <span class="document-size">
-                <i class="bi bi-hdd"></i>
-                {{ formatFileSize(doc.size) }}
-              </span>
+            
+            
+            
+            
             </div>
           </div>
         </div>
@@ -164,6 +164,17 @@ export default {
         console.error("Error downloading file", error);
         alert("Failed to download file");
       }
+    },
+    formatDate(date) {
+      if (!date) return 'N/A';
+      const uploadDate = new Date(date);
+      return uploadDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     }
   },
   mounted() {

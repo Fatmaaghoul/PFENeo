@@ -75,6 +75,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 
 // Configuration d'EmailService
 var emailSettings = builder.Configuration.GetSection("EmailSettings");
