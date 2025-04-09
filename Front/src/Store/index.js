@@ -43,6 +43,7 @@ export default createStore({
           commit('SET_AUTH', { 
             authenticated: true, 
             user: {
+              Id:userData.Id,
               email: userData.email,
               role: userRole
             }
@@ -70,7 +71,8 @@ export default createStore({
           authenticated: true, 
           user: {
             ...response.data.data, // Inclut toutes les données de l'API
-            role: response.data.data.role || 'User' // Ajoute le rôle si nécessaire
+            role: response.data.data.role || 'User', // Ajoute le rôle si nécessaire
+            Id:response.data.data.Id
           }
         });
       } catch (error) {

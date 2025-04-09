@@ -14,6 +14,8 @@ import ForgotPassword from '@/views/Auth/ForgotPassword.vue';
 import Home from '@/views/Home/Home.vue';
 import ConfirmEmail from '@/views/Auth/ConfirmEmail.vue';
 import Cookies from 'js-cookie'; // Import de js-cookie
+import ContentDocument from '@/views/Documents/ContentDocument.vue';
+import Documents from '@/views/Admin/Documents.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +35,12 @@ const router = createRouter({
       path: '/document',
       name: 'Document',
       component: ListDocument,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/document/content/:id',
+      name: 'ContentDocument',
+      component: ContentDocument,
       meta: { requiresAuth: true }
     },
     {
@@ -94,8 +102,8 @@ const router = createRouter({
         },
         {
           path: 'documents',
-          name: 'AdminDocuments',
-          component: ListDocument
+          name: 'Documents',
+          component: Documents
         }
       ]
     }

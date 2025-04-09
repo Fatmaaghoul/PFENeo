@@ -9,66 +9,44 @@ using System.Linq;
 using System.Threading.Tasks;
 using Docvision.Persistance;
 using Docvision.Models;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Docvision.Repositories;
 
 
 namespace Back.Controllers
 {
     [ApiController]
     [Route("api/documents")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class DocumentController : ControllerBase
     {
-        private readonly Cloudinary _cloudinary;
-        private readonly DocContext _context;
-
-        public DocumentController(Cloudinary cloudinary, DocContext context)
+        private readonly IDocumentRepository _idocumentRepository;
+        private DocContext _context;
+        
+        public DocumentController(IDocumentRepository IdocumentRepository , DocContext docContext)
         {
-            _cloudinary = cloudinary;
-            _context = context;
+            _idocumentRepository = IdocumentRepository;
+            _context = docContext;
+          
         }
 
 
-        [HttpPost("upload")]
-        public async Task<IActionResult> UploadDocument(IFormFile file, [FromQuery] Guid? userId)
+        [HttpPost("add")]
+        [Consumes("multipart/form-data")]  
+        public async Task<IActionResult> UploadDocument(IFormFile file)
         {
             try
             {
-                if (file == null || file.Length == 0)
-                    return BadRequest("Aucun fichier sélectionné.");
-                ApplicationUser? user = null;
-                if (userId.HasValue)
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+                if (string.IsNullOrEmpty(userId))
                 {
-                    user = await _context.Users.FindAsync(userId.Value);
-                    if (user == null)
-                        return BadRequest("Utilisateur introuvable.");
+                    return Unauthorized("Utilisateur non authentifié.");
                 }
-                using var stream = file.OpenReadStream();
-
-                var uploadParams = new RawUploadParams
-                {
-                    File = new FileDescription(file.FileName, stream),
-                    Folder = "documents",
-                    UseFilename = true,
-                    UniqueFilename = false,
-                    Overwrite = true
-                };
-
-                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
-
-                if (uploadResult.Error != null)
-                    return BadRequest($"Erreur Cloudinary : {uploadResult.Error.Message}");
-                var document = new Document
-                {
-                    Id = Guid.NewGuid(),
-                    Name = file.FileName,
-                    UploadDate = DateTime.UtcNow,
-                    FileUrl = uploadResult.SecureUrl.ToString(),
-                    UserId = user != null ? user.Id : null,  // Pas besoin de convertir en Guid, car user.Id est déjà un string.
-
-                    User = user,
-                };
-
-                _context.Documents.Add(document);
-                await _context.SaveChangesAsync();
+               var document = await _idocumentRepository.AddDocumentAsync(file, userId);
 
                 return Ok(document);
             }
@@ -77,35 +55,19 @@ namespace Back.Controllers
                 return BadRequest($"Erreur lors de l'upload du document : {ex.Message}");
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllDocuments()
         {
-            var documents = await _context.Documents.ToListAsync();
-            return Ok(documents);
-        }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetDocument(Guid id)
-        {
-            var document = await _context.Documents.FindAsync(id);
-            if (document == null)
-                return NotFound("Document non trouvé.");
-
-            return Ok(document);
-        }
-
-
-        [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetDocumentsByUserId(Guid userId)
-        {
             try
             {
-                var documents = await _context.Documents
-                    .Where(d => d.UserId == userId.ToString()) // Comparer les deux en tant que string.
-                    .ToListAsync();
-
-                if (documents == null || documents.Count == 0)
-                    return NotFound($"Aucun document trouvé pour l'utilisateur avec l'ID {userId}");
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized("Utilisateur non authentifié.");
+                }
+                var documents = await _idocumentRepository.GetAllDocumentAsync(userId);
 
                 return Ok(documents);
             }
@@ -113,23 +75,31 @@ namespace Back.Controllers
             {
                 return StatusCode(500, $"Erreur serveur : {ex.Message}");
             }
+
         }
 
-
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetDocument(Guid id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("Utilisateur non authentifié.");
+            }
+            var document = await _idocumentRepository.GetDocumentByIdAsync(id,userId);            
+            return Ok(document);
+        }
 
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDocument(Guid id, [FromBody] Document updatedDocument)
         {
-            var document = await _context.Documents.FindAsync(id);
-            if (document == null)
-                return NotFound("Document non trouvé.");
-
-            document.Name = updatedDocument.Name ?? document.Name;
-            document.Text = updatedDocument.Text ?? document.Text;
-
-            _context.Documents.Update(document);
-            await _context.SaveChangesAsync();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("Utilisateur non authentifié.");
+            }
+           var document = await _idocumentRepository.UpdateDocumentAsync(id,updatedDocument,userId);
 
             return Ok(document);
         }
@@ -138,12 +108,12 @@ namespace Back.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDocument(Guid id)
         {
-            var document = await _context.Documents.FindAsync(id);
-            if (document == null)
-                return NotFound("Document non trouvé.");
-            // Suppression de la base de données
-            _context.Documents.Remove(document);
-            await _context.SaveChangesAsync();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("Utilisateur non authentifié.");
+            }
+           await _idocumentRepository.DeleteDocumentAsync(id,userId);
 
             return Ok("Document supprimé avec succès.");
         }
