@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Docvision.Migrations
 {
     [DbContext(typeof(DocContext))]
-    [Migration("20250318224620_description")]
-    partial class description
+    [Migration("20250407231359_trit")]
+    partial class trit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,6 +123,9 @@ namespace Docvision.Migrations
 
                     b.Property<string>("description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("triter")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

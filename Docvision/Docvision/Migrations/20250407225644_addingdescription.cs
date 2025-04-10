@@ -5,7 +5,7 @@
 namespace Docvision.Migrations
 {
     /// <inheritdoc />
-    public partial class description : Migration
+    public partial class addingdescription : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

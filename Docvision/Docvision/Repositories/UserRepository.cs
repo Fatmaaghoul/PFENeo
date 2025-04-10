@@ -1,5 +1,7 @@
 ﻿using Docvision.Models;
+using Docvision.Persistance;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Docvision.Repositories
 {
@@ -56,5 +58,8 @@ namespace Docvision.Repositories
         {
             return await _userManager.RemoveFromRolesAsync(user, roles);
         }
+
+        
+
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Docvision.Models;
+using Docvision.Persistance;
 using Docvision.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Docvision.Services
 {
@@ -10,13 +12,14 @@ namespace Docvision.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
+
         public UserService(IUserRepository userRepository, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userRepository = userRepository;
             _userManager = userManager;
             _roleManager = roleManager;
         }
-
+        
         public async Task<ResponseModel> AddUserAsync(string username, string email, string phonenumber, string password, List<string> roles)
         {
             var user = new ApplicationUser { UserName = username, Email = email , PhoneNumber = phonenumber };
@@ -84,8 +87,7 @@ namespace Docvision.Services
                 {
                     Id = user.Id,
                     Username = user.UserName,
-                                        Email = user.Email,
-
+                    Email = user.Email,
                     PhoneNumber = user.PhoneNumber,
 
                     Roles = roles

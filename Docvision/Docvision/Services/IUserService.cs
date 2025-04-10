@@ -8,6 +8,8 @@ namespace Docvision.Services
         Task<ResponseModel> EditUserAsync(string userId, string username, string email,string phonenumber, List<string> roles);
         Task<ResponseModel> DeleteUserAsync(string userId);
         Task<List<UserWithRolesResponse>> GetAllUsersAsync();
+
+
     }
 
     public class UserWithRolesResponse

@@ -3,6 +3,7 @@ using CloudinaryDotNet;
 using Docvision.Models;
 using Microsoft.EntityFrameworkCore;
 using Docvision.Persistance;
+using Docvision.Dtos;
 
 namespace Docvision.Repositories
 {
@@ -16,7 +17,7 @@ namespace Docvision.Repositories
             _Context = docContext;
         }
 
-        public async Task<Document> AddDocumentAsync(IFormFile file, string userId)
+        public async Task<Document> AddDocumentAsync(IFormFile file,string description, string userId)
         {
             using var stream = file.OpenReadStream();
 
@@ -26,6 +27,7 @@ namespace Docvision.Repositories
                 Folder = "documents",
                 UseFilename = true,
                 UniqueFilename = false,
+            
                 Overwrite = true
             };
 
@@ -37,7 +39,8 @@ namespace Docvision.Repositories
                 Name = file.FileName,
                 UploadDate = DateTime.UtcNow,
                 FileUrl = uploadResult.SecureUrl.ToString(),
-                UserId = userId
+                UserId = userId,
+                description = description,
             };
 
             _Context.Documents.Add(document);
@@ -73,18 +76,32 @@ namespace Docvision.Repositories
             return await _Context.Documents.FirstOrDefaultAsync(d => d.Id == Id && d.UserId == userId);
         }
 
-        public async Task<Document?> UpdateDocumentAsync(Guid Id, Document updatedDocument, string userId)
+        public async Task<Document?> UpdateDocumentAsync(Guid id, DocumentUpdateDto updatedDocument, string userId)
         {
-            var document = await _Context.Documents.FirstOrDefaultAsync(d => d.Id == Id && d.UserId == userId);
-            if (document == null) return null;
+            var document = await _Context.Documents.FirstOrDefaultAsync(d => d.Id == id && d.UserId == userId);
 
-            document.Name = updatedDocument.Name ?? document.Name;
-            document.Text = updatedDocument.Text ?? document.Text;
+            if (document == null)
+            {
+                return null; // Si aucun document n'est trouvé, on retourne null
+            }
+
+            // Mise à jour uniquement du nom et de la description, si spécifié
+            if (!string.IsNullOrEmpty(updatedDocument.Name))
+            {
+                document.Name = updatedDocument.Name;
+            }
+
+            if (!string.IsNullOrEmpty(updatedDocument.Description))
+            {
+                document.description = updatedDocument.Description;
+            }
 
             _Context.Documents.Update(document);
             await _Context.SaveChangesAsync();
 
             return document;
         }
+
+
     }
 }

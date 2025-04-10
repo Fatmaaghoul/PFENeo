@@ -121,6 +121,12 @@ namespace Docvision.Migrations
                     b.Property<string>("description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isExtracted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("istraiter")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
