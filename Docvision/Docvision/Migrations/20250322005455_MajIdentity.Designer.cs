@@ -4,6 +4,7 @@ using Docvision.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Docvision.Migrations
 {
     [DbContext(typeof(DocContext))]
-    partial class DocContextModelSnapshot : ModelSnapshot
+    [Migration("20250322005455_MajIdentity")]
+    partial class MajIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,52 +100,22 @@ namespace Docvision.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("AnalysisDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AnalysisModel")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DetectedObjectsCount")
-                        .HasColumnType("int");
 
                     b.Property<string>("FileUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("ImagesExtracted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<DateTime?>("ImagesExtractedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsAnalyzed")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("ProcessingTimeSec")
-                        .HasColumnType("float");
 
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UploadDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -163,9 +136,6 @@ namespace Docvision.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AnnotatedImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -174,9 +144,6 @@ namespace Docvision.Migrations
 
                     b.Property<string>("FileUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Metadata")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -339,7 +306,7 @@ namespace Docvision.Migrations
                     b.HasOne("Docvision.Models.Document", "Document")
                         .WithMany("Images")
                         .HasForeignKey("DocumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Document");

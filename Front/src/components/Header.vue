@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isAdminRoute">
+  <div v-if="!isAdminRoute" style="margin-bottom: 80px;">
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top w-100">
       <div class="container">
         <RouterLink to="/" class="navbar-brand d-flex align-items-center">
@@ -26,6 +26,11 @@
             <li v-if="authenticated" class="nav-item">
               <RouterLink to="/document" class="nav-link">
                 <i class="bi bi-files me-1"></i> Documents
+              </RouterLink>
+            </li>
+            <li v-if="authenticated" class="nav-item">
+              <RouterLink to="/analyze-document" class="nav-link">
+                <i class="bi bi-files me-1"></i> Analyser
               </RouterLink>
             </li>
             <li v-if="authenticated && user?.role === 'Admin'" class="nav-item">
@@ -63,7 +68,7 @@
         </div>
       </div>
     </nav>
-    <div style="padding-top: 80px;"></div>
+    <div ></div>
   </div>
 </template>
 

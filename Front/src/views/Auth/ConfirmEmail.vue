@@ -18,24 +18,48 @@ export default {
     const route = useRoute();
     const rawToken = route.query.token || '';
     const token = decodeURIComponent(rawToken).replace(/ /g, '+');
-    const email = route.query.email || '';
+    const userId = route.query.userId || route.query.email || '';
 
     const message = ref("Confirmation en cours...");
     const title = ref("🔄 Confirmation...");
     const success = ref(false);
 
     onMounted(async () => {
-      console.log("Token:", token, "Email:", email); // Debug
+      console.log("Token:", token, "UserId/Email:", userId); // Debug
 
-      if (!token || !email) {
+      // Vérifie si nous sommes déjà sur la page de réponse API (avec une réponse JSON)
+      if (document.contentType === 'application/json') {
+        try {
+          // Essayons de parser le JSON de la page
+          const jsonContent = JSON.parse(document.body.textContent);
+          message.value = jsonContent.message || "E-mail confirmé avec succès !";
+          title.value = jsonContent.success ? "✅ Succès" : "❌ Erreur";
+          success.value = jsonContent.success || false;
+          return;
+        } catch (e) {
+          console.error("Erreur lors du parsing JSON:", e);
+        }
+      }
+
+      // Si nous ne sommes pas sur une page de réponse JSON ou si le parsing a échoué
+      if (!token || !userId) {
         message.value = "Lien invalide.";
         title.value = "❌ Erreur";
         return;
       }
 
       try {
+        // Détermine quel paramètre utiliser (userId ou email) en fonction de ce qui est disponible
+        const params = {};
+        if (route.query.userId) {
+          params.userId = userId;
+        } else {
+          params.email = userId;
+        }
+        params.token = token;
+
         const response = await axios.get('https://localhost:7036/api/auth/confirm-email', {
-          params: { token, email }
+          params: params
         });
 
         message.value = response.data.message;
@@ -44,7 +68,7 @@ export default {
       } catch (error) {
         console.error("Erreur Axios:", error); // Debug
         if (error.code === "ERR_NETWORK") {
-          message.value = "Unable to connect to the server. Please try again later.";
+          message.value = "Impossible de se connecter au serveur. Veuillez réessayer plus tard.";
         } else {
           message.value = error.response?.data?.message || error.response?.data || "Erreur lors de la confirmation.";
         }

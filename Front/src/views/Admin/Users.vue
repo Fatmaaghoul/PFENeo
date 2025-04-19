@@ -58,7 +58,7 @@
         <div class="d-flex justify-content-between align-items-center">
           <div>
             <h3 class="card-title mb-0">
-              <i class="bi bi-people me-2"></i>Gestion des utilisateurs
+              <i class="bi bi-people me-2"></i>Users
             </h3>
             <p class="text-muted mb-0 mt-1">Gérez tous les utilisateurs de votre système</p>
           </div>

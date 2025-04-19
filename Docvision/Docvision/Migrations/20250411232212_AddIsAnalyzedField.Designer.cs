@@ -4,6 +4,7 @@ using Docvision.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Docvision.Migrations
 {
     [DbContext(typeof(DocContext))]
-    partial class DocContextModelSnapshot : ModelSnapshot
+    [Migration("20250411232212_AddIsAnalyzedField")]
+    partial class AddIsAnalyzedField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,17 +103,11 @@ namespace Docvision.Migrations
                     b.Property<DateTime?>("AnalysisDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("AnalysisModel")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DetectedObjectsCount")
-                        .HasColumnType("int");
 
                     b.Property<string>("FileUrl")
                         .IsRequired()
@@ -132,9 +129,6 @@ namespace Docvision.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("ProcessingTimeSec")
-                        .HasColumnType("float");
 
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
@@ -163,9 +157,6 @@ namespace Docvision.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AnnotatedImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -174,9 +165,6 @@ namespace Docvision.Migrations
 
                     b.Property<string>("FileUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Metadata")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

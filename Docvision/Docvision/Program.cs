@@ -10,6 +10,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Docvision.Helpers;
+using Microsoft.OpenApi.Models;
+using System.Net.Http.Headers;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 // Configuration JWT
@@ -67,7 +70,21 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddDbContext<DocContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("docsdb")));
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-builder.Services.AddScoped<HttpClient>();
+// Configuration HttpClientFactory
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+builder.Services.AddHttpClient("PythonService", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5000/");
+    client.Timeout = TimeSpan.FromMinutes(6);
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("multipart/form-data"));
+});
+builder.Services.AddScoped<HttpClient>(); // Conserve votre enregistrement existant
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<JwtHelper>();
@@ -100,11 +117,16 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
-builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API Docvision", Version = "v1" });
+
+    // Ajoutez cette ligne pour les problèmes de sérialisation
+    c.UseAllOfToExtendReferenceSchemas();
+}); 
 var cloudinary = new Cloudinary(new Account(
     builder.Configuration["Cloudinary:CloudName"],
     builder.Configuration["Cloudinary:ApiKey"],
@@ -129,7 +151,6 @@ async Task CreateRoles(IServiceProvider serviceProvider)
         }
     }
 }
-
 // Créer les rôles par défaut au démarrage
 using (var scope = app.Services.CreateScope())
 {
@@ -142,12 +163,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 app.UseAuthentication(); 
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

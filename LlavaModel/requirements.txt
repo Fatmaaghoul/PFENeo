@@ -1,0 +1,8 @@
+cloudinary
+transformers
+torch
+ultralytics
+pillow
+requests
+flask
+ollama

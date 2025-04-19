@@ -59,25 +59,8 @@
 
     <!-- Main Content -->
     <div class="main-content" :class="{ 'expanded': isSidebarCollapsed }">
-      <div class="top-bar">
-        <div class="d-flex align-items-center">
-           <!-- <button class="btn btn-link text-dark me-3" @click="toggleSidebar">
-            <i class="bi bi-list fs-4"></i>
-          </button>-->
-          <div class="search-box">
-            <i class="bi bi-search"></i>
-            <input type="text" placeholder="Rechercher..." />
-          </div>
-        </div>
-        <div class="top-bar-right">
-          <button class="btn btn-link text-dark">
-            <i class="bi bi-bell"></i>
-          </button>
-          <button class="btn btn-link text-dark">
-            <i class="bi bi-gear"></i>
-          </button>
-        </div>
-      </div>
+   
+
 
       <!-- Router View -->
       <div class="content-wrapper">

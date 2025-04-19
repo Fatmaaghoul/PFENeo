@@ -89,7 +89,7 @@ export default {
   setup() {
     const data = reactive({ 
       name: "", 
-      phone: "", 
+      phoneNumber: "", 
       email: "", 
       password: "", 
       confirmPassword: "" 
@@ -102,10 +102,10 @@ export default {
         return;
       }
       try {
-        await axios.post('/api/auth/register', {
+        await axios.post('/api/Auth/register', {
           username: data.name,
           password: data.password,
-          email: data.phone,
+          phoneNumber: data.phone,
           email: data.email,
         });
         router.push('/login');
