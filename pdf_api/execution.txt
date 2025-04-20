@@ -1,3 +1,0 @@
-.\venv\Scripts\activate
-pip install fastapi uvicorn python-multipart requests python-dotenv python-multipart cloudinary PyMuPDF
-uvicorn main:app --reload

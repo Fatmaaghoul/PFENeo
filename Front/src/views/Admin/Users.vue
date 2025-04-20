@@ -1,103 +1,45 @@
 <template>
-  <div class="dashboard-container">
-    <!-- Stats Cards Row -->
-    <div class="row mb-4">
-      <div class="col-md-4">
-        <div class="card stats-card bg-gradient-primary">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <h6 class="text-white mb-1">Total Utilisateurs</h6>
-                <h3 class="text-white mb-0">{{ users.length }}</h3>
-                <small class="text-white-50">Augmenté de 5%</small>
-              </div>
-              <div class="stats-icon">
-                <i class="bi bi-people-fill"></i>
-              </div>
+  <div class="admin-container">
+    <div class="card">
+      <div class="card-content">
+        <div class="header">
+          <h2 class="title">Utilisateurs</h2>
+          <div class="search-container">
+            <div class="search-box">
+              <input type="text" class="search-input" placeholder="Rechercher des utilisateurs..." v-model="searchQuery" />
+              <button class="search-button">
+                🔍
+              </button>
             </div>
           </div>
+          <button @click="showAddModal = true" class="button-add">
+            ➕ Nouvel utilisateur
+          </button>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card stats-card bg-gradient-info">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <h6 class="text-white mb-1">Administrateurs</h6>
-                <h3 class="text-white mb-0">{{ adminCount }}</h3>
-                <small class="text-white-50">Stable</small>
-              </div>
-              <div class="stats-icon">
-                <i class="bi bi-shield-check"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card stats-card bg-gradient-success">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <h6 class="text-white mb-1">Utilisateurs Actifs</h6>
-                <h3 class="text-white mb-0">{{ users.length - adminCount }}</h3>
-                <small class="text-white-50">Augmenté de 10%</small>
-              </div>
-              <div class="stats-icon">
-                <i class="bi bi-person-check-fill"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Main Content Card -->
-    <div class="card shadow-sm">
-      <div class="card-header bg-white py-3">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <h3 class="card-title mb-0">
-              <i class="bi bi-people me-2"></i>Users
-            </h3>
-            <p class="text-muted mb-0 mt-1">Gérez tous les utilisateurs de votre système</p>
-          </div>
-          <div class="d-flex gap-2">
-            <button class="btn btn-success" @click="showAddModal = true">
-              <i class="bi bi-person-plus me-2"></i>Nouvel utilisateur
-            </button>
-            <button class="btn btn-primary" @click="refreshUsers">
-              <i class="bi bi-arrow-clockwise me-2"></i>Actualiser
-            </button>
-          </div>
+        <!-- État de chargement -->
+        <div v-if="loading" class="loading">
+          <div class="spinner"></div>
+          <p class="loading-text">Chargement des utilisateurs...</p>
         </div>
-      </div>
-      <div class="card-body">
-        <div v-if="loading" class="text-center py-5">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Chargement...</span>
-          </div>
-        </div>
-        <div v-else-if="users.length > 0" class="table-responsive">
-          <table class="table table-hover align-middle">
-            <thead class="table-light">
+
+        <!-- Tableau des utilisateurs -->
+        <div v-else class="table-wrapper">
+          <table class="users-table">
+            <thead>
               <tr>
-                <th>ID</th>
                 <th>Nom</th>
                 <th>Email</th>
                 <th>Rôle</th>
-                <th class="text-end">Actions</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="user in users" :key="user.id">
-                <td>{{ user.id }}</td>
+              <tr v-for="user in filteredUsers" :key="user.id">
                 <td>
-                  <div class="d-flex align-items-center">
-                    <div class="avatar-circle bg-primary text-white me-2">
-                      {{ user.username.charAt(0).toUpperCase() }}
-                    </div>
-                    {{ user.username }}
+                  <div class="user-name">
+                    👤
+                    <span>{{ user.username }}</span>
                   </div>
                 </td>
                 <td>{{ user.email }}</td>
@@ -109,471 +51,699 @@
                     {{ user.roles.join(', ') }}
                   </span>
                 </td>
-                <td class="text-end">
-                  <div class="btn-group">
-                    <button
-                      class="btn btn-outline-primary btn-sm"
-                      @click="editUser(user)"
-                      title="Modifier l'utilisateur"
-                    >
-                      <i class="bi bi-pencil"></i>
+                <td>
+                  <div class="actions">
+                    <button class="action-button edit" @click="editUser(user)" title="Modifier">
+                      ✏️
                     </button>
-                    <button
-                      class="btn btn-outline-warning btn-sm"
-                      @click="toggleRole(user)"
-                      :title="user.roles.includes('Admin') ? 'Rétrograder en utilisateur' : 'Promouvoir en admin'"
-                    >
-                      <i class="bi" :class="user.roles.includes('Admin') ? 'bi-person-down' : 'bi-person-up'"></i>
+                    <button v-if="!user.roles.includes('Admin')" class="action-button delete" @click="deleteUser(user.id)" title="Supprimer">
+                      🗑️
                     </button>
-                    <button 
-                      class="btn btn-outline-danger btn-sm"
-                      @click="deleteUser(user.id)"
-                      title="Supprimer l'utilisateur"
-                    >
-                      <i class="bi bi-trash"></i>
-                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr v-if="filteredUsers.length === 0">
+                <td colspan="4" class="empty-state">
+                  <div class="empty-message">
+                    👥
+                    <span>Aucun utilisateur trouvé</span>
                   </div>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div v-else class="text-center py-5">
-          <i class="bi bi-people text-muted" style="font-size: 3rem;"></i>
-          <p class="text-muted mt-3">Aucun utilisateur trouvé.</p>
-          <button class="btn btn-outline-primary mt-3" @click="refreshUsers">
-            <i class="bi bi-arrow-clockwise me-2"></i>Réessayer
-          </button>
-        </div>
       </div>
     </div>
 
-    <!-- Modal Ajout/Modification -->
-    <div class="modal fade" :class="{ show: showAddModal || showEditModal }" 
-         :style="{ display: (showAddModal || showEditModal) ? 'block' : 'none' }" 
-         tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">
-              {{ showEditModal ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur' }}
-            </h5>
-            <button type="button" class="btn-close" @click="closeModal"></button>
+    <!-- Modal Ajouter/Modifier un utilisateur -->
+    <div v-if="showAddModal || showEditModal" class="modal-overlay" @click="closeModal">
+      <div class="modal-content" @click.stop>
+        <div class="modal-header">
+          <h2>{{ showEditModal ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur' }}</h2>
+          <button class="close-btn" @click="closeModal">
+            ❌
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <div v-if="serverErrors.length" class="server-errors">
+            <p v-for="(error, index) in serverErrors" :key="index" class="error-message">{{ error }}</p>
           </div>
-          <div class="modal-body">
-            <form @submit.prevent="submitForm">
-              <div class="mb-3">
-                <label class="form-label">Nom d'utilisateur</label>
-                <input v-model="formData.username" type="text" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input v-model="formData.email" type="email" class="form-control" required>
-              </div>
-              <div v-if="showAddModal" class="mb-3">
-                <label class="form-label">Mot de passe</label>
-                <input v-model="formData.password" type="password" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Rôle</label>
-                <select v-model="formData.roles" class="form-select" multiple>
-                  <option value="User">Utilisateur</option>
-                  <option value="Admin">Administrateur</option>
-                </select>
-              </div>
-            </form>
+
+          <div class="form-group">
+            <label>Nom d'utilisateur</label>
+            <input 
+              v-model="formData.username"
+              type="text"
+              class="form-input"
+              placeholder="Entrez le nom d'utilisateur"
+              :class="{ 'error': (formSubmitted && !formData.username) || serverErrors.some(e => e.toLowerCase().includes('username')) }"
+            />
+            <span v-if="formSubmitted && !formData.username" class="error-message">Le nom est requis</span>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="closeModal">Annuler</button>
-            <button type="button" class="btn btn-primary" @click="submitForm">
-              {{ showEditModal ? 'Modifier' : 'Créer' }}
-            </button>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input 
+              v-model="formData.email"
+              type="email"
+              class="form-input"
+              placeholder="Entrez l'email"
+              :disabled="showEditModal"
+              :class="{ 
+                'error': (formSubmitted && !formData.email) || serverErrors.some(e => e.toLowerCase().includes('email')),
+                'disabled': showEditModal
+              }"
+            />
+            <span v-if="formSubmitted && !formData.email" class="error-message">L'email est requis</span>
           </div>
+
+          <div v-if="showAddModal" class="form-group">
+            <label>Mot de passe</label>
+            <input 
+              v-model="formData.password"
+              type="password"
+              class="form-input"
+              placeholder="Entrez le mot de passe"
+              :class="{ 'error': (formSubmitted && !formData.password) || serverErrors.some(e => e.toLowerCase().includes('password')) }"
+            />
+            <span v-if="formSubmitted && !formData.password" class="error-message">Le mot de passe est requis</span>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button class="cancel-btn" @click="closeModal">Annuler</button>
+          <button 
+            class="submit-btn" 
+            @click="submitForm"
+            :disabled="!isFormValid"
+          >
+            {{ showEditModal ? 'Modifier' : 'Créer' }}
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import axios from 'axios';
-import { ref, onMounted, computed } from 'vue';
+<script setup>
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import Cookies from 'js-cookie'; // Import de js-cookie
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
-export default {
-  name: "Users",
-  setup() {
-    const users = ref([]);
-    const loading = ref(true);
-    const router = useRouter();
-    const store = useStore();
-    const showAddModal = ref(false);
-    const showEditModal = ref(false);
-    const formData = ref({
-      username: '',
-      email: '',
-      password: '',
-      roles: ['User']
-    });
-    const editingUserId = ref(null);
+const router = useRouter();
+const store = useStore();
+const users = ref([]);
+const loading = ref(true);
+const searchQuery = ref('');
+const showAddModal = ref(false);
+const showEditModal = ref(false);
+const formData = ref({
+  username: '',
+  email: '',
+  password: ''
+});
+const editingUserId = ref(null);
+const formSubmitted = ref(false);
+const serverErrors = ref([]);
 
-    // Computed properties for statistics
-    const adminCount = computed(() => {
-      return users.value.filter(user => user.roles.includes('Admin')).length;
-    });
+// Computed property to filter users
+const filteredUsers = computed(() => {
+  if (!searchQuery.value) return users.value;
+  
+  const query = searchQuery.value.toLowerCase();
+  return users.value.filter(user => 
+    user.username.toLowerCase().includes(query) || 
+    user.email.toLowerCase().includes(query)
+  );
+});
 
-    const checkAdminAccess = () => {
-      const token = Cookies.get('token'); // Récupère le token depuis les cookies
-      if (!token) {
-        console.error("No token found");
-        store.dispatch('logout');
-        router.push('/login');
-        return false;
-      }
+// Computed property for form validation
+const isFormValid = computed(() => {
+  if (showEditModal.value) {
+    return formData.value.username.trim();
+  }
+  return formData.value.username.trim() && 
+         formData.value.email.trim() && 
+         formData.value.password.trim();
+});
 
-      const tokenParts = token.split('.');
-      const payload = JSON.parse(atob(tokenParts[1]));
-      console.log("Token payload in checkAdminAccess:", payload);
+// Check admin access
+const checkAdminAccess = () => {
+  const token = Cookies.get('token');
+  if (!token) {
+    console.error("Aucun jeton trouvé");
+    store.dispatch('logout');
+    router.push('/login');
+    return false;
+  }
 
-      const userRole = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-      console.log("User role from token:", userRole);
+  const tokenParts = token.split('.');
+  const payload = JSON.parse(atob(tokenParts[1]));
+  const userRole = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
 
-      if (userRole !== 'Admin') {
-        console.error("User is not an admin");
-        alert("Accès non autorisé. Cette page est réservée aux administrateurs.");
-        router.push('/Document');
-        return false;
-      }
+  if (userRole !== 'Admin') {
+    console.error("L'utilisateur n'est pas administrateur");
+    alert("Accès non autorisé. Cette page est réservée aux administrateurs.");
+    router.push('/Document');
+    return false;
+  }
 
-      return true;
-    };
-
-    const fetchUsers = async () => {
-      if (!checkAdminAccess()) {
-        loading.value = false;
-        return;
-      }
-      
-      loading.value = true;
-      try {
-        console.log("Fetching users from API...");
-        const token = Cookies.get('token'); // Récupère le token depuis les cookies
-        console.log("Current token:", token);
-        
-        if (!token) {
-          console.error("No token found");
-          store.dispatch('logout');
-          router.push('/login');
-          return;
-        }
-
-        console.log("Making API request to: /api/users/all");
-        
-        const response = await axios({
-          method: 'get',
-          url: '/api/users/all',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': '*/*',
-            'Content-Type': 'application/json'
-          },
-          timeout: 10000,
-          validateStatus: function (status) {
-            return status >= 200 && status < 500;
-          }
-        });
-        
-        console.log("API Response:", response);
-        
-        if (Array.isArray(response.data)) {
-          users.value = response.data;
-          console.log("Users array updated:", users.value);
-        } else {
-          console.error("Response data is not an array:", response.data);
-          users.value = [];
-        }
-      } catch (error) {
-        console.error("Error details:", error);
-        handleError(error);
-      } finally {
-        loading.value = false;
-        console.log("Loading state set to false");
-      }
-    };
-
-    const handleError = (error) => {
-      let errorMessage = "Erreur lors de la récupération des utilisateurs.";
-      if (error.response?.status === 401) {
-        errorMessage = "Vous n'êtes pas autorisé à accéder à cette page. Veuillez vous reconnecter.";
-        store.dispatch('logout');
-        router.push('/login');
-      } else if (error.response?.status === 403) {
-        errorMessage = "Accès refusé. Cette page est réservée aux administrateurs.";
-        router.push('/Document');
-      } else if (error.response?.status === 404) {
-        errorMessage = `L'endpoint n'a pas été trouvé. URL: ${error.config?.baseURL}${error.config?.url}\nVeuillez vérifier que le serveur backend est en cours d'exécution.`;
-      } else if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
-      }
-      
-      alert(errorMessage);
-      users.value = [];
-    };
-
-    const refreshUsers = () => {
-      fetchUsers();
-    };
-
-    const deleteUser = async (userId) => {
-      if (!confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.")) return;
-
-      try {
-        const token = Cookies.get('token'); // Récupère le token depuis les cookies
-        await axios.delete(`/api/users/delete/${userId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        users.value = users.value.filter(user => user.id !== userId);
-      } catch (error) {
-        console.error("Error details:", error);
-        alert("Une erreur est survenue lors de la suppression de l'utilisateur.");
-      }
-    };
-
-    const toggleRole = async (user) => {
-      try {
-        const token = Cookies.get('token'); // Récupère le token depuis les cookies
-        const newRoles = user.roles.includes('Admin') 
-          ? ['User'] 
-          : ['Admin'];
-        
-        await axios.put(`/api/users/edit/${user.id}`, 
-          { 
-            username: user.username,
-            email: user.email,
-            roles: newRoles
-          },
-          {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          }
-        );
-        
-        user.roles = newRoles;
-      } catch (error) {
-        console.error("Error details:", error);
-        alert("Une erreur est survenue lors du changement de rôle.");
-      }
-    };
-
-    const editUser = (user) => {
-      editingUserId.value = user.id;
-      formData.value = {
-        username: user.username,
-        email: user.email,
-        roles: [...user.roles]
-      };
-      showEditModal.value = true;
-    };
-
-    const closeModal = () => {
-      showAddModal.value = false;
-      showEditModal.value = false;
-      editingUserId.value = null;
-      formData.value = {
-        username: '',
-        email: '',
-        password: '',
-        roles: ['User']
-      };
-    };
-
-    const submitForm = async () => {
-      try {
-        const token = Cookies.get('token'); // Récupère le token depuis les cookies
-        if (!token) {
-          console.error("No token found");
-          store.dispatch('logout');
-          router.push('/login');
-          return;
-        }
-
-        if (showEditModal.value) {
-          console.log("Updating user:", {
-            id: editingUserId.value,
-            data: {
-              username: formData.value.username,
-              email: formData.value.email,
-              roles: formData.value.roles
-            }
-          });
-          
-          await axios.put(`/api/users/edit/${editingUserId.value}`, {
-            username: formData.value.username,
-            email: formData.value.email,
-            roles: formData.value.roles
-          }, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Accept': '*/*',
-              'Content-Type': 'application/json'
-            }
-          });
-        } else {
-          // Convertir le Proxy en tableau simple
-          const rolesArray = Array.from(formData.value.roles);
-          
-          const userData = {
-            username: formData.value.username,
-            email: formData.value.email,
-            password: formData.value.password,
-            roles: rolesArray
-          };
-
-          console.log("Creating new user with data:", userData);
-          
-          const response = await axios.post('/api/users/add', userData, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Accept': '*/*',
-              'Content-Type': 'application/json'
-            }
-          });
-          
-          console.log("Create user response:", response.data);
-        }
-        
-        closeModal();
-        refreshUsers();
-      } catch (error) {
-        console.error("Error details:", {
-          message: error.message,
-          response: error.response?.data,
-          status: error.response?.status,
-          statusText: error.response?.statusText
-        });
-        
-        let errorMessage = "Une erreur est survenue lors de l'enregistrement de l'utilisateur.";
-        if (error.response?.data?.message) {
-          errorMessage = error.response.data.message;
-        }
-        
-        alert(errorMessage);
-      }
-    };
-
-    onMounted(fetchUsers);
-
-    return {
-      users,
-      loading,
-      showAddModal,
-      showEditModal,
-      formData,
-      deleteUser,
-      toggleRole,
-      refreshUsers,
-      editUser,
-      closeModal,
-      submitForm,
-      adminCount
-    };
-  },
+  return true;
 };
+
+// Fetch users
+const fetchUsers = async () => {
+  if (!checkAdminAccess()) {
+    loading.value = false;
+    return;
+  }
+  
+  loading.value = true;
+  try {
+    const token = Cookies.get('token');
+    const response = await axios.get('/api/users/all', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': '*/*',
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (Array.isArray(response.data)) {
+      users.value = response.data;
+    } else {
+      console.error("Les données de réponse ne sont pas un tableau:", response.data);
+      users.value = [];
+    }
+  } catch (error) {
+    console.error("Détails de l'erreur:", error);
+    handleError(error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+// Handle errors
+const handleError = (error) => {
+  let errorMessage = "Erreur lors de la récupération des utilisateurs.";
+  if (error.response?.status === 401) {
+    errorMessage = "Vous n'êtes pas autorisé à accéder à cette page. Veuillez vous reconnecter.";
+    store.dispatch('logout');
+    router.push('/login');
+  } else if (error.response?.status === 403) {
+    errorMessage = "Accès refusé. Cette page est réservée aux administrateurs.";
+    router.push('/Document');
+  } else if (error.response?.status === 404) {
+    errorMessage = `L'endpoint n'a pas été trouvé. URL: ${error.config?.baseURL}${error.config?.url}\nVeuillez vérifier que le serveur backend est en cours d'exécution.`;
+  } else if (error.response?.data?.message) {
+    errorMessage = error.response.data.message;
+  }
+  
+  alert(errorMessage);
+  users.value = [];
+};
+
+// Refresh users
+const refreshUsers = () => {
+  fetchUsers();
+};
+
+// Delete user
+const deleteUser = async (userId) => {
+  if (!confirm("Voulez-vous vraiment supprimer cet utilisateur ? Cette action est irréversible.")) return;
+
+  try {
+    const token = Cookies.get('token');
+    await axios.delete(`/api/users/delete/${userId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    users.value = users.value.filter(user => user.id !== userId);
+    alert("Utilisateur supprimé avec succès !");
+  } catch (error) {
+    console.error("Détails de l'erreur:", error);
+    alert("Une erreur est survenue lors de la suppression de l'utilisateur.");
+  }
+};
+
+// Edit user
+const editUser = (user) => {
+  editingUserId.value = user.id;
+  formData.value = {
+    username: user.username,
+    email: user.email
+  };
+  showEditModal.value = true;
+  serverErrors.value = [];
+  formSubmitted.value = false;
+};
+
+// Close modal
+const closeModal = () => {
+  showAddModal.value = false;
+  showEditModal.value = false;
+  editingUserId.value = null;
+  formData.value = {
+    username: '',
+    email: '',
+    password: ''
+  };
+  serverErrors.value = [];
+  formSubmitted.value = false;
+};
+
+// Submit form
+const submitForm = async () => {
+  formSubmitted.value = true;
+  serverErrors.value = [];
+
+  if (!isFormValid.value) {
+    alert("Veuillez remplir tous les champs requis.");
+    return;
+  }
+
+  try {
+    const token = Cookies.get('token');
+    if (!token) {
+      console.error("Aucun jeton trouvé");
+      store.dispatch('logout');
+      router.push('/login');
+      return;
+    }
+
+    if (showEditModal.value) {
+      await axios.put(`/api/users/edit/${editingUserId.value}`, {
+        username: formData.value.username.trim()
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': '*/*',
+          'Content-Type': 'application/json'
+        }
+      });
+      alert("Utilisateur modifié avec succès !");
+    } else {
+      const userData = {
+        username: formData.value.username.trim(),
+        email: formData.value.email.trim(),
+        password: formData.value.password.trim()
+      };
+
+      await axios.post('/api/users/add', userData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': '*/*',
+          'Content-Type': 'application/json'
+        }
+      });
+      alert("Utilisateur créé avec succès !");
+    }
+    
+    closeModal();
+    refreshUsers();
+  } catch (error) {
+    console.error("Détails de l'erreur:", error);
+    if (error.response?.data) {
+      const errors = error.response.data;
+      if (errors.errors) {
+        serverErrors.value = Object.entries(errors.errors)
+          .map(([field, messages]) => `${field}: ${messages.join(', ')}`);
+      } else if (errors.message) {
+        serverErrors.value = [errors.message];
+      } else {
+        serverErrors.value = ["Une erreur inattendue s'est produite."];
+      }
+    } else {
+      serverErrors.value = ["Échec de l'enregistrement de l'utilisateur. Aucune réponse du serveur."];
+    }
+  }
+};
+
+onMounted(fetchUsers);
 </script>
 
 <style scoped>
-.dashboard-container {
-  padding: 1.5rem;
-}
-
-.stats-card {
-  border: none;
-  border-radius: 10px;
-  transition: transform 0.2s;
-}
-
-.stats-card:hover {
-  transform: translateY(-5px);
-}
-
-.bg-gradient-primary {
-  background: linear-gradient(45deg, #4e73df 0%, #224abe 100%);
-}
-
-.bg-gradient-info {
-  background: linear-gradient(45deg, #36b9cc 0%, #1a8a9c 100%);
-}
-
-.bg-gradient-success {
-  background: linear-gradient(45deg, #1cc88a 0%, #13855c 100%);
-}
-
-.stats-icon {
-  font-size: 2rem;
-  opacity: 0.8;
-  color: white;
-}
-
-.avatar-circle {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
+.admin-container {
+  padding: 2rem;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .card {
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
-}
-
-.card-header {
-  border-bottom: 1px solid rgba(0,0,0,.125);
-  border-radius: 10px 10px 0 0 !important;
   background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.table th {
+.card-content {
+  padding: 1.5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+
+.search-container {
+  flex: 1 1 300px;
+  max-width: 400px;
+}
+
+.search-box {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  outline: none;
+}
+
+.search-button {
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  border-left: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background: #f5f5f5;
+}
+
+.button-add {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(45deg, #3498db, #2980b9);
+  color: white;
   font-weight: 600;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.button-add:hover {
+  background: linear-gradient(45deg, #3aa8f2, #3498db);
+  transform: translateY(-2px);
+}
+
+.button-add:active {
+  transform: translateY(0);
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 1rem;
+  color: #666;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.users-table th,
+.users-table td {
+  padding: 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+  word-break: break-word;
+}
+
+.users-table th {
+  font-weight: 600;
+  color: #2c3e50;
+  background: #f8f9fa;
+}
+
+.users-table td {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .badge {
   padding: 0.5em 0.75em;
   font-weight: 500;
+  border-radius: 4px;
 }
 
-.btn-group .btn {
-  padding: 0.375rem 0.75rem;
+.bg-danger {
+  background-color: #e74c3c;
+  color: white;
 }
 
-.btn-group .btn i {
-  font-size: 0.875rem;
+.bg-primary {
+  background-color: #3498db;
+  color: white;
 }
 
-.modal {
-  background-color: rgba(0, 0, 0, 0.5);
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
 }
 
-.table-responsive {
-  border-radius: 0.5rem;
+.action-button {
+  padding: 0.4rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background: none;
+  font-size: 1rem;
 }
 
-.table {
-  margin-bottom: 0;
+.action-button:hover {
+  background: #f5f5f5;
 }
 
-.table thead th {
-  border-top: none;
+.action-button.edit {
+  color: #f39c12;
+}
+
+.action-button.delete {
+  color: #e74c3c;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+}
+
+.empty-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: #666;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form-input.error {
+  border-color: #e74c3c;
+}
+
+.form-input.disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.cancel-btn,
+.submit-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.cancel-btn {
+  background: #f8f9fa;
+  color: #2c3e50;
+}
+
+.submit-btn {
+  background: #3498db;
+  color: white;
+}
+
+.submit-btn:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+}
+
+.server-errors {
+  background: #ffe6e6;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.server-errors .error-message {
+  margin: 0.25rem 0;
+}
+
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 1rem;
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .search-container {
+    width: 100%;
+    max-width: none;
+  }
+  
+  .users-table th,
+  .users-table td {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .modal-content {
+    width: 95%;
+  }
+  
+  .button-add {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
 }
 </style>

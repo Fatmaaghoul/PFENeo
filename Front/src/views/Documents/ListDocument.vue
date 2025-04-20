@@ -1,17 +1,40 @@
 <template>
   <div class="documents-container">
-    <!-- Search Bar -->
+    <!-- Search and Filter Bar -->
     <div class="search-container">
       <div class="search-input">
         <i class="bi bi-search"></i>
         <input 
           type="text" 
           v-model="searchQuery" 
-          placeholder="Search documents..." 
+          placeholder="Rechercher des documents..." 
           @input="filterDocuments"
         />
         <button v-if="searchQuery" @click="clearSearch" class="clear-btn">
           <i class="bi bi-x"></i>
+        </button>
+      </div>
+      <div class="filter-buttons">
+        <button 
+          :class="['filter-btn', currentFilter === 'all' ? 'active' : '']"
+          @click="setFilter('all')"
+        >
+          <i class="bi bi-files"></i>
+          Tous
+        </button>
+        <button 
+          :class="['filter-btn', currentFilter === 'traiter' ? 'active' : '']"
+          @click="setFilter('traiter')"
+        >
+          <i class="bi bi-check-circle"></i>
+          Traité
+        </button>
+        <button 
+          :class="['filter-btn', currentFilter === 'non-traiter' ? 'active' : '']"
+          @click="setFilter('non-traiter')"
+        >
+          <i class="bi bi-x-circle"></i>
+          Non Traité
         </button>
       </div>
     </div>
@@ -19,26 +42,29 @@
     <!-- Loading State -->
     <div v-if="loading" class="loading-container">
       <div class="spinner"></div>
-      <p>Loading documents...</p>
+      <p>Chargement des documents...</p>
     </div>
 
     <!-- Documents Grid -->
     <div v-else class="documents-grid">
       <!-- Add Document Card -->
-      <div class="document-card add-document-card" @click="showAddModal = true">
-        <div class="document-content">
+      <div class="document-card add-document-card " @click="showAddModal = true">
+        <div class="document-content add-document-card-content">
           <div class="document-icon">
             <i class="bi bi-plus-circle add-icon"></i>
           </div>
           <div class="document-info">
-            <h3 class="document-title">Add New Document</h3>
-            <p class="document-description">Click to upload a new document</p>
+            <h3 class="document-title ">Ajouter un nouveau document</h3>
           </div>
         </div>
       </div>
 
       <!-- Document Cards -->
       <div v-for="doc in filteredDocuments" :key="doc.id" class="document-card">
+        <!-- Status Badge -->
+        <span :class="['status-badge', doc.istraiter ? 'traiter' : 'non-traiter']">
+          <i :class="doc.istraiter ? 'bi bi-check-circle' : 'bi bi-x-circle'"></i>
+        </span>
         <div class="document-content">
           <div class="document-icon">
             <i class="bi bi-file-earmark-text"></i>
@@ -67,35 +93,16 @@
     <div v-if="showAddModal" class="modal-overlay" @click="closeModal">
       <div class="modal-content" @click.stop>
         <div class="modal-header">
-          <h2>Add New Document</h2>
+          <h2>Ajouter un nouveau document</h2>
           <button class="close-btn" @click="closeModal">
             <i class="bi bi-x"></i>
           </button>
         </div>
         
         <div class="modal-body">
+          <!-- Document File Upload (Always visible) -->
           <div class="form-group">
-            <label>Document Name</label>
-            <input 
-              type="text" 
-              v-model="newDocument.name"
-              class="form-input"
-              placeholder="Enter document name"
-            />
-          </div>
-          
-          <div class="form-group">
-            <label>Description</label>
-            <textarea 
-              v-model="newDocument.description"
-              class="form-textarea"
-              placeholder="Enter document description"
-              rows="3"
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label>Document File (PDF)</label>
+            <label>Fichier PDF</label>
             <div 
               class="file-upload" 
               @dragover.prevent="handleDragOver"
@@ -113,8 +120,8 @@
               />
               <div class="upload-placeholder" v-if="!selectedFile">
                 <i class="bi bi-cloud-upload"></i>
-                <p>Drag and drop your PDF file here or click to browse</p>
-                <button class="browse-btn">Browse Files</button>
+                <p>Faites glisser votre fichier PDF ici ou cliquez pour parcourir</p>
+                <button class="browse-btn">Parcourir les fichiers</button>
               </div>
               <div class="file-preview" v-else>
                 <span class="file-name">{{ selectedFile.name }}</span>
@@ -122,17 +129,40 @@
               </div>
             </div>
           </div>
+
+          <!-- Document Name and Description (Only visible after file selection) -->
+          <div v-if="selectedFile" class="form-fields">
+            <div class="form-group">
+              <label>Nom du document</label>
+              <input 
+                type="text" 
+                v-model="newDocument.name"
+                class="form-input"
+                placeholder="Entrez le nom du document"
+              />
+            </div>
+            
+            <div class="form-group">
+              <label>Description</label>
+              <textarea 
+                v-model="newDocument.description"
+                class="form-textarea"
+                placeholder="Entrez la description du document"
+                rows="3"
+              ></textarea>
+            </div>
+          </div>
         </div>
         
         <div class="modal-footer">
-          <button class="cancel-btn" @click="closeModal">Cancel</button>
+          <button class="cancel-btn" @click="closeModal">Annuler</button>
           <button 
             class="submit-btn" 
             @click="uploadDocument"
             :disabled="!isFormValid || uploading"
           >
             <span v-if="uploading" class="spinner"></span>
-            <span v-else>Upload Document</span>
+            <span v-else>Uploader le document</span>
           </button>
         </div>
       </div>
@@ -155,6 +185,7 @@ export default {
       isDragging: false,
       selectedFile: null,
       uploading: false,
+      currentFilter: 'all',
       newDocument: {
         name: '',
         description: ''
@@ -163,44 +194,64 @@ export default {
   },
   computed: {
     filteredDocuments() {
-      if (!this.searchQuery) return this.documents;
+      let filtered = this.documents;
       
-      const query = this.searchQuery.toLowerCase();
-      return this.documents.filter(doc => 
-        doc.name.toLowerCase().includes(query) || 
-        doc.description.toLowerCase().includes(query)
-      );
+      // Apply search filter
+      if (this.searchQuery) {
+        const query = this.searchQuery.toLowerCase();
+        filtered = filtered.filter(doc => {
+          const name = doc.name ? doc.name.toLowerCase() : '';
+          const description = doc.description ? doc.description.toLowerCase() : '';
+          return name.includes(query) || description.includes(query);
+        });
+      }
+      
+      // Apply status filter
+      if (this.currentFilter === 'traiter') {
+        filtered = filtered.filter(doc => doc.istraiter);
+      } else if (this.currentFilter === 'non-traiter') {
+        filtered = filtered.filter(doc => !doc.istraiter);
+      }
+      
+      return filtered;
     },
     isFormValid() {
-      return this.newDocument.name && 
-             this.newDocument.description && 
+      return this.newDocument.name.trim() !== '' && 
+             this.newDocument.description.trim() !== '' && 
              this.selectedFile;
     }
   },
   methods: {
+    setFilter(filter) {
+      this.currentFilter = filter;
+    },
     async fetchDocuments() {
       this.loading = true;
       try {
-        const response = await axios.get('api/documents');
+        const token = Cookies.get('token');
+        const response = await axios.get('api/documents', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         this.documents = response.data;
       } catch (error) {
-        console.error('Error fetching documents:', error);
-        alert('Error loading documents. Please try again.');
+        console.error('Erreur lors du chargement des documents:', error);
+        alert('Erreur lors du chargement des documents. Veuillez réessayer.');
       } finally {
         this.loading = false;
       }
     },
     formatDate(dateString) {
       const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', {
+      return date.toLocaleDateString('fr-FR', {
         year: 'numeric',
         month: 'short',
         day: 'numeric'
       });
     },
     filterDocuments() {
-      // This method is triggered by the @input event on the search field
-      // The actual filtering is done in the computed property
+      // Triggered by search input; filtering handled by filteredDocuments
     },
     clearSearch() {
       this.searchQuery = '';
@@ -226,16 +277,16 @@ export default {
     },
     handleFile(file) {
       if (file.type !== 'application/pdf') {
-        alert('Only PDF files are allowed.');
+        alert('Seuls les fichiers PDF sont autorisés.');
         return;
       }
       this.selectedFile = file;
-      if (!this.newDocument.name) {
-        this.newDocument.name = file.name.replace(/\.[^/.]+$/, "");
-      }
+      this.newDocument.name = file.name.replace(/\.[^/.]+$/, "");
     },
     removeFile() {
       this.selectedFile = null;
+      this.newDocument.name = '';
+      this.newDocument.description = '';
       if (this.$refs.fileInput) {
         this.$refs.fileInput.value = '';
       }
@@ -262,139 +313,129 @@ export default {
       if (!this.isFormValid) return;
 
       this.uploading = true;
-      
-      // Vérifier que la description n'est pas vide
-      if (!this.newDocument.description || this.newDocument.description.trim() === '') {
-        alert('Description is required.');
-        this.uploading = false;
-        return;
-      }
 
       try {
         const token = Cookies.get('token');
         if (!token) {
-          throw new Error('Authentication token not found. Please log in again.');
+          throw new Error('Jeton d’authentification non trouvé. Veuillez vous reconnecter.');
         }
 
-        // Créer un nouveau FormData
         const formData = new FormData();
-        
-        // Ajouter le fichier
         if (this.selectedFile) {
           formData.append('file', this.selectedFile);
         }
-        
-        // Ajouter la description comme paramètre de requête
-        // Le backend attend un paramètre nommé "description"
-        formData.append('description', this.newDocument.description);
-        
-        // Ajouter le nom
-        formData.append('name', this.newDocument.name);
+        formData.append('description', this.newDocument.description.trim());
+        formData.append('name', this.newDocument.name.trim());
 
-        console.log('Uploading document with token:', token.substring(0, 10) + '...');
-        console.log('FormData contents:', {
-          name: this.newDocument.name,
-          description: this.newDocument.description,
-          file: this.selectedFile ? this.selectedFile.name : 'No file'
-        });
-
-        // Afficher le contenu du FormData pour débogage
-        for (let pair of formData.entries()) {
-          console.log(pair[0] + ': ' + pair[1]);
-        }
-
-        // Essayer une approche différente pour envoyer les données
-        // Utiliser URLSearchParams pour les paramètres de requête
-        const params = new URLSearchParams();
-        params.append('description', this.newDocument.description);
-        
-        // Envoyer la requête avec les paramètres dans l'URL
-        const response = await axios({
-          method: 'post',
-          url: `api/documents/add?${params.toString()}`,
-          data: formData,
+        const response = await axios.post('api/documents/add', formData, {
           headers: {
             'Authorization': `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            'Accept': 'application/json'
           }
         });
-        
-        console.log('Document uploaded successfully:', response.data);
-        alert('Document uploaded successfully!');
-        
+
+        this.showSuccessAlert('Document uploadé avec succès !');
         this.documents.unshift(response.data);
         this.closeModal();
       } catch (error) {
-        console.error('Error uploading document:', error);
         if (error.response && error.response.data) {
-          alert(`Error uploading document: ${error.response.data}`);
+          const errorData = error.response.data;
+          if (errorData.errors) {
+            const errorMessages = Object.entries(errorData.errors)
+              .map(([field, messages]) => `${field}: ${messages.join(', ')}`)
+              .join('\n');
+            this.showErrorAlert(`Erreurs de validation:\n${errorMessages}`);
+          } else {
+            this.showErrorAlert(`Erreur lors de l’upload: ${errorData.title || errorData}`);
+          }
         } else if (error.message) {
-          alert(error.message);
+          this.showErrorAlert(error.message);
         } else {
-          alert('Error uploading document. Please try again.');
+          this.showErrorAlert('Erreur lors de l’upload du document. Veuillez réessayer.');
         }
       } finally {
         this.uploading = false;
       }
+    },
+    showSuccessAlert(message) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'custom-alert success';
+      alertDiv.innerHTML = `
+        <i class="bi bi-check-circle"></i>
+        <span>${message}</span>
+      `;
+      document.body.appendChild(alertDiv);
+      setTimeout(() => {
+        alertDiv.classList.add('show');
+        setTimeout(() => {
+          alertDiv.classList.remove('show');
+          setTimeout(() => {
+            document.body.removeChild(alertDiv);
+          }, 300);
+        }, 3000);
+      }, 100);
+    },
+    showErrorAlert(message) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'custom-alert error';
+      alertDiv.innerHTML = `
+        <i class="bi bi-exclamation-circle"></i>
+        <span>${message}</span>
+      `;
+      document.body.appendChild(alertDiv);
+      setTimeout(() => {
+        alertDiv.classList.add('show');
+        setTimeout(() => {
+          alertDiv.classList.remove('show');
+          setTimeout(() => {
+            document.body.removeChild(alertDiv);
+          }, 300);
+        }, 3000);
+      }, 100);
     },
     navigateToContentDocument(doc) {
       this.$router.push({ name: 'ContentDocument', params: { id: doc.id } });
     },
     async downloadDocument(doc) {
       try {
-        // Vérifier si le document a une URL directe
-        if (doc.fileUrl) {
-          // Télécharger directement le fichier
-          const response = await axios({
-            url: doc.fileUrl,
-            method: 'GET',
-            responseType: 'blob'
-          });
-          
-          // Créer un lien temporaire pour télécharger le fichier
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', doc.name);
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(url);
-        } else {
-          // Si pas d'URL directe, essayer de construire l'URL
-          const baseUrl = 'https://localhost:7036';
-          const fileUrl = `${baseUrl}/uploads/documents/${doc.id}/${doc.name}`;
-          
-          // Télécharger directement le fichier
-          const response = await axios({
-            url: fileUrl,
-            method: 'GET',
-            responseType: 'blob'
-          });
-          
-          // Créer un lien temporaire pour télécharger le fichier
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', doc.name);
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(url);
-        }
+        const token = Cookies.get('token');
+        const response = await axios({
+          url: doc.fileUrl,
+          method: 'GET',
+          responseType: 'blob',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', doc.name);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
       } catch (error) {
-        console.error('Error downloading document:', error);
-        alert('Error downloading document. Please try again.');
+        console.error('Erreur lors du téléchargement:', error);
+        alert('Erreur lors du téléchargement du document. Veuillez réessayer.');
       }
     },
     async deleteDocument(documentId) {
-      if (!confirm("Are you sure you want to delete this document?")) return;
+      if (!confirm("Voulez-vous vraiment supprimer ce document ?")) return;
       try {
-        await axios.delete(`api/documents/${documentId}`);
-        this.fetchDocuments();
+        const token = Cookies.get('token');
+        await axios.delete(`api/documents/${documentId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        this.documents = this.documents.filter(doc => doc.id !== documentId);
+        this.showSuccessAlert('Document supprimé avec succès !');
       } catch (error) {
-        console.error('Error deleting document:', error);
-        alert('Error deleting document. Please try again.');
+        console.error('Erreur lors de la suppression:', error);
+        alert('Erreur lors de la suppression du document. Veuillez réessayer.');
       }
     }
   },
@@ -412,11 +453,17 @@ export default {
 }
 
 .search-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
 
 .search-input {
   position: relative;
+  flex: 1;
+  min-width: 250px;
   max-width: 500px;
 }
 
@@ -455,6 +502,41 @@ export default {
   font-size: 1.1rem;
 }
 
+.filter-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  color: #666;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-btn i {
+  font-size: 1rem;
+}
+
+.filter-btn:hover {
+  background: #f8f9fa;
+  border-color: #0d6efd;
+  color: #0d6efd;
+}
+
+.filter-btn.active {
+  background: #0d6efd;
+  border-color: #0d6efd;
+  color: white;
+}
+
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -485,6 +567,7 @@ export default {
 }
 
 .document-card {
+  position: relative;
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -510,10 +593,13 @@ export default {
   border-color: #0d6efd;
   background-color: #f0f7ff;
 }
-
+.add-document-card-content{
+  margin-top: 50px;
+}
 .add-icon {
   color: #0d6efd;
   font-size: 2rem;
+  margin-top: -10px;
 }
 
 .document-content {
@@ -546,7 +632,6 @@ export default {
   font-size: 0.9rem;
   color: #6c757d;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -607,6 +692,35 @@ export default {
 
 .delete-btn:hover {
   color: #dc3545;
+}
+
+/* Status Badge */
+.status-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 1;
+}
+
+.status-badge.traiter {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.non-traiter {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-badge i {
+  font-size: 1rem;
 }
 
 /* Modal Styles */
@@ -812,9 +926,80 @@ export default {
   color: #666;
 }
 
+/* Form Fields Animation */
+.form-fields {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom Alert Styles */
+.custom-alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateX(120%);
+  transition: transform 0.3s ease;
+  z-index: 9999;
+}
+
+.custom-alert.show {
+  transform: translateX(0);
+}
+
+.custom-alert.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.custom-alert.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.custom-alert i {
+  font-size: 1.25rem;
+}
+
+.custom-alert span {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
 @media (max-width: 768px) {
   .documents-container {
     padding: 1rem;
+  }
+  
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-input {
+    max-width: none;
+  }
+  
+  .filter-buttons {
+    justify-content: center;
+    flex-wrap: wrap;
   }
   
   .documents-grid {

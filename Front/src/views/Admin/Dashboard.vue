@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <!-- Stats Cards -->
+    <!-- Cartes de statistiques -->
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-icon users">
@@ -8,7 +8,7 @@
         </div>
         <div class="stat-content">
           <h3 class="stat-value">{{ stats.totalUsers }}</h3>
-          <p class="stat-label">Total Users</p>
+          <p class="stat-label">Utilisateurs totaux</p>
         </div>
         <div class="stat-trend positive">
           <span class="trend-icon">↑</span>
@@ -22,7 +22,7 @@
         </div>
         <div class="stat-content">
           <h3 class="stat-value">{{ stats.totalDocuments }}</h3>
-          <p class="stat-label">Total Documents</p>
+          <p class="stat-label">Documents totaux</p>
         </div>
         <div class="stat-trend positive">
           <span class="trend-icon">↑</span>
@@ -36,47 +36,47 @@
         </div>
         <div class="stat-content">
           <h3 class="stat-value">{{ formatStorage(stats.totalStorage) }}</h3>
-          <p class="stat-label">Storage Used</p>
+          <p class="stat-label">Stockage utilisé</p>
         </div>
         <div class="stat-trend neutral">
           <span class="trend-icon">→</span>
           <span class="trend-value">{{ stats.storageGrowth }}%</span>
         </div>
       </div>
-
-      <div class="stat-card">
-        <div class="stat-icon activity">
-          <span class="icon">📊</span>
-        </div>
-        <div class="stat-content">
-          <h3 class="stat-value">{{ stats.activeUsers }}</h3>
-          <p class="stat-label">Active Users</p>
-        </div>
-        <div class="stat-trend positive">
-          <span class="trend-icon">↑</span>
-          <span class="trend-value">+{{ stats.activityGrowth }}%</span>
-        </div>
-      </div>
     </div>
 
-    <!-- Charts Section -->
+    <!-- Section des graphiques -->
     <div class="charts-grid">
       <div class="chart-card">
         <div class="chart-header">
-          <h3>Document Activity</h3>
-          <div class="chart-actions">
-            <button class="chart-action-btn">Week</button>
-            <button class="chart-action-btn active">Month</button>
-            <button class="chart-action-btn">Year</button>
-          </div>
+          <h3>Activité des documents</h3>
         </div>
         <div class="chart-content">
-          <!-- Placeholder for chart -->
-          <div class="chart-placeholder">
-            <div class="chart-bars">
-              <div v-for="(value, index) in chartData" :key="index" 
-                   class="chart-bar" 
-                   :style="{ height: `${value}%` }">
+          <div class="chart-container">
+            <div class="y-axis">
+              <div v-for="label in yAxisLabels" :key="label" class="y-axis-label">
+                {{ label }}
+              </div>
+            </div>
+            <div class="chart-placeholder">
+              <div class="chart-bars">
+                <div 
+                  v-for="(item, index) in chartData" 
+                  :key="index" 
+                  class="chart-bar" 
+                  :style="{ height: `${(item.count / maxCount) * 100}%` }"
+                >
+                  <span class="bar-value">{{ item.count }}</span>
+                </div>
+              </div>
+              <div class="x-axis">
+                <div 
+                  v-for="(item, index) in chartData" 
+                  :key="index" 
+                  class="x-axis-label"
+                >
+                  {{ item.label }}
+                </div>
               </div>
             </div>
           </div>
@@ -85,41 +85,42 @@
 
       <div class="chart-card">
         <div class="chart-header">
-          <h3>Storage Usage</h3>
+          <h3>Utilisation du stockage</h3>
           <div class="chart-legend">
             <span class="legend-item">
               <span class="legend-color" style="background: #3498db"></span>
-              Used
+              Utilisé
             </span>
             <span class="legend-item">
               <span class="legend-color" style="background: #e0e0e0"></span>
-              Free
+              Libre
             </span>
           </div>
         </div>
         <div class="chart-content">
-          <!-- Placeholder for pie chart -->
           <div class="pie-chart-placeholder">
             <div class="pie-chart">
               <div class="pie-segment" :style="{ 
-                '--percentage': `${(stats.totalStorage / stats.maxStorage) * 100}%`,
+                '--percentage': `${storagePercentage}%`,
                 '--color': '#3498db'
               }"></div>
             </div>
             <div class="pie-chart-center">
-              <span class="pie-value">{{ Math.round((stats.totalStorage / stats.maxStorage) * 100) }}%</span>
-              <span class="pie-label">Used</span>
+              <span class="pie-value">{{ storagePercentage }}%</span>
+              <span class="pie-label">Utilisé</span>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Recent Activity -->
+    <!-- Activité récente -->
     <div class="activity-card">
       <div class="activity-header">
-        <h3>Recent Activity</h3>
-        <button class="view-all-btn">View All</button>
+        <h3>Activité récente</h3>
+        <button class="view-all-btn" @click="toggleShowAll">
+          {{ showAllActivities ? 'Voir moins' : 'Voir tout' }}
+        </button>
       </div>
       <div class="activity-list">
         <div v-for="activity in recentActivities" :key="activity.id" class="activity-item">
@@ -137,65 +138,67 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import axios from 'axios'
 
-// Mock data for demonstration
+const apiBaseUrl = 'https://localhost:7036'
+
+// État réactif
 const stats = ref({
-  totalUsers: 1234,
-  userGrowth: 12,
-  totalDocuments: 5678,
-  documentGrowth: 8,
-  totalStorage: 256,
-  maxStorage: 1024,
-  storageGrowth: 5,
-  activeUsers: 789,
-  activityGrowth: 15
+  totalUsers: 0,
+  userGrowth: 0,
+  totalDocuments: 0,
+  documentGrowth: 0,
+  totalStorage: 0,
+  maxStorage: 10,
+  storageGrowth: 0
 })
 
-const chartData = ref([65, 45, 75, 50, 85, 60, 70, 55, 80, 65, 75, 60])
+const chartData = ref([])
+const allActivities = ref([]) // Stocke toutes les activités
+const showAllActivities = ref(false) // Contrôle l'affichage complet ou limité
+const maxCount = ref(0)
 
-const recentActivities = ref([
-  {
-    id: 1,
-    type: 'upload',
-    description: 'John Doe uploaded a new document',
-    timestamp: new Date(Date.now() - 1000 * 60 * 5) // 5 minutes ago
-  },
-  {
-    id: 2,
-    type: 'edit',
-    description: 'Sarah Smith edited document "Project Plan"',
-    timestamp: new Date(Date.now() - 1000 * 60 * 15) // 15 minutes ago
-  },
-  {
-    id: 3,
-    type: 'delete',
-    description: 'Mike Johnson deleted a document',
-    timestamp: new Date(Date.now() - 1000 * 60 * 30) // 30 minutes ago
-  },
-  {
-    id: 4,
-    type: 'share',
-    description: 'Emily Brown shared a document with the team',
-    timestamp: new Date(Date.now() - 1000 * 60 * 60) // 1 hour ago
-  }
-])
+// Propriété calculée pour les activités affichées
+const recentActivities = computed(() => {
+  const activities = allActivities.value
+    .filter(activity => activity.timestamp && !isNaN(new Date(activity.timestamp).getTime()))
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+  
+  return showAllActivities.value ? activities : activities.slice(0, 4)
+})
 
+// Labels de l'axe Y calculés
+const yAxisLabels = computed(() => {
+  if (maxCount.value === 0) return []
+  const step = Math.ceil(maxCount.value / 5) || 1
+  return Array.from({ length: 6 }, (_, i) => Math.round(i * step)).reverse()
+})
+
+// Propriété calculée pour le pourcentage du stockage
+const storagePercentage = computed(() => {
+  if (stats.value.maxStorage === 0 || stats.value.totalStorage < 0) return 0
+  return Math.round((stats.value.totalStorage / stats.value.maxStorage) * 100)
+})
+
+// Fonctions utilitaires
 const formatStorage = (value) => {
-  return `${value} GB`
+  return `${value} Go`
 }
 
 const formatTime = (timestamp) => {
   const now = new Date()
-  const diff = now - timestamp
+  const diff = now - new Date(timestamp)
   const minutes = Math.floor(diff / 1000 / 60)
   
   if (minutes < 60) {
-    return `${minutes} minutes ago`
+    return `il y a ${minutes} minute${minutes > 1 ? 's' : ''}`
   } else if (minutes < 1440) {
-    return `${Math.floor(minutes / 60)} hours ago`
+    const hours = Math.floor(minutes / 60)
+    return `il y a ${hours} heure${hours > 1 ? 's' : ''}`
   } else {
-    return `${Math.floor(minutes / 1440)} days ago`
+    const days = Math.floor(minutes / 1440)
+    return `il y a ${days} jour${days > 1 ? 's' : ''}`
   }
 }
 
@@ -209,9 +212,146 @@ const getActivityIcon = (type) => {
   return icons[type] || '📌'
 }
 
-onMounted(() => {
-  // Here you would typically fetch real data from your API
-  // For now we're using mock data
+// Basculer entre afficher toutes les activités ou seulement 4
+const toggleShowAll = () => {
+  showAllActivities.value = !showAllActivities.value
+}
+
+// Appels API
+const fetchUsers = async () => {
+  try {
+    const response = await axios.get(`${apiBaseUrl}/api/users/all`)
+    const users = response.data
+    stats.value.totalUsers = users.length
+    stats.value.userGrowth = Math.round(Math.random() * 20)
+  } catch (error) {
+    console.error('Erreur lors de la récupération des utilisateurs :', error)
+  }
+}
+
+const fetchCloudinaryStorage = async () => {
+  try {
+    console.log('Appel à l\'API .NET pour les données de stockage Cloudinary...')
+    const response = await axios.get(`${apiBaseUrl}/api/admin/documents/storageCloud`, {
+      timeout: 10000
+    })
+    console.log('Réponse de l\'API .NET:', response.data)
+    if (typeof response.data.totalStorage !== 'number' || typeof response.data.maxStorage !== 'number') {
+      throw new Error('Données de stockage invalides reçues')
+    }
+    stats.value.totalStorage = response.data.totalStorage
+    stats.value.maxStorage = response.data.maxStorage > 0 ? response.data.maxStorage : 10
+    stats.value.storageGrowth = Math.round(Math.random() * 5)
+  } catch (error) {
+    console.error('Erreur lors de la récupération des données de stockage :', error)
+    if (error.response) {
+      console.error('Réponse du serveur:', error.response.status, error.response.data)
+    }
+    stats.value.totalStorage = 0
+    stats.value.maxStorage = 10
+  }
+}
+
+const fetchDocuments = async () => {
+  try {
+    const response = await axios.get(`${apiBaseUrl}/api/admin/documents`)
+    const documents = response.data
+    stats.value.totalDocuments = documents.length
+    stats.value.documentGrowth = Math.round(Math.random() * 10)
+  } catch (error) {
+    console.error('Erreur lors de la récupération des documents :', error)
+  }
+}
+
+const fetchRecentActivities = async () => {
+  try {
+    const response = await axios.get(`${apiBaseUrl}/api/admin/documents`)
+    const documents = response.data
+    
+    // Transformer les données des documents en format d'activité
+    allActivities.value = await Promise.all(
+      documents
+        .filter(doc => doc.uploadDate && !isNaN(new Date(doc.uploadDate).getTime()))
+        .map(async (doc) => {
+          try {
+            const userResponse = await axios.get(`${apiBaseUrl}/api/admin/documents/${doc.id}/user`)
+            const user = userResponse.data
+            return {
+              id: doc.id,
+              type: 'upload',
+              description: `${user.userName || 'Utilisateur'} a ajoutée le document "${doc.name}"`,
+              timestamp: doc.uploadDate
+            }
+          } catch (error) {
+            console.error(`Erreur lors de la récupération de l'utilisateur pour le document ${doc.id} :`, error)
+            return {
+              id: doc.id,
+              type: 'upload',
+              description: `Utilisateur a téléversé le document "${doc.name}"`,
+              timestamp: doc.uploadDate
+            }
+          }
+        })
+    )
+  } catch (error) {
+    console.error('Erreur lors de la récupération des activités :', error)
+  }
+}
+
+const fetchChartData = async () => {
+  try {
+    const response = await axios.get(`${apiBaseUrl}/api/admin/documents`)
+    const documents = response.data
+    
+    const now = new Date()
+    const bins = Array(6).fill().map((_, i) => ({
+      startDate: new Date(now.getTime() - (29 - i * 5) * 24 * 60 * 60 * 1000),
+      endDate: new Date(now.getTime() - (24 - i * 5) * 24 * 60 * 60 * 1000),
+      count: 0,
+      label: ''
+    }))
+    
+    bins.forEach(bin => {
+      bin.label = bin.startDate.toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' })
+    })
+    
+    documents.forEach(doc => {
+      if (!doc.uploadDate) return
+      const docDate = new Date(doc.uploadDate)
+      if (isNaN(docDate.getTime())) return
+      
+      for (const bin of bins) {
+        if (docDate >= bin.startDate && docDate < bin.endDate) {
+          bin.count++
+          break
+        }
+      }
+    })
+    
+    maxCount.value = Math.max(...bins.map(bin => bin.count), 1)
+    chartData.value = bins
+  } catch (error) {
+    console.error('Erreur lors de la récupération des données du graphique :', error)
+  }
+}
+
+// Récupération initiale des données
+onMounted(async () => {
+  axios.interceptors.request.use(config => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  })
+  
+  await Promise.all([
+    fetchUsers(),
+    fetchDocuments(),
+    fetchCloudinaryStorage(),
+    fetchRecentActivities(),
+    fetchChartData()
+  ])
 })
 </script>
 
@@ -222,7 +362,7 @@ onMounted(() => {
   margin: 0 auto;
 }
 
-/* Stats Grid */
+/* Grille des statistiques */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -258,7 +398,6 @@ onMounted(() => {
 .stat-icon.users { background: rgba(52, 152, 219, 0.1); }
 .stat-icon.documents { background: rgba(46, 204, 113, 0.1); }
 .stat-icon.storage { background: rgba(155, 89, 182, 0.1); }
-.stat-icon.activity { background: rgba(241, 196, 15, 0.1); }
 
 .stat-content {
   flex: 1;
@@ -301,7 +440,7 @@ onMounted(() => {
   background: rgba(127, 140, 141, 0.1);
 }
 
-/* Charts Grid */
+/* Grille des graphiques */
 .charts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -329,27 +468,6 @@ onMounted(() => {
   color: #2c3e50;
 }
 
-.chart-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.chart-action-btn {
-  padding: 0.25rem 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: none;
-  cursor: pointer;
-  font-size: 0.875rem;
-  color: #666;
-}
-
-.chart-action-btn.active {
-  background: #3498db;
-  color: white;
-  border-color: #3498db;
-}
-
 .chart-legend {
   display: flex;
   gap: 1rem;
@@ -374,19 +492,40 @@ onMounted(() => {
   position: relative;
 }
 
-.chart-placeholder {
-  height: 100%;
+.chart-container {
   display: flex;
-  align-items: flex-end;
-  gap: 8px;
+  height: 100%;
   padding: 1rem 0;
+}
+
+.y-axis {
+  width: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-right: 10px;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.y-axis-label {
+  text-align: right;
+}
+
+.chart-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
 }
 
 .chart-bars {
   display: flex;
   align-items: flex-end;
   gap: 8px;
-  height: 100%;
+  height: calc(100% - 30px);
   width: 100%;
 }
 
@@ -395,6 +534,29 @@ onMounted(() => {
   background: #3498db;
   border-radius: 4px;
   transition: height 0.3s ease;
+  position: relative;
+}
+
+.bar-value {
+  position: absolute;
+  top: -20px;
+  width: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #2c3e50;
+}
+
+.x-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.x-axis-label {
+  flex: 1;
+  text-align: center;
 }
 
 .pie-chart-placeholder {
@@ -443,7 +605,7 @@ onMounted(() => {
   color: #666;
 }
 
-/* Activity Card */
+/* Carte d'activité */
 .activity-card {
   background: white;
   border-radius: 12px;
@@ -534,5 +696,14 @@ onMounted(() => {
     align-items: flex-start;
     gap: 0.5rem;
   }
+
+  .x-axis-label {
+    font-size: 0.65rem;
+  }
+
+  .y-axis {
+    width: 40px;
+    font-size: 0.65rem;
+  }
 }
-</style> 
+</style>

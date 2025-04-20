@@ -77,7 +77,6 @@ builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
-builder.Services.AddScoped<IPdfExtractorService, PdfExtractorService>();
 
 // Configuration d'EmailService
 var emailSettings = builder.Configuration.GetSection("EmailSettings");
