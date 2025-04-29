@@ -9,7 +9,7 @@ namespace Docvision.Models
         public string Name { get; set; } = "";
         public DateTime UploadDate { get; set; }
         public string? description { get; set; } = "";
-        public bool istraiter { get; set; }=false;
+        public bool isAnalysed { get; set; }=false;
         public bool isExtracted { get; set; }=false ;
         public string FileUrl { get; set; } = "";
         public string? Text { get; set; }

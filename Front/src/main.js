@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 import Orion from '@orion.ui/orion'; // Import de la librairie Orion
@@ -9,8 +10,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css'; // Import Bootstrap Icons
 import 'bootstrap';
 import '@fortawesome/fontawesome-free/css/all.css';
-import store from './Store';  // Import du store
+import store from './Store'; // Import du store (Vuex?)
 import Cookies from 'js-cookie'; // Import de js-cookie pour gérer les cookies
+
+// Créer l'application Vue
+const app = createApp(App);
+
+// Initialiser Pinia
+const pinia = createPinia();
+app.use(pinia);
 
 // Définir l'URL de base pour Axios
 axios.defaults.baseURL = "https://localhost:7036";
@@ -21,7 +29,6 @@ axios.interceptors.request.use(
     const token = Cookies.get('token'); // Récupère le token depuis les cookies
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      
     }
     if (!(config.data instanceof FormData)) {
       config.headers.Accept = 'application/json';
@@ -67,9 +74,6 @@ axios.interceptors.response.use(
   }
 );
 
-// Créer l'application Vue
-const app = createApp(App);
-
 // Utiliser les plugins et le store
 app.use(router);
 app.use(Orion);
@@ -78,4 +82,5 @@ app.use(store);
 // Vérifier le statut de l'utilisateur au démarrage de l'application
 store.dispatch('checkUserStatus');
 
+// Monter l'application
 app.mount('#app');

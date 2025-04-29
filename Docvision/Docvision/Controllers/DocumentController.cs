@@ -16,7 +16,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Docvision.Repositories;
 using Docvision.Dtos;
-
+using System.ComponentModel.DataAnnotations;
+using System.Net.Http;
+using System.Text.Json;
+using System.Text;
 
 namespace Back.Controllers
 {
@@ -26,19 +29,19 @@ namespace Back.Controllers
     public class DocumentController : ControllerBase
     {
         private readonly IDocumentRepository _idocumentRepository;
-        private DocContext _context;
+        private readonly DocContext _context;
+        private readonly HttpClient _httpClient;
 
-        public DocumentController(IDocumentRepository IdocumentRepository, DocContext docContext)
+        public DocumentController(IDocumentRepository IdocumentRepository, DocContext docContext, IHttpClientFactory httpClientFactory)
         {
             _idocumentRepository = IdocumentRepository;
             _context = docContext;
-
+            _httpClient = httpClientFactory.CreateClient(nameof(DocumentController)); // Utiliser le client nommé
         }
-
 
         [HttpPost("add")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UploadDocument(IFormFile file,string description)
+        public async Task<IActionResult> UploadDocument([FromForm] CreateDocumentRequest request)
         {
             try
             {
@@ -47,7 +50,11 @@ namespace Back.Controllers
                 {
                     return Unauthorized("Utilisateur non authentifié.");
                 }
-                var document = await _idocumentRepository.AddDocumentAsync(file, description, userId);
+                if (string.IsNullOrWhiteSpace(request.Description))
+                {
+                    ModelState.AddModelError("Description", "The description field is required.");
+                }
+                var document = await _idocumentRepository.AddDocumentAsync(request.File,request.Name, request.Description, userId);
 
                 return Ok(document);
             }
@@ -60,7 +67,6 @@ namespace Back.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllDocuments()
         {
-
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub);
@@ -76,7 +82,6 @@ namespace Back.Controllers
             {
                 return StatusCode(500, $"Erreur serveur : {ex.Message}");
             }
-
         }
 
         [HttpGet("{id}")]
@@ -91,19 +96,18 @@ namespace Back.Controllers
             return Ok(document);
         }
 
-
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDocument(Guid id, [FromBody] DocumentUpdateDto updatedDocument)
+        public async Task<IActionResult> UpdateDocument(Guid id, [FromBody] DocumentUpdateDto
+
+ updatedDocument)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub);
-
             if (string.IsNullOrEmpty(userId))
             {
                 return Unauthorized("Utilisateur non authentifié.");
             }
 
             var document = await _idocumentRepository.UpdateDocumentAsync(id, updatedDocument, userId);
-
             if (document == null)
             {
                 return NotFound("Document non trouvé ou l'utilisateur n'a pas accès à ce document.");
@@ -111,9 +115,6 @@ namespace Back.Controllers
 
             return Ok(document);
         }
-
-
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDocument(Guid id)
@@ -127,6 +128,7 @@ namespace Back.Controllers
 
             return Ok("Document supprimé avec succès.");
         }
+
         [HttpPost("extract/{id}")]
         public async Task<IActionResult> Extract(Guid id)
         {
@@ -135,8 +137,7 @@ namespace Back.Controllers
 
             var requestBody = new { pdf_url = document.FileUrl };
 
-            using var httpClient = new HttpClient();
-            var response = await httpClient.PostAsJsonAsync("http://127.0.0.1:8000/extract", requestBody);
+            var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:8000/extract", requestBody);
             if (!response.IsSuccessStatusCode)
                 return StatusCode((int)response.StatusCode, "Erreur appel FastAPI");
 
@@ -173,12 +174,173 @@ namespace Back.Controllers
                 images = result.images
             });
         }
+
+        [HttpPost("describe/{id}")]
+        public async Task<IActionResult> DescribeImages(Guid id)
+        {
+            try
+            {
+                // Récupérer le document
+                var document = await _context.Documents.FirstOrDefaultAsync(d => d.Id == id);
+                if (document == null)
+                    return NotFound("Document non trouvé.");
+
+                if (string.IsNullOrEmpty(document.Text))
+                    return BadRequest("Le document n'a pas de texte extrait. Veuillez d'abord extraire le document.");
+
+                // Récupérer les images associées
+                var images = await _context.Images.Where(i => i.DocumentId == id).ToListAsync();
+                if (!images.Any())
+                    return NotFound("Aucune image trouvée pour ce document.");
+
+                // Traiter les images en parallèle
+                var tasks = images.Select(async image =>
+                {
+                    try
+                    {
+                        // Valider l'URL de l'image
+                        if (string.IsNullOrEmpty(image.FileUrl) || !Uri.IsWellFormedUriString(image.FileUrl, UriKind.Absolute))
+                        {
+                            return new
+                            {
+                                ImageId = image.Id,
+                                Success = false,
+                                Error = $"URL de l'image {image.FileUrl} invalide."
+                            };
+                        }
+
+                        var requestBody = new
+                        {
+                            image_url = image.FileUrl,
+                            text = document.Text
+                        };
+
+                        var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:8000/describe_image", requestBody);
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            return new
+                            {
+                                ImageId = image.Id,
+                                Success = false,
+                                Error = $"Erreur lors de l'appel à l'API FastAPI pour l'image {image.FileUrl}: {(int)response.StatusCode}"
+                            };
+                        }
+
+                        var result = await response.Content.ReadFromJsonAsync<DescribeImageResult>();
+                        if (result == null)
+                        {
+                            return new
+                            {
+                                ImageId = image.Id,
+                                Success = false,
+                                Error = $"Réponse invalide de l'API pour l'image {image.FileUrl}"
+                            };
+                        }
+
+                        // Mettre à jour l'image
+                        image.Description = result.description;
+                        image.Objects = JsonSerializer.Serialize(result.detected_objects);
+                        document.isAnalysed = true;
+
+                        return new
+                        {
+                            ImageId = image.Id,
+                            Success = true,
+                            Error = (string?)null
+                        };
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        return new
+                        {
+                            ImageId = image.Id,
+                            Success = false,
+                            Error = $"La requête pour l'image {image.FileUrl} a expiré."
+                        };
+                    }
+                    catch (HttpRequestException ex)
+                    {
+                        return new
+                        {
+                            ImageId = image.Id,
+                            Success = false,
+                            Error = $"Erreur réseau lors du traitement de l'image {image.FileUrl}: {ex.Message}"
+                        };
+                    }
+                    catch (Exception ex)
+                    {
+                        return new
+                        {
+                            ImageId = image.Id,
+                            Success = false,
+                            Error = $"Erreur inattendue lors du traitement de l'image {image.FileUrl}: {ex.Message}"
+                        };
+                    }
+                });
+
+                // Attendre que toutes les requêtes soient terminées
+                var results = await Task.WhenAll(tasks);
+
+                // Sauvegarder les modifications pour les images traitées avec succès
+                await _context.SaveChangesAsync();
+
+                // Vérifier s'il y a des erreurs
+                var errors = results.Where(r => !r.Success).ToList();
+                if (errors.Any())
+                {
+                    return Ok(new
+                    {
+                        Message = "Certaines images n'ont pas pu être traitées, mais les images valides ont été enregistrées.",
+                        Results = results.Select(r => new
+                        {
+                            r.ImageId,
+                            r.Success,
+                            r.Error
+                        })
+                    });
+                }
+
+                // Retourner les détails des images traitées
+                return Ok(new
+                {
+                    Message = "Toutes les images ont été traitées et enregistrées avec succès.",
+                    Images = images.Select(i => new
+                    {
+                        i.Id,
+                        i.FileUrl,
+                        i.Description,
+                        Objects = string.IsNullOrEmpty(i.Objects) ? new List<string>() : JsonSerializer.Deserialize<List<string>>(i.Objects)
+                    })
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erreur serveur : {ex.Message}");
+            }
+        }
         public class ExtractedResult
         {
             public string text { get; set; } = "";
             public List<string> images { get; set; } = new();
         }
 
+        public class DescribeImageResult
+        {
+            public List<string> detected_objects { get; set; } = new();
+            public List<string> mentioned_objects { get; set; } = new();
+            public List<string> objects_to_describe { get; set; } = new();
+            public string description { get; set; } = "";
+        }
 
+        public class CreateDocumentRequest
+        {
+            [Required]
+            public IFormFile File { get; set; }
+            [Required]
+            public string Name { get; set; }
+            [Required]
+            public string Description { get; set; }
+            
+        }
     }
 }

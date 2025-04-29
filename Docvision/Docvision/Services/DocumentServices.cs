@@ -1,4 +1,6 @@
-﻿using Docvision.Models;
+﻿using CloudinaryDotNet.Actions;
+using CloudinaryDotNet;
+using Docvision.Models;
 using Docvision.Persistance;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,10 +9,12 @@ namespace Docvision.Services
     public class DocumentService : IDocumentService
     {
         private readonly DocContext _context;
+        private readonly Cloudinary _cloudinary;
 
-        public DocumentService(DocContext context)
+        public DocumentService(DocContext context,Cloudinary cloudinary)
         {
             _context = context;
+            _cloudinary = cloudinary;
         }
 
         public async Task<List<Document>> GetAllDocumentsAsync()
@@ -23,14 +27,39 @@ namespace Docvision.Services
             return await _context.Documents.FindAsync(id);
         }
 
-        public async Task<Document> AddDocumentAsync(Document document)
+        public async Task<Document> AddDocumentAsync(IFormFile file,string name, string description, string userId)
         {
+            using var stream = file.OpenReadStream();
+
+            var uploadParams = new RawUploadParams
+            {
+                File = new FileDescription(file.FileName, stream),
+                Folder = "documents",
+                UseFilename = true,
+                UniqueFilename = false,
+
+                Overwrite = true
+            };
+
+            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+
+            var document = new Document
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                UploadDate = DateTime.UtcNow,
+                FileUrl = uploadResult.SecureUrl.ToString(),
+                UserId = userId,
+                description = description,
+            };
+
             _context.Documents.Add(document);
             await _context.SaveChangesAsync();
+
             return document;
         }
 
-        public async Task<Document?> UpdateDocumentAsync(Guid id, string? name, string? description)
+        public async Task<Document?> UpdateDocumentAsync(Guid id, string? name, string? description,string userId)
         {
             var doc = await _context.Documents.FindAsync(id);
             if (doc == null) return null;
@@ -44,7 +73,11 @@ namespace Docvision.Services
             {
                 doc.description = description;
             }
-
+            var user = _context.Users.Find(userId);
+            if (!string.IsNullOrEmpty(doc.UserId))
+            {
+                doc.UserId = user.Id;
+            }
             _context.Documents.Update(doc);
             await _context.SaveChangesAsync();
 

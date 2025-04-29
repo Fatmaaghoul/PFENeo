@@ -17,7 +17,7 @@ namespace Docvision.Repositories
             _Context = docContext;
         }
 
-        public async Task<Document> AddDocumentAsync(IFormFile file,string description, string userId)
+        public async Task<Document> AddDocumentAsync(IFormFile file,string Name, string description, string userId)
         {
             using var stream = file.OpenReadStream();
 
@@ -36,7 +36,7 @@ namespace Docvision.Repositories
             var document = new Document
             {
                 Id = Guid.NewGuid(),
-                Name = file.FileName,
+                Name = Name,
                 UploadDate = DateTime.UtcNow,
                 FileUrl = uploadResult.SecureUrl.ToString(),
                 UserId = userId,
@@ -49,19 +49,57 @@ namespace Docvision.Repositories
             return document;
         }
 
-        public async Task<Document?> DeleteDocumentAsync(Guid Id, string userId)
+        public async Task<Document?> DeleteDocumentAsync(Guid id, string userId)
         {
-            var document = await _Context.Documents.FirstOrDefaultAsync(d => d.Id == Id && d.UserId == userId);
-            if (document == null) return null;
+            try
+            {
+                // Validate inputs
+                if (id == Guid.Empty)
+                {
+                    throw new ArgumentException("Document ID cannot be empty", nameof(id));
+                }
+                if (string.IsNullOrEmpty(userId))
+                {
+                    throw new ArgumentException("UserId cannot be null or empty", nameof(userId));
+                }
 
-            var publicId = document.FileUrl.Split('/').Last().Split('.')[0];
-            var deletionParams = new DeletionParams(publicId);
-            await _cloudinary.DestroyAsync(deletionParams);
+                // Retrieve document with user verification and include Images
+                var document = await _Context.Documents
+                    .Include(d => d.Images) // Ensure Images is loaded
+                    .FirstOrDefaultAsync(d => d.Id == id && d.UserId == userId);
 
-            _Context.Documents.Remove(document);
-            await _Context.SaveChangesAsync();
+                if (document == null)
+                {
+                    return null;
+                }
 
-            return document;
+                // Use transaction for database operations
+                using var transaction = await _Context.Database.BeginTransactionAsync();
+                try
+                {
+                    // Delete associated images if they exist
+                    if (document.Images != null && document.Images.Any())
+                    {
+                        _Context.Images.RemoveRange(document.Images);
+                    }
+
+                    // Delete document
+                    _Context.Documents.Remove(document);
+                    await _Context.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+                    return document;
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<List<Document>> GetAllDocumentAsync(string userId)

@@ -28,6 +28,11 @@
                 <i class="bi bi-files me-1"></i> Documents
               </RouterLink>
             </li>
+            <li v-if="authenticated" class="nav-item">
+              <RouterLink to="/analyze-document" class="nav-link">
+                <i class="bi bi-files me-1"></i> Analyser
+              </RouterLink>
+            </li>
             <li v-if="authenticated && user?.role === 'Admin'" class="nav-item">
               <RouterLink to="/admin/dashboard" class="nav-link text-danger fw-bold">
                 <i class="bi bi-speedometer2 me-1"></i>

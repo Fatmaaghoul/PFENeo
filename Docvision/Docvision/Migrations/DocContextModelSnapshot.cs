@@ -121,10 +121,10 @@ namespace Docvision.Migrations
                     b.Property<string>("description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isExtracted")
+                    b.Property<bool>("isAnalysed")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("istraiter")
+                    b.Property<bool>("isExtracted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -142,6 +142,9 @@ namespace Docvision.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Caption")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -150,6 +153,9 @@ namespace Docvision.Migrations
 
                     b.Property<string>("FileUrl")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Objects")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

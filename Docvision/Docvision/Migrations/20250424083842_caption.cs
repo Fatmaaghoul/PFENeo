@@ -5,15 +5,15 @@
 namespace Docvision.Migrations
 {
     /// <inheritdoc />
-    public partial class triter : Migration
+    public partial class caption : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "triter",
-                table: "Documents",
-                type: "bit",
+            migrationBuilder.AddColumn<string>(
+                name: "Caption",
+                table: "Images",
+                type: "nvarchar(max)",
                 nullable: true);
         }
 
@@ -21,8 +21,8 @@ namespace Docvision.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "triter",
-                table: "Documents");
+                name: "Caption",
+                table: "Images");
         }
     }
 }

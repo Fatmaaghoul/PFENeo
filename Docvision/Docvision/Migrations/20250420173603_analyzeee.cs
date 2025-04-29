@@ -5,35 +5,34 @@
 namespace Docvision.Migrations
 {
     /// <inheritdoc />
-    public partial class extraction : Migration
+    public partial class analyzeee : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "triter",
+                name: "istraiter",
                 table: "Documents",
-                newName: "istraiter");
+                newName: "isAnalysed");
 
-            migrationBuilder.AddColumn<bool>(
-                name: "isExtracted",
-                table: "Documents",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
+            migrationBuilder.AddColumn<string>(
+                name: "Objects",
+                table: "Images",
+                type: "nvarchar(max)",
+                nullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "isExtracted",
-                table: "Documents");
+                name: "Objects",
+                table: "Images");
 
             migrationBuilder.RenameColumn(
-                name: "istraiter",
+                name: "isAnalysed",
                 table: "Documents",
-                newName: "triter");
+                newName: "istraiter");
         }
     }
 }

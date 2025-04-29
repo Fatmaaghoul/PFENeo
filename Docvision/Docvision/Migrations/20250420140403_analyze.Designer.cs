@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Docvision.Migrations
 {
     [DbContext(typeof(DocContext))]
-    [Migration("20250407225644_addingdescription")]
-    partial class addingdescription
+    [Migration("20250420140403_analyze")]
+    partial class analyze
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,6 +123,12 @@ namespace Docvision.Migrations
 
                     b.Property<string>("description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isExtracted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("istraiter")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

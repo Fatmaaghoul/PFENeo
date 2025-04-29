@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Docvision.Helpers;
+using Back.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 // Configuration JWT
@@ -62,7 +63,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<DocContext>()
 .AddDefaultTokenProviders();
 
-
 // Add services to the container.
 builder.Services.AddDbContext<DocContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("docsdb")));
@@ -77,7 +77,11 @@ builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
-builder.Services.AddScoped<IPdfExtractorService, PdfExtractorService>();
+//builder.Services.AddHttpClient(); // Ajouter IHttpClientFactory
+builder.Services.AddHttpClient<DocumentController>(client =>
+{
+    client.Timeout = TimeSpan.FromMinutes(100); 
+});
 
 // Configuration d'EmailService
 var emailSettings = builder.Configuration.GetSection("EmailSettings");
@@ -91,7 +95,7 @@ builder.Services.AddScoped<IEmailService, EmailService>(provider =>
 );
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddHttpContextAccessor();
-// Ajout de CORS
+// Ajout de COR
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -147,7 +151,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
-app.UseAuthentication(); 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

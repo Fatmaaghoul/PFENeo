@@ -5,7 +5,7 @@ import Login from '@/views/Auth/Login.vue';
 import Profile from '@/views/Auth/Profile.vue';
 import Users from '@/views/Admin/Users.vue';
 import Register from '@/views/Auth/Register.vue';
-import ListDocument from '@/views/Documents/ListDocument.vue';
+//import ListDocument from '@/views/Documents/ListDocument.vue';
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import Dashboard from '@/views/Admin/Dashboard.vue';
 import AdminProfile from '@/views/Admin/AdminProfile.vue';
@@ -14,8 +14,10 @@ import ForgotPassword from '@/views/Auth/ForgotPassword.vue';
 import Home from '@/views/Home/Home.vue';
 import ConfirmEmail from '@/views/Auth/ConfirmEmail.vue';
 import Cookies from 'js-cookie'; // Import de js-cookie
-import ContentDocument from '@/views/Documents/ContentDocument.vue';
 import Documents from '@/views/Admin/Documents.vue';
+import AnalyzeDocument from '@/views/Documents/AnalyzeDocument.vue';
+import Document from '@/views/Documents/ContentDocument/Document.vue';
+import ListDocument from '@/views/Documents/ListDocument/ListDocument.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,9 +40,15 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/analyze-document',
+      name: 'AnalyzeDocument',
+      component: AnalyzeDocument
+    },
+  
+    {
       path: '/document/content/:id',
       name: 'ContentDocument',
-      component: ContentDocument,
+      component: Document,
       meta: { requiresAuth: true }
     },
     {
