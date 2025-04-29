@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isAdminRoute" style="margin-bottom: 80px;">
+  <div v-if="!isAdminRoute" >
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top w-100">
       <div class="container">
         <RouterLink to="/" class="navbar-brand d-flex align-items-center">

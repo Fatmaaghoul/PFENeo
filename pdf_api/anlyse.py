@@ -96,8 +96,8 @@ def extract_mentioned_objects(text: str, reference_objects: set) -> set:
 def generate_description(image_path: str, objects_to_describe: set, text: str = "") -> str:
     print(f"[INFO] Objets à décrire : {objects_to_describe}")
     if not objects_to_describe:
-        print("[INFO] Aucun objet à décrire, retour : 'Il n'y a pas d'objets'")
-        return "Il n'y a pas d'objets"
+        print("[INFO] Aucun objet à décrire, retour : 'Cette image n’a aucun lien avec le texte : aucun objet présent dans l’image n’est mentionné dans le texte.")
+        return "Cette image n’a aucun lien avec le texte : aucun objet présent dans l’image n’est mentionné dans le texte."
 
     object_list = ", ".join(objects_to_describe)
     prompt = f"""
@@ -109,11 +109,13 @@ Ta tâche est de :
 - Pour chaque objet, précise son apparence (forme, couleur, taille, texture, état visuel...).
 - Décris sa position approximative dans l'image (ex : en haut à gauche, au centre, proche du bord inférieur, etc.).
 - Si pertinent, indique brièvement son environnement immédiat mais uniquement en lien avec l'objet concerné.
+-commencer par le {object_list} est un 
 
 Important :
 - Ignore totalement l'arrière-plan général, les éléments non mentionnés et les détails superflus.
 - Concentre-toi uniquement sur les objets listés. Fais comme si le reste de l'image n'existait pas.
 - Ne fais aucune hypothèse sur des objets absents de la liste, même s'ils paraissent évidents.
+-commencer par le {object_list} est un 
 
 Ta réponse doit être rédigée en français clair, précis et descriptif.
 Pas d'introduction, pas de conclusion. Va directement aux descriptions ciblées.

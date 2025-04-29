@@ -232,8 +232,10 @@
   
   <style scoped>
   .documents-container {
+    
     max-width: 1200px;
     margin: 0 auto;
+    margin-top: 80px;
     padding: 2rem;
   }
   

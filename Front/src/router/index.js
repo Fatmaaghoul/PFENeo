@@ -15,7 +15,6 @@ import Home from '@/views/Home/Home.vue';
 import ConfirmEmail from '@/views/Auth/ConfirmEmail.vue';
 import Cookies from 'js-cookie'; // Import de js-cookie
 import Documents from '@/views/Admin/Documents.vue';
-import AnalyzeDocument from '@/views/Documents/AnalyzeDocument.vue';
 import Document from '@/views/Documents/ContentDocument/Document.vue';
 import ListDocument from '@/views/Documents/ListDocument/ListDocument.vue';
 
@@ -39,12 +38,7 @@ const router = createRouter({
       component: ListDocument,
       meta: { requiresAuth: true }
     },
-    {
-      path: '/analyze-document',
-      name: 'AnalyzeDocument',
-      component: AnalyzeDocument
-    },
-  
+    
     {
       path: '/document/content/:id',
       name: 'ContentDocument',

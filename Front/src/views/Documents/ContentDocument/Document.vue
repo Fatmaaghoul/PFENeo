@@ -6,11 +6,11 @@
       <p>⏳ Extraction en cours, veuillez patienter...</p>
     </div>
 
-    <!-- Message pendant l'analyse -->
+    <!-- Message pendant l'analyse
     <div v-if="documentStore.isAnalysing" class="loading-bar">
       <div class="spinner"></div>
       <p>⏳ Analyse en cours, veuillez patienter...</p>
-    </div>
+    </div> -->
 
     <!-- Disposition du contenu principal -->
     <div v-else class="content-layout">
@@ -39,6 +39,15 @@
             @click="activeSection = 'text'"
           >
             Texte
+          </button>
+
+          <!-- Bouton Analyser avec icône tournante -->
+          <button
+            class="analyse-btn"
+            @click="analyseDocument"
+            :disabled="documentStore.isAnalysing"
+          >
+            <i class="bi bi-gear" :class="{ 'spin-icon': documentStore.isAnalysing }"></i> Analyser
           </button>
         </div>
 
@@ -94,7 +103,7 @@ const documentId = route.params.id
 const selectedImage = ref(null)
 const isCopied = ref(false)
 const documentStore = useDocumentStore()
-const activeSection = ref('information') // Section active par défaut
+const activeSection = ref('images') // Section active par défaut
 
 const document = ref({
   name: '',
@@ -168,6 +177,7 @@ const analyseDocument = async () => {
     await axios.post(`api/documents/describe/${documentId}`)
     const res = await axios.get(`api/documents/${documentId}`)
     document.value = res.data
+    await fetchImages() // Rafraîchir les descriptions des images
     alert('Document analysé avec succès ✅')
   } catch (error) {
     console.error('Erreur lors de l\'analyse du document :', error)
@@ -202,8 +212,8 @@ onMounted(() => {
 <style scoped>
 .container {
   max-width: 100%;
-  margin: 0;
-  padding: 20px;
+  margin-top: 42px;
+  padding: 10px;
   font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
@@ -247,42 +257,78 @@ onMounted(() => {
 }
 
 .left-content {
+  margin-top: 50px;
   width: 50%;
   display: flex;
   flex-direction: column;
 }
 
 .button-bar {
+  z-index: 99;
+  position: fixed;
   display: flex;
-  gap: 10px;
+  gap: 20px; /* Espacement similaire à l'image */
   padding: 10px;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
+  background: none; /* Supprimer le fond */
+  border-bottom: none; /* Supprimer la bordure */
+  width: calc(50% - 20px); /* Aligner avec .left-content (50% - padding) */
 }
 
 .content-btn {
-  padding: 8px 16px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  color: #333;
+  background: none; /* Pas de fond */
+  border: none; /* Pas de bordure */
+  padding: 5px; /* Padding minimal */
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+  position: relative; /* Pour la barre active */
+  font-size: 16px; /* Taille de texte ajustée */
+  color: #5f6368; /* Gris comme dans l'image */
+  transition: color 0.3s;
+}
+
+.content-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px; /* Épaisseur de la barre */
+  background-color: #1a73e8; /* Bleu comme dans l'image */
 }
 
 .content-btn:hover {
-  background-color: #f8f9fa;
-  border-color: #bbb;
+  color: #1a73e8; /* Bleu au survol */
 }
 
-.content-btn.active {
-  background-color: #4caf50;
-  border-color: #4caf50;
+.analyse-btn {
+  margin-left: auto; /* Pousse le bouton à droite */
+  background-color: #1bc0c8; /* Cyan pour être remarquable */
   color: white;
+  padding: 8px 16px; /* Ajusté pour correspondre à la barre */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s;
+}
+
+.analyse-btn:hover {
+  background-color: #17a2b8;
+}
+
+.analyse-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.spin-icon {
+  animation: spin 1s ease-in-out infinite; /* Applique l'animation de rotation */
 }
 
 .dynamic-content {
+  margin-top: 50px;
   flex: 1;
   padding: 20px;
   overflow-y: auto;
@@ -370,6 +416,12 @@ onMounted(() => {
   .button-bar {
     flex-wrap: wrap;
     justify-content: center;
+    width: 100%; /* Ajuster pour petits écrans */
+  }
+
+  .analyse-btn {
+    margin-left: 0; /* Centrer sur petits écrans */
+    margin-top: 10px; /* Espacement vertical */
   }
 
   .dynamic-content {
@@ -379,7 +431,7 @@ onMounted(() => {
   .preview {
     position: static;
     width: 100%;
-    height: auto;
+    height: 100%;
     border-left: none;
     border-top: 1px solid #ddd;
   }
@@ -391,13 +443,13 @@ onMounted(() => {
   }
 
   .button-bar {
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row; /* Garder les boutons en ligne */
+    justify-content: center;
+    gap: 15px;
   }
 
   .content-btn {
-    width: 100%;
-    margin-bottom: 10px;
+    padding: 5px;
   }
 
   .modal-content {

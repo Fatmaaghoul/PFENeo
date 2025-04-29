@@ -17,7 +17,7 @@ export default {
     <main class="main-content">
       <router-view></router-view>
     </main>
-    <Footer />
+    <!-- <Footer /> -->
   </div>
 </template>
 
