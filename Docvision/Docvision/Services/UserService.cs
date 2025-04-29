@@ -22,7 +22,8 @@ namespace Docvision.Services
         
         public async Task<ResponseModel> AddUserAsync(string username, string email, string phonenumber, string password, List<string> roles)
         {
-            var user = new ApplicationUser { UserName = username, Email = email , PhoneNumber = phonenumber };
+            var user = new ApplicationUser { UserName = username, Email = email, PhoneNumber = phonenumber         ,RefreshToken = string.Empty 
+            };
             var result = await _userRepository.CreateUserAsync(user, password);
 
             if (!result.Succeeded)

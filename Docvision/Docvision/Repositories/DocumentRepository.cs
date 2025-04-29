@@ -4,6 +4,11 @@ using Docvision.Models;
 using Microsoft.EntityFrameworkCore;
 using Docvision.Persistance;
 using Docvision.Dtos;
+using static Back.Controllers.DocumentController;
+using System.Net.Http;
+using System.Text;
+using UglyToad.PdfPig;
+
 
 namespace Docvision.Repositories
 {
@@ -11,10 +16,16 @@ namespace Docvision.Repositories
     {
         private readonly Cloudinary _cloudinary;
         private readonly DocContext _Context;
-        public DocumentRepository(Cloudinary cloudinary, DocContext docContext)
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly DocContext _context;
+
+
+        public DocumentRepository(Cloudinary cloudinary, DocContext docContext, IHttpClientFactory httpClientFactory, DocContext context)
         {
             _cloudinary = cloudinary;
             _Context = docContext;
+            _httpClientFactory = httpClientFactory;
+            _context = context;
         }
 
         public async Task<Document> AddDocumentAsync(IFormFile file,string Name, string description, string userId)
@@ -102,16 +113,19 @@ namespace Docvision.Repositories
             }
         }
 
-        public async Task<List<Document>> GetAllDocumentAsync(string userId)
+        public async Task<Document?> GetDocumentByIdAsync(Guid id, string userId)
         {
-            return await _Context.Documents
-                                 .Where(d => d.UserId == userId)
-                                 .ToListAsync();
+            return await _context.Documents
+                .Include(d => d.Images)
+                .FirstOrDefaultAsync(d => d.Id == id && d.UserId == userId);
         }
 
-        public async Task<Document?> GetDocumentByIdAsync(Guid Id, string userId)
+        public async Task<List<Document>> GetAllDocumentAsync(string userId)
         {
-            return await _Context.Documents.FirstOrDefaultAsync(d => d.Id == Id && d.UserId == userId);
+            return await _context.Documents
+                .Where(d => d.UserId == userId)
+                .Include(d => d.Images)
+                .ToListAsync();
         }
 
         public async Task<Document?> UpdateDocumentAsync(Guid id, DocumentUpdateDto updatedDocument, string userId)
@@ -138,6 +152,64 @@ namespace Docvision.Repositories
             await _Context.SaveChangesAsync();
 
             return document;
+        }
+        public async Task<ExtractedResult> ExtractTextAndImagesAsync(string pdfUrl)
+        {
+            var result = new ExtractedResult
+            {
+                Text = "",
+                ImageUrls = new List<string>()
+            };
+
+            using var httpClient = _httpClientFactory.CreateClient();
+            var response = await httpClient.GetAsync(pdfUrl);
+            response.EnsureSuccessStatusCode();
+
+            await using var stream = await response.Content.ReadAsStreamAsync();
+            using var pdfDocument = PdfDocument.Open(stream);
+
+            // Extraction du texte
+            var textBuilder = new StringBuilder();
+            foreach (var page in pdfDocument.GetPages())
+            {
+                textBuilder.AppendLine(page.Text);
+            }
+            result.Text = textBuilder.ToString();
+
+            // Extraction des images (sans analyse)
+            foreach (var page in pdfDocument.GetPages())
+            {
+                foreach (var image in page.GetImages())
+                {
+                    var bytes = image.RawBytes.ToArray();
+                    if (bytes.Length == 0) continue;
+
+                    var imageUrl = await UploadImageToCloudinary(
+                        bytes,
+                        $"img_{Guid.NewGuid()}"
+                    );
+
+                    if (!string.IsNullOrWhiteSpace(imageUrl))
+                    {
+                        result.ImageUrls.Add(imageUrl);
+                    }
+                }
+            }
+
+            return result;
+        }
+        private async Task<string> UploadImageToCloudinary(byte[] imageData, string publicId)
+        {
+            using var stream = new MemoryStream(imageData);
+            var uploadParams = new ImageUploadParams
+            {
+                File = new FileDescription(publicId, stream),
+                PublicId = publicId,
+                Overwrite = true
+            };
+
+            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+            return uploadResult?.SecureUrl?.ToString() ?? string.Empty;
         }
 
 

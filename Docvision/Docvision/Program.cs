@@ -11,6 +11,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Docvision.Helpers;
 using Back.Controllers;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 // Configuration JWT
@@ -82,6 +83,12 @@ builder.Services.AddHttpClient<DocumentController>(client =>
 {
     client.Timeout = TimeSpan.FromMinutes(100); 
 });
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
 
 // Configuration d'EmailService
 var emailSettings = builder.Configuration.GetSection("EmailSettings");

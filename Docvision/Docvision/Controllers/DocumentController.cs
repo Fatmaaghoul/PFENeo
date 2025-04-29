@@ -31,12 +31,16 @@ namespace Back.Controllers
         private readonly IDocumentRepository _idocumentRepository;
         private readonly DocContext _context;
         private readonly HttpClient _httpClient;
+        private readonly ILogger<DocumentRepository> _logger;
 
-        public DocumentController(IDocumentRepository IdocumentRepository, DocContext docContext, IHttpClientFactory httpClientFactory)
+
+        public DocumentController(IDocumentRepository IdocumentRepository, DocContext docContext, IHttpClientFactory httpClientFactory, ILogger<DocumentRepository> logger)
         {
             _idocumentRepository = IdocumentRepository;
             _context = docContext;
             _httpClient = httpClientFactory.CreateClient(nameof(DocumentController)); // Utiliser le client nommé
+            _logger = logger;
+
         }
 
         [HttpPost("add")]
@@ -74,9 +78,28 @@ namespace Back.Controllers
                 {
                     return Unauthorized("Utilisateur non authentifié.");
                 }
-                var documents = await _idocumentRepository.GetAllDocumentAsync(userId);
 
-                return Ok(documents);
+                var documents = await _idocumentRepository.GetAllDocumentAsync(userId);
+                var result = documents.Select(d => new DocumentDto
+                {
+                    Id = d.Id,
+                    Name = d.Name,
+                    UploadDate = d.UploadDate,
+                    Description = d.description,
+                    IsAnalysed = d.isAnalysed,
+                    IsExtracted = d.isExtracted,
+                    FileUrl = d.FileUrl,
+                    Text = d.Text,
+                    Images = d.Images?.Select(i => new DocumentImageDto
+                    {
+                        Id = i.Id,
+                        FileUrl = i.FileUrl,
+                        Description = i.Description,
+                        Objects = i.Objects
+                    }).ToList() ?? new List<DocumentImageDto>()
+                }).ToList();
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -92,8 +115,30 @@ namespace Back.Controllers
             {
                 return Unauthorized("Utilisateur non authentifié.");
             }
+
             var document = await _idocumentRepository.GetDocumentByIdAsync(id, userId);
-            return Ok(document);
+            if (document == null) return NotFound();
+
+            var result = new DocumentDto
+            {
+                Id = document.Id,
+                Name = document.Name,
+                UploadDate = document.UploadDate,
+                Description = document.description,
+                IsAnalysed = document.isAnalysed,
+                IsExtracted = document.isExtracted,
+                FileUrl = document.FileUrl,
+                Text = document.Text,
+                Images = document.Images?.Select(i => new DocumentImageDto
+                {
+                    Id = i.Id,
+                    FileUrl = i.FileUrl,
+                    Description = i.Description,
+                    Objects = i.Objects
+                }).ToList() ?? new List<DocumentImageDto>()
+            };
+
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -128,52 +173,99 @@ namespace Back.Controllers
 
             return Ok("Document supprimé avec succès.");
         }
-
         [HttpPost("extract/{id}")]
         public async Task<IActionResult> Extract(Guid id)
         {
-            var document = await _context.Documents.FirstOrDefaultAsync(d => d.Id == id);
+            var document = await _context.Documents.FindAsync(id);
             if (document == null) return NotFound();
 
-            var requestBody = new { pdf_url = document.FileUrl };
-
-            var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:8000/extract", requestBody);
-            if (!response.IsSuccessStatusCode)
-                return StatusCode((int)response.StatusCode, "Erreur appel FastAPI");
-
-            var result = await response.Content.ReadFromJsonAsync<ExtractedResult>();
-            if (result == null)
-                return StatusCode(500, "Réponse invalide");
-
-            // Mise à jour du texte
-            document.Text = result.text;
-            document.isExtracted = true;
-
-            // Supprimer les anciennes images liées au document
-            var existingImages = await _context.Images.Where(i => i.DocumentId == document.Id).ToListAsync();
-            _context.Images.RemoveRange(existingImages);
-
-            // Ajouter les nouvelles images
-            foreach (var imageUrl in result.images)
+            try
             {
-                var image = new DocumentImage
+                // Extraction texte + images (sans analyse)
+                var result = await _idocumentRepository.ExtractTextAndImagesAsync(document.FileUrl);
+
+                // Mise à jour du document
+                document.Text = result.Text;
+                document.isExtracted = true; // Marquer comme extrait
+                document.isAnalysed = false;  // Aucune analyse effectuée
+
+                // Remplacer les anciennes images
+                var oldImages = await _context.Images.Where(i => i.DocumentId == id).ToListAsync();
+                _context.Images.RemoveRange(oldImages);
+
+                foreach (var imageUrl in result.ImageUrls)
                 {
-                    Id = Guid.NewGuid(),
-                    FileUrl = imageUrl,
-                    DocumentId = document.Id
-                };
-                _context.Images.Add(image);
+                    _context.Images.Add(new DocumentImage
+                    {
+                        Id = Guid.NewGuid(),
+                        FileUrl = imageUrl,
+                        DocumentId = id,
+                        Description = "Image extraite", 
+                        Objects = null 
+                    });
+                }
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    Message = "Extraction texte+images réussie",
+                    Text = result.Text,
+                    Images = result.ImageUrls
+                });
             }
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new
+            catch (Exception ex)
             {
-                message = "Extraction réussie",
-                text = document.Text,
-                images = result.images
-            });
+                _logger.LogError(ex, "Erreur d'extraction");
+                return StatusCode(500, "Erreur lors de l'extraction");
+            }
         }
+
+        /*  [HttpPost("extract/{id}")]
+          public async Task<IActionResult> Extract(Guid id)
+          {
+              var document = await _context.Documents.FirstOrDefaultAsync(d => d.Id == id);
+              if (document == null) return NotFound();
+
+              var requestBody = new { pdf_url = document.FileUrl };
+
+              var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:8000/extract", requestBody);
+              if (!response.IsSuccessStatusCode)
+                  return StatusCode((int)response.StatusCode, "Erreur appel FastAPI");
+
+              var result = await response.Content.ReadFromJsonAsync<ExtractedResult>();
+              if (result == null)
+                  return StatusCode(500, "Réponse invalide");
+
+              // Mise à jour du texte
+              document.Text = result.text;
+              document.isExtracted = true;
+
+              // Supprimer les anciennes images liées au document
+              var existingImages = await _context.Images.Where(i => i.DocumentId == document.Id).ToListAsync();
+              _context.Images.RemoveRange(existingImages);
+
+              // Ajouter les nouvelles images
+              foreach (var imageUrl in result.images)
+              {
+                  var image = new DocumentImage
+                  {
+                      Id = Guid.NewGuid(),
+                      FileUrl = imageUrl,
+                      DocumentId = document.Id
+                  };
+                  _context.Images.Add(image);
+              }
+
+              await _context.SaveChangesAsync();
+
+              return Ok(new
+              {
+                  message = "Extraction réussie",
+                  text = document.Text,
+                  images = result.images
+              });
+          }*/
 
         [HttpPost("describe/{id}")]
         public async Task<IActionResult> DescribeImages(Guid id)
@@ -320,8 +412,8 @@ namespace Back.Controllers
         }
         public class ExtractedResult
         {
-            public string text { get; set; } = "";
-            public List<string> images { get; set; } = new();
+            public string Text { get; set; }  
+            public List<string> ImageUrls { get; set; }  
         }
 
         public class DescribeImageResult

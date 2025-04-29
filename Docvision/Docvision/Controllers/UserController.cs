@@ -1,12 +1,9 @@
 ﻿using Docvision.Models;
-using Docvision.Persistance;
-using Docvision.Repositories;
 using Docvision.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 using System.Security.Claims;
 
 namespace Docvision.Controllers
@@ -19,7 +16,7 @@ namespace Docvision.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserController(IDocumentRepository documentRepository, IUserService userService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserController(IUserService userService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userService = userService;
             _userManager = userManager;
@@ -30,16 +27,15 @@ namespace Docvision.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddUser([FromBody] AddUserRequest model)
         {
-            var result = await _userService.AddUserAsync(model.Username, model.Email, model.PhoneNumber,model.Password, model.Roles);
+            var result = await _userService.AddUserAsync(model.Username, model.Email, model.PhoneNumber, model.Password, model.Roles);
             return Ok(result);
         }
-
 
         // ✅ 2. Modifier un utilisateur et ses rôles
         [HttpPut("edit/{userId}")]
         public async Task<IActionResult> EditUser(string userId, [FromBody] EditUserRequest model)
         {
-            var result = await _userService.EditUserAsync(userId, model.Username, model.Email,model.PhoneNumber, model.Roles);
+            var result = await _userService.EditUserAsync(userId, model.Username, model.Email, model.PhoneNumber, model.Roles);
             return Ok(result);
         }
 
@@ -67,7 +63,7 @@ namespace Docvision.Controllers
             return Ok(roles);
         }
 
-      
+
     }
 
     // Modèles de requête

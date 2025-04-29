@@ -1,6 +1,7 @@
 ﻿using Docvision.Dtos;
 using Docvision.Models;
 using Microsoft.AspNetCore.Identity;
+using static Back.Controllers.DocumentController;
 
 namespace Docvision.Repositories
 {
@@ -13,6 +14,10 @@ namespace Docvision.Repositories
 
         Task<Document> DeleteDocumentAsync(Guid Id, string userId);
 
-       
+        Task<ExtractedResult> ExtractTextAndImagesAsync(string pdfUrl);
+
+
+
+
     }
 }

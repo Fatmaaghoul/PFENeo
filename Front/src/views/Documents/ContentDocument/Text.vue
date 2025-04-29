@@ -2,7 +2,7 @@
   <div class="text-section">
     <!-- <h2>📝 Texte</h2> -->
     <div class="text-container">
-      <textarea readonly class="form-textarea" :value="text"></textarea>
+      <textarea readonly class="form-textarea" :value="text" style="color: black;"></textarea>
       <button @click="copyText" class="copy-btn">
         <i :class="['bi', isCopied ? 'bi-check-circle' : 'bi-copy']"></i> Copier
       </button>

@@ -8,12 +8,13 @@
             <div class="search-box">
               <input type="text" class="search-input" placeholder="Rechercher des documents..." v-model="searchQuery" />
               <button class="search-button">
-                🔍
+                
+                <i class="bi bi-search"></i>
               </button>
             </div>
           </div>
           <button @click="showAddModal = true" class="button primary">
-            ➕ Ajouter un document
+<i class="bi bi-plus-lg"></i> Ajouter un document
           </button>
         </div>
 
@@ -56,15 +57,15 @@
                 </td>
                 <td>{{ formatDate(document.uploadDate) }}</td>
                 <td>
-                  <div class="actions">
-                    <button class="action-button view" @click="viewDocument(document)" title="Voir">
-                      👁️
+                  <div class="action-buttons">
+                    <button class="btn-view" @click="viewDocument(document)" title="Voir">
+                      <i class="bi bi-eye"></i>
                     </button>
-                    <button class="action-button edit" @click="editDocument(document)" title="Modifier">
-                      ✏️
+                    <button class="btn-edit" @click="editDocument(document)" title="Modifier">
+                      <i class="bi bi-pencil"></i>
                     </button>
-                    <button class="action-button delete" @click="deleteDocument(document)" title="Supprimer">
-                      🗑️
+                    <button class="btn-delete" @click="deleteDocument(document)" title="Supprimer">
+                      <i class="bi bi-trash"></i>
                     </button>
                   </div>
                 </td>
@@ -72,7 +73,7 @@
               <tr v-if="filteredDocuments.length === 0">
                 <td colspan="5" class="empty-state">
                   <div class="empty-message">
-                    📂
+                    <i class="bi bi-folder-plus"></i>
                     <span>Aucun document trouvé</span>
                   </div>
                 </td>
@@ -695,6 +696,7 @@ onMounted(() => {
   padding: 0.5rem 1rem;
   background: none;
   border: none;
+  color: #1976d2;
   border-left: 1px solid #ddd;
   cursor: pointer;
 }
@@ -779,28 +781,8 @@ onMounted(() => {
   text-overflow: ellipsis;
 }
 
-.actions {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: nowrap;
-}
 
-.action-button {
-  padding: 0.4rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  background: none;
-  font-size: 1rem;
-}
 
-.action-button:hover {
-  background: #f5f5f5;
-}
-
-.action-button.view { color: #3498db; }
-.action-button.edit { color: #f39c12; }
-.action-button.delete { color: #e74c3c; }
 
 .empty-state {
   text-align: center;
@@ -968,6 +950,49 @@ onMounted(() => {
   font-size: 1.2rem;
   cursor: pointer;
   color: #e74c3c;
+}
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-buttons button {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-edit {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.btn-edit:hover {
+  background: #bbdefb;
+}
+
+.btn-view {
+  background: #fff8e1;
+  color: #ffa000;
+}
+
+.btn-view:hover {
+  background: #ffecb3;
+}
+
+.btn-delete {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+.btn-delete:hover {
+  background: #ffcdd2;
 }
 
 .cancel-btn,
