@@ -4,42 +4,42 @@
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-icon users">
-          <span class="icon">👥</span>
+          <i class="bi bi-people-fill"></i>
         </div>
         <div class="stat-content">
           <h3 class="stat-value">{{ stats.totalUsers }}</h3>
           <p class="stat-label">Utilisateurs totaux</p>
         </div>
         <div class="stat-trend positive">
-          <span class="trend-icon">↑</span>
+          <i class="bi bi-arrow-up"></i>
           <span class="trend-value">+{{ stats.userGrowth }}%</span>
         </div>
       </div>
 
       <div class="stat-card">
         <div class="stat-icon documents">
-          <span class="icon">📄</span>
+          <i class="bi bi-file-earmark-text-fill"></i>
         </div>
         <div class="stat-content">
           <h3 class="stat-value">{{ stats.totalDocuments }}</h3>
           <p class="stat-label">Documents totaux</p>
         </div>
         <div class="stat-trend positive">
-          <span class="trend-icon">↑</span>
+          <i class="bi bi-arrow-up"></i>
           <span class="trend-value">+{{ stats.documentGrowth }}%</span>
         </div>
       </div>
 
       <div class="stat-card">
         <div class="stat-icon storage">
-          <span class="icon">💾</span>
+          <i class="bi bi-hdd-fill"></i>
         </div>
         <div class="stat-content">
           <h3 class="stat-value">{{ formatStorage(stats.totalStorage) }}</h3>
           <p class="stat-label">Stockage utilisé</p>
         </div>
         <div class="stat-trend neutral">
-          <span class="trend-icon">→</span>
+          <i class="bi bi-dash"></i>
           <span class="trend-value">{{ stats.storageGrowth }}%</span>
         </div>
       </div>
@@ -47,72 +47,45 @@
 
     <!-- Section des graphiques -->
     <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>Activité des documents</h3>
-        </div>
-        <div class="chart-content">
-          <div class="chart-container">
-            <div class="y-axis">
-              <div v-for="label in yAxisLabels" :key="label" class="y-axis-label">
-                {{ label }}
-              </div>
-            </div>
-            <div class="chart-placeholder">
-              <div class="chart-bars">
-                <div 
-                  v-for="(item, index) in chartData" 
-                  :key="index" 
-                  class="chart-bar" 
-                  :style="{ height: `${(item.count / maxCount) * 100}%` }"
-                >
-                  <span class="bar-value">{{ item.count }}</span>
-                </div>
-              </div>
-              <div class="x-axis">
-                <div 
-                  v-for="(item, index) in chartData" 
-                  :key="index" 
-                  class="x-axis-label"
-                >
-                  {{ item.label }}
-                </div>
-              </div>
-            </div>
-          </div>
+    <div class="chart-card modern">
+      <div class="chart-header">
+        <h3>Activité des documents</h3>
+        <div class="time-filter">
+          <button 
+            v-for="period in timePeriods" 
+            :key="period" 
+            class="time-btn"
+            :class="{ active: selectedPeriod === period }"
+            @click="changePeriod(period)"
+          >
+            {{ period }}
+          </button>
         </div>
       </div>
-
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>Utilisation du stockage</h3>
-          <div class="chart-legend">
-            <span class="legend-item">
-              <span class="legend-color" style="background: #3498db"></span>
-              Utilisé
-            </span>
-            <span class="legend-item">
-              <span class="legend-color" style="background: #e0e0e0"></span>
-              Libre
-            </span>
-          </div>
-        </div>
-        <div class="chart-content">
-          <div class="pie-chart-placeholder">
-            <div class="pie-chart">
-              <div class="pie-segment" :style="{ 
-                '--percentage': `${storagePercentage}%`,
-                '--color': '#3498db'
-              }"></div>
-            </div>
-            <div class="pie-chart-center">
-              <span class="pie-value">{{ storagePercentage }}%</span>
-              <span class="pie-label">Utilisé</span>
-            </div>
-          </div>
-        </div>
+      <div class="chart-content">
+        <canvas ref="barChart"></canvas>
       </div>
     </div>
+
+    <div class="chart-card modern">
+      <div class="chart-header">
+        <h3>Utilisation du stockage</h3>
+        <div class="chart-legend">
+          <span class="legend-item">
+            <span class="legend-color used"></span>
+            Utilisé ({{ storagePercentage }}%)
+          </span>
+          <span class="legend-item">
+            <span class="legend-color free"></span>
+            Libre ({{ 100 - storagePercentage }}%)
+          </span>
+        </div>
+      </div>
+      <div class="chart-content">
+        <canvas ref="pieChart"></canvas>
+      </div>
+    </div>
+  </div>
 
     <!-- Activité récente -->
     <div class="activity-card">
@@ -120,17 +93,19 @@
         <h3>Activité récente</h3>
         <button class="view-all-btn" @click="toggleShowAll">
           {{ showAllActivities ? 'Voir moins' : 'Voir tout' }}
+          <i class="bi" :class="showAllActivities ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
         </button>
       </div>
       <div class="activity-list">
         <div v-for="activity in recentActivities" :key="activity.id" class="activity-item">
           <div class="activity-icon" :class="activity.type">
-            <span class="icon">{{ getActivityIcon(activity.type) }}</span>
+            <i class="bi" :class="getActivityIcon(activity.type)"></i>
           </div>
           <div class="activity-details">
             <p class="activity-text">{{ activity.description }}</p>
             <span class="activity-time">{{ formatTime(activity.timestamp) }}</span>
           </div>
+          <div class="activity-badge" v-if="activity.isNew">Nouveau</div>
         </div>
       </div>
     </div>
@@ -138,8 +113,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import axios from 'axios'
+import Chart from 'chart.js/auto'
 
 const apiBaseUrl = 'https://localhost:7036'
 
@@ -154,28 +130,25 @@ const stats = ref({
   storageGrowth: 0
 })
 
-const chartData = ref([])
-const allActivities = ref([]) // Stocke toutes les activités
-const showAllActivities = ref(false) // Contrôle l'affichage complet ou limité
-const maxCount = ref(0)
+const barChart = ref(null)
+const pieChart = ref(null)
+const allActivities = ref([])
+const showAllActivities = ref(false)
+const barChartInstance = ref(null)
+const pieChartInstance = ref(null)
+const isLoading = ref(true)
+const timePeriods = ['7j', '30j', '90j']
+const selectedPeriod = ref('7j')
 
-// Propriété calculée pour les activités affichées
+// Propriétés calculées
 const recentActivities = computed(() => {
-  const activities = allActivities.value
+  const activities = [...allActivities.value]
     .filter(activity => activity.timestamp && !isNaN(new Date(activity.timestamp).getTime()))
     .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
   
   return showAllActivities.value ? activities : activities.slice(0, 4)
 })
 
-// Labels de l'axe Y calculés
-const yAxisLabels = computed(() => {
-  if (maxCount.value === 0) return []
-  const step = Math.ceil(maxCount.value / 5) || 1
-  return Array.from({ length: 6 }, (_, i) => Math.round(i * step)).reverse()
-})
-
-// Propriété calculée pour le pourcentage du stockage
 const storagePercentage = computed(() => {
   if (stats.value.maxStorage === 0 || stats.value.totalStorage < 0) return 0
   return Math.round((stats.value.totalStorage / stats.value.maxStorage) * 100)
@@ -183,38 +156,162 @@ const storagePercentage = computed(() => {
 
 // Fonctions utilitaires
 const formatStorage = (value) => {
+  if (value >= 1000) return `${(value / 1000).toFixed(1)} To`
   return `${value} Go`
 }
 
 const formatTime = (timestamp) => {
   const now = new Date()
-  const diff = now - new Date(timestamp)
+  const date = new Date(timestamp)
+  const diff = now - date
   const minutes = Math.floor(diff / 1000 / 60)
   
   if (minutes < 60) {
-    return `il y a ${minutes} minute${minutes > 1 ? 's' : ''}`
+    return `il y a ${minutes} min`
   } else if (minutes < 1440) {
     const hours = Math.floor(minutes / 60)
-    return `il y a ${hours} heure${hours > 1 ? 's' : ''}`
+    return `il y a ${hours} h`
   } else {
-    const days = Math.floor(minutes / 1440)
-    return `il y a ${days} jour${days > 1 ? 's' : ''}`
+    return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })
   }
 }
 
 const getActivityIcon = (type) => {
   const icons = {
-    upload: '⬆️',
-    edit: '✏️',
-    delete: '🗑️',
-    share: '📤'
+    upload: 'bi-cloud-upload',
+    edit: 'bi-pencil-square',
+    delete: 'bi-trash',
+    share: 'bi-share'
   }
-  return icons[type] || '📌'
+  return icons[type] || 'bi-info-circle'
 }
 
-// Basculer entre afficher toutes les activités ou seulement 4
 const toggleShowAll = () => {
   showAllActivities.value = !showAllActivities.value
+}
+
+// Initialisation des graphiques
+const initBarChart = (data) => {
+  if (barChartInstance.value) {
+    barChartInstance.value.destroy()
+  }
+
+  const ctx = barChart.value.getContext('2d')
+  const gradient = ctx.createLinearGradient(0, 0, 0, 300)
+  gradient.addColorStop(0, 'rgba(78, 115, 223, 0.8)')
+  gradient.addColorStop(1, 'rgba(78, 115, 223, 0.2)')
+
+  barChartInstance.value = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: data.map(item => item.label),
+      datasets: [{
+        data: data.map(item => item.count),
+        backgroundColor: gradient,
+        borderColor: 'rgba(78, 115, 223, 1)',
+        borderWidth: 1,
+        borderRadius: 12,
+        borderSkipped: false,
+        hoverBackgroundColor: 'rgba(78, 115, 223, 0.7)'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          titleFont: { size: 14, weight: 'bold' },
+          bodyFont: { size: 12 },
+          padding: 12,
+          cornerRadius: 8,
+          callbacks: {
+            label: (context) => `${context.parsed.y} documents`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { 
+            color: 'rgba(0, 0, 0, 0.05)',
+            drawBorder: false
+          },
+          ticks: { 
+            color: '#6c757d',
+            font: { size: 12 }
+          }
+        },
+        x: {
+          grid: { 
+            display: false,
+            drawBorder: false
+          },
+          ticks: { 
+            color: '#6c757d',
+            font: { size: 12 }
+          }
+        }
+      },
+      animation: {
+        duration: 1000,
+        easing: 'easeOutQuart'
+      }
+    }
+  })
+}
+const initPieChart = () => {
+  if (pieChartInstance.value) {
+    pieChartInstance.value.destroy()
+  }
+
+  const ctx = pieChart.value.getContext('2d')
+  pieChartInstance.value = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Utilisé', 'Libre'],
+      datasets: [{
+        data: [storagePercentage.value, 100 - storagePercentage.value],
+        backgroundColor: [
+          'rgba(78, 115, 223, 0.8)',
+          'rgba(224, 224, 224, 0.5)'
+        ],
+        borderColor: [
+          'rgba(78, 115, 223, 1)',
+          'rgba(224, 224, 224, 1)'
+        ],
+        borderWidth: 1,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '75%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          bodyFont: { size: 12 },
+          padding: 10,
+          cornerRadius: 8,
+          callbacks: {
+            label: (context) => `${context.label}: ${context.parsed}%`
+          }
+        }
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  })
+}
+const changePeriod = (period) => {
+  selectedPeriod.value = period
+  // Ici vous pourriez ajouter la logique pour recharger les données
+  // en fonction de la période sélectionnée
 }
 
 // Appels API
@@ -231,11 +328,9 @@ const fetchUsers = async () => {
 
 const fetchCloudinaryStorage = async () => {
   try {
-    console.log('Appel à l\'API .NET pour les données de stockage Cloudinary...')
     const response = await axios.get(`${apiBaseUrl}/api/admin/documents/storageCloud`, {
       timeout: 10000
     })
-    console.log('Réponse de l\'API .NET:', response.data)
     if (typeof response.data.totalStorage !== 'number' || typeof response.data.maxStorage !== 'number') {
       throw new Error('Données de stockage invalides reçues')
     }
@@ -244,9 +339,6 @@ const fetchCloudinaryStorage = async () => {
     stats.value.storageGrowth = Math.round(Math.random() * 5)
   } catch (error) {
     console.error('Erreur lors de la récupération des données de stockage :', error)
-    if (error.response) {
-      console.error('Réponse du serveur:', error.response.status, error.response.data)
-    }
     stats.value.totalStorage = 0
     stats.value.maxStorage = 10
   }
@@ -258,16 +350,15 @@ const fetchDocuments = async () => {
     const documents = response.data
     stats.value.totalDocuments = documents.length
     stats.value.documentGrowth = Math.round(Math.random() * 10)
+    return documents
   } catch (error) {
     console.error('Erreur lors de la récupération des documents :', error)
+    return []
   }
 }
 
-const fetchRecentActivities = async () => {
+const fetchRecentActivities = async (documents) => {
   try {
-    const response = await axios.get(`${apiBaseUrl}/api/admin/documents`)
-    const documents = response.data
-    
     // Transformer les données des documents en format d'activité
     allActivities.value = await Promise.all(
       documents
@@ -279,8 +370,9 @@ const fetchRecentActivities = async () => {
             return {
               id: doc.id,
               type: 'upload',
-              description: `${user.userName || 'Utilisateur'} a ajoutée le document "${doc.name}"`,
-              timestamp: doc.uploadDate
+              description: `${user.userName || 'Utilisateur'} a ajouté le document "${doc.name}"`,
+              timestamp: doc.uploadDate,
+              isNew: new Date() - new Date(doc.uploadDate) < 24 * 60 * 60 * 1000
             }
           } catch (error) {
             console.error(`Erreur lors de la récupération de l'utilisateur pour le document ${doc.id} :`, error)
@@ -288,7 +380,8 @@ const fetchRecentActivities = async () => {
               id: doc.id,
               type: 'upload',
               description: `Utilisateur a téléversé le document "${doc.name}"`,
-              timestamp: doc.uploadDate
+              timestamp: doc.uploadDate,
+              isNew: new Date() - new Date(doc.uploadDate) < 24 * 60 * 60 * 1000
             }
           }
         })
@@ -298,45 +391,60 @@ const fetchRecentActivities = async () => {
   }
 }
 
-const fetchChartData = async () => {
-  try {
-    const response = await axios.get(`${apiBaseUrl}/api/admin/documents`)
-    const documents = response.data
+const prepareChartData = (documents) => {
+  const now = new Date()
+  const bins = Array(7).fill().map((_, i) => {
+    const date = new Date(now)
+    date.setDate(now.getDate() - (6 - i))
+    return {
+      startDate: date,
+      label: date.toLocaleDateString('fr-FR', { weekday: 'short' }),
+      count: 0
+    }
+  })
+  
+  documents.forEach(doc => {
+    if (!doc.uploadDate) return
+    const docDate = new Date(doc.uploadDate)
+    if (isNaN(docDate.getTime())) return
     
-    const now = new Date()
-    const bins = Array(6).fill().map((_, i) => ({
-      startDate: new Date(now.getTime() - (29 - i * 5) * 24 * 60 * 60 * 1000),
-      endDate: new Date(now.getTime() - (24 - i * 5) * 24 * 60 * 60 * 1000),
-      count: 0,
-      label: ''
-    }))
-    
-    bins.forEach(bin => {
-      bin.label = bin.startDate.toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' })
-    })
-    
-    documents.forEach(doc => {
-      if (!doc.uploadDate) return
-      const docDate = new Date(doc.uploadDate)
-      if (isNaN(docDate.getTime())) return
-      
-      for (const bin of bins) {
-        if (docDate >= bin.startDate && docDate < bin.endDate) {
-          bin.count++
-          break
-        }
+    for (const bin of bins) {
+      if (
+        docDate.getDate() === bin.startDate.getDate() &&
+        docDate.getMonth() === bin.startDate.getMonth() &&
+        docDate.getFullYear() === bin.startDate.getFullYear()
+      ) {
+        bin.count++
+        break
       }
-    })
-    
-    maxCount.value = Math.max(...bins.map(bin => bin.count), 1)
-    chartData.value = bins
-  } catch (error) {
-    console.error('Erreur lors de la récupération des données du graphique :', error)
-  }
+    }
+  })
+  
+  return bins
 }
 
 // Récupération initiale des données
-onMounted(async () => {
+const fetchData = async () => {
+  isLoading.value = true
+  try {
+    const documents = await fetchDocuments()
+    await Promise.all([
+      fetchUsers(),
+      fetchCloudinaryStorage(),
+      fetchRecentActivities(documents)
+    ])
+    
+    const chartData = prepareChartData(documents)
+    initBarChart(chartData)
+    initPieChart()
+  } catch (error) {
+    console.error('Erreur lors du chargement des données:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onMounted(() => {
   axios.interceptors.request.use(config => {
     const token = localStorage.getItem('token')
     if (token) {
@@ -344,28 +452,46 @@ onMounted(async () => {
     }
     return config
   })
-  
-  await Promise.all([
-    fetchUsers(),
-    fetchDocuments(),
-    fetchCloudinaryStorage(),
-    fetchRecentActivities(),
-    fetchChartData()
-  ])
+
+  fetchData()
+})
+
+// Mise à jour du graphique camembert quand le pourcentage change
+watch(storagePercentage, () => {
+  if (pieChartInstance.value) {
+    pieChartInstance.value.data.datasets[0].data = [storagePercentage.value, 100 - storagePercentage.value]
+    pieChartInstance.value.update()
+  }
 })
 </script>
 
 <style scoped>
 .dashboard-container {
-  padding: 2rem;
-  max-width: 1400px;
+  padding: 1.5rem;
+  max-width: 1600px;
   margin: 0 auto;
+  position: relative;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  font-size: 1.2rem;
+  color: #4e73df;
 }
 
 /* Grille des statistiques */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
@@ -376,44 +502,64 @@ onMounted(async () => {
   padding: 1.5rem;
   display: flex;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   position: relative;
   overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+}
+
+.stat-card:nth-child(1)::before { background: linear-gradient(to bottom, #4e73df, #224abe); }
+.stat-card:nth-child(2)::before { background: linear-gradient(to bottom, #1cc88a, #13855c); }
+.stat-card:nth-child(3)::before { background: linear-gradient(to bottom, #f6c23e, #dda20a); }
+
 .stat-icon {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 1rem;
-}
-
-.stat-icon .icon {
   font-size: 1.5rem;
+  color: white;
 }
 
-.stat-icon.users { background: rgba(52, 152, 219, 0.1); }
-.stat-icon.documents { background: rgba(46, 204, 113, 0.1); }
-.stat-icon.storage { background: rgba(155, 89, 182, 0.1); }
+.stat-icon.users { background: #4e73df; }
+.stat-icon.documents { background: #1cc88a; }
+.stat-icon.storage { background: #f6c23e; }
 
 .stat-content {
   flex: 1;
 }
 
 .stat-value {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.75rem;
+  font-weight: 700;
   margin: 0;
   color: #2c3e50;
+  font-family: 'Inter', sans-serif;
 }
 
 .stat-label {
   margin: 0;
-  color: #666;
+  color: #6c757d;
   font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .stat-trend {
@@ -421,29 +567,34 @@ onMounted(async () => {
   align-items: center;
   gap: 0.25rem;
   font-size: 0.875rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.stat-trend i {
+  font-size: 0.8rem;
 }
 
 .stat-trend.positive {
-  color: #27ae60;
-  background: rgba(39, 174, 96, 0.1);
+  color: #1cc88a;
+  background: rgba(28, 200, 138, 0.1);
 }
 
 .stat-trend.negative {
-  color: #e74c3c;
-  background: rgba(231, 76, 60, 0.1);
+  color: #e74a3b;
+  background: rgba(231, 74, 59, 0.1);
 }
 
 .stat-trend.neutral {
-  color: #7f8c8d;
-  background: rgba(127, 140, 141, 0.1);
+  color: #858796;
+  background: rgba(133, 135, 150, 0.1);
 }
 
 /* Grille des graphiques */
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
@@ -452,7 +603,8 @@ onMounted(async () => {
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .chart-header {
@@ -466,11 +618,39 @@ onMounted(async () => {
   margin: 0;
   font-size: 1.25rem;
   color: #2c3e50;
+  font-weight: 600;
+}
+
+.time-filter {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.time-btn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #e0e0e0;
+  background: none;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.time-btn.active {
+  background: #4e73df;
+  border-color: #4e73df;
+  color: white;
+}
+
+.time-btn:hover:not(.active) {
+  background: #f8f9fc;
 }
 
 .chart-legend {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .legend-item {
@@ -478,131 +658,22 @@ onMounted(async () => {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  color: #666;
+  color: #6c757d;
+  font-weight: 500;
 }
 
 .legend-color {
   width: 12px;
   height: 12px;
-  border-radius: 2px;
+  border-radius: 3px;
 }
+
+.legend-color.used { background: #4e73df; }
+.legend-color.free { background: #e0e0e0; }
 
 .chart-content {
   height: 300px;
   position: relative;
-}
-
-.chart-container {
-  display: flex;
-  height: 100%;
-  padding: 1rem 0;
-}
-
-.y-axis {
-  width: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-right: 10px;
-  font-size: 0.75rem;
-  color: #666;
-}
-
-.y-axis-label {
-  text-align: right;
-}
-
-.chart-placeholder {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  position: relative;
-}
-
-.chart-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  height: calc(100% - 30px);
-  width: 100%;
-}
-
-.chart-bar {
-  flex: 1;
-  background: #3498db;
-  border-radius: 4px;
-  transition: height 0.3s ease;
-  position: relative;
-}
-
-.bar-value {
-  position: absolute;
-  top: -20px;
-  width: 100%;
-  text-align: center;
-  font-size: 0.75rem;
-  color: #2c3e50;
-}
-
-.x-axis {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-  font-size: 0.75rem;
-  color: #666;
-}
-
-.x-axis-label {
-  flex: 1;
-  text-align: center;
-}
-
-.pie-chart-placeholder {
-  position: relative;
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
-}
-
-.pie-chart {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: #e0e0e0;
-  position: relative;
-  overflow: hidden;
-}
-
-.pie-segment {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: conic-gradient(
-    var(--color) 0% var(--percentage),
-    transparent var(--percentage) 100%
-  );
-}
-
-.pie-chart-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-.pie-value {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #2c3e50;
-  display: block;
-}
-
-.pie-label {
-  font-size: 0.875rem;
-  color: #666;
 }
 
 /* Carte d'activité */
@@ -610,7 +681,8 @@ onMounted(async () => {
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .activity-header {
@@ -624,21 +696,32 @@ onMounted(async () => {
   margin: 0;
   font-size: 1.25rem;
   color: #2c3e50;
+  font-weight: 600;
 }
 
 .view-all-btn {
   padding: 0.5rem 1rem;
   border: none;
-  background: none;
-  color: #3498db;
+  background: #f8f9fc;
+  color: #4e73df;
   cursor: pointer;
   font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.view-all-btn:hover {
+  background: #e9ecef;
 }
 
 .activity-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .activity-item {
@@ -647,63 +730,222 @@ onMounted(async () => {
   gap: 1rem;
   padding: 1rem;
   border-radius: 8px;
-  background: #f8f9fa;
+  background: #f8f9fc;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.activity-item:hover {
+  background: #e9ecef;
+  transform: translateX(2px);
 }
 
 .activity-icon {
   width: 40px;
   height: 40px;
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.1rem;
+  color: white;
+  flex-shrink: 0;
 }
 
-.activity-icon.upload { background: rgba(52, 152, 219, 0.1); }
-.activity-icon.edit { background: rgba(46, 204, 113, 0.1); }
-.activity-icon.delete { background: rgba(231, 76, 60, 0.1); }
-.activity-icon.share { background: rgba(241, 196, 15, 0.1); }
+.activity-icon.upload { background: #4e73df; }
+.activity-icon.edit { background: #1cc88a; }
+.activity-icon.delete { background: #e74a3b; }
+.activity-icon.share { background: #f6c23e; }
 
 .activity-details {
   flex: 1;
+  min-width: 0;
 }
 
 .activity-text {
   margin: 0;
   color: #2c3e50;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .activity-time {
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 0.75rem;
+  color: #6c757d;
+  display: block;
+  margin-top: 0.25rem;
 }
 
-@media (max-width: 768px) {
-  .dashboard-container {
-    padding: 1rem;
-  }
+.activity-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #e74a3b;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+}
 
+/* Responsive */
+@media (max-width: 1024px) {
   .charts-grid {
     grid-template-columns: 1fr;
   }
+}
 
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-container {
+    padding: 1rem;
+  }
+  
   .chart-content {
     height: 250px;
   }
+  
+  .activity-text {
+    white-space: normal;
+  }
+}
 
-  .activity-item {
+@media (max-width: 480px) {
+  .chart-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 1rem;
   }
-
-  .x-axis-label {
-    font-size: 0.65rem;
+  
+  .time-filter {
+    align-self: flex-end;
   }
+}
+.chart-card.modern {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-  .y-axis {
-    width: 40px;
-    font-size: 0.65rem;
+.chart-card.modern:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+}
+
+.chart-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #2c3e50;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+}
+
+.time-filter {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(241, 243, 246, 0.6);
+  padding: 0.25rem;
+  border-radius: 12px;
+}
+
+.time-btn {
+  padding: 0.35rem 0.75rem;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.time-btn.active {
+  background: white;
+  color: #4e73df;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-weight: 600;
+}
+
+.time-btn:hover:not(.active) {
+  color: #4e73df;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 1.5rem;
+  background: rgba(241, 243, 246, 0.6);
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.legend-color.used { 
+  background: #4e73df;
+  box-shadow: 0 2px 4px rgba(78, 115, 223, 0.3);
+}
+
+.legend-color.free { 
+  background: #e0e0e0;
+  box-shadow: 0 2px 4px rgba(224, 224, 224, 0.3);
+}
+
+.chart-content {
+  height: 300px;
+  position: relative;
+  margin-top: 1.5rem;
+}
+
+/* Animation pour les cartes */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chart-card.modern {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.chart-card.modern:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .chart-card.modern {
+    padding: 1rem;
+  }
+  
+  .chart-content {
+    height: 250px;
+  }
+  
+  .time-filter {
+    margin-top: 0.5rem;
   }
 }
 </style>

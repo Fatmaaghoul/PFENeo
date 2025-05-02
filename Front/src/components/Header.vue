@@ -15,12 +15,12 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <RouterLink to="/" class="nav-link">
-                <i class="bi bi-house-door me-1"></i> Home
+                Accueil
               </RouterLink>
             </li>
             <li class="nav-item">
               <RouterLink to="/about" class="nav-link">
-                <i class="bi bi-info-circle me-1"></i> About
+                A propos
               </RouterLink>
             </li>
             <li v-if="authenticated" class="nav-item">
@@ -28,20 +28,25 @@
                 <i class="bi bi-files me-1"></i> Documents
               </RouterLink>
             </li>
-            <li v-if="authenticated" class="nav-item">
+           <!-- <li v-if="authenticated" class="nav-item">
               <RouterLink to="/analyze-document" class="nav-link">
                 <i class="bi bi-files me-1"></i> Analyser
               </RouterLink>
-            </li>
+            </li>-->
             <li v-if="authenticated && user?.role === 'Admin'" class="nav-item">
               <RouterLink to="/admin/dashboard" class="nav-link text-danger fw-bold">
                 <i class="bi bi-speedometer2 me-1"></i>
-                Admin Dashboard
+                Tableau de bord admin
               </RouterLink>
             </li>
           </ul>
 
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center gap-3">
+            <!-- Theme Toggle Button -->
+            <button class="theme-toggle" @click="toggleTheme" :title="themeStore.isDark ? 'Passer au thème clair' : 'Passer au thème sombre'">
+              <i :class="themeStore.isDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill'"></i>
+            </button>
+
             <div v-if="authenticated" class="user-menu">
               <div class="user-avatar" @click="toggleUserMenu">
                 {{ user?.email?.[0]?.toUpperCase() || 'U' }}
@@ -60,9 +65,9 @@
               </div>
             </div>
             <div v-else>
-              <RouterLink to="/login" class="btn btn-primary">
-                <i class="bi bi-box-arrow-in-right me-2"></i> Login
-              </RouterLink>
+              <RouterLink to="/login" class="btn btn-outline-primary rounded-pill px-4 py-2">
+  Se connecter
+</RouterLink>
             </div>
           </div>
         </div>
@@ -76,10 +81,12 @@
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter, useRoute } from 'vue-router';
+import { useThemeStore } from '@/Store/theme';
 
 const store = useStore();
 const router = useRouter();
 const route = useRoute();
+const themeStore = useThemeStore();
 const isUserMenuOpen = ref(false);
 
 // Récupération des données du store Vuex
@@ -108,6 +115,11 @@ const handleClickOutside = (event) => {
   if (isUserMenuOpen.value && !event.target.closest('.user-menu')) {
     isUserMenuOpen.value = false;
   }
+};
+
+// Toggle theme
+const toggleTheme = () => {
+  themeStore.toggleTheme();
 };
 
 onMounted(() => {
@@ -272,5 +284,28 @@ onUnmounted(() => {
     box-shadow: none;
     margin-top: 0.5rem;
   }
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.25rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--secondary-background);
+  transform: scale(1.1);
+}
+
+.gap-3 {
+  gap: 1rem;
 }
 </style>

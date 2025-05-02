@@ -6,12 +6,12 @@
         <div class="auth-form-container">
           <div class="back-to-login">
             <router-link to="/login" class="back-link">
-              <i class="bi bi-arrow-left"></i> Back to login
+              <i class="bi bi-arrow-left"></i> Retour à la connexion
             </router-link>
           </div>
 
-          <h2>Forgot your password?</h2>
-          <p class="subtitle">Don't worry, happens to all of us. Enter your email below to recover your password</p>
+          <h2>Mot de passe oublié?</h2>
+          <p class="subtitle">Ne vous inquiétez pas, cela nous arrive à tous. Saisissez votre adresse e-mail ci-dessous pour récupérer votre mot de passe.</p>
 
           <form @submit.prevent="sendResetEmail">
             <div class="form-group">

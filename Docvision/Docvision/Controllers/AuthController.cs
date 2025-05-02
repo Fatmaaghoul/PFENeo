@@ -33,7 +33,7 @@ namespace Docvision.Controllers
         }
 
 
-        [HttpGet("confirm-email")]
+        [HttpGet("confirm-email")] 
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             var result = await _authService.ConfirmEmailAsync(userId, token);

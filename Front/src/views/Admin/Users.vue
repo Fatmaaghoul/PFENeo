@@ -88,20 +88,24 @@
                     <button class="btn-edit" @click="editUser(user)" title="Modifier">
                       <i class="bi bi-pencil"></i>
                     </button>
-                    <button 
-                      class="btn-role" 
-                      @click="toggleRole(user)"
-                      :title="user.roles.includes('Admin') ? 'Rétrograder' : 'Promouvoir'"
-                    >
-                      <i :class="user.roles.includes('Admin') ? 'bi bi-person-down' : 'bi bi-person-up'"></i>
-                    </button>
-                    <button 
-                      class="btn-delete" 
-                      @click="deleteUser(user.id)"
-                      title="Supprimer"
-                    >
-                      <i class="bi bi-trash"></i>
-                    </button>
+                  
+<button 
+  class="btn-role" 
+  @click="toggleRole(user)"
+  :title="user.roles.includes('Admin') ? 'Rétrograder' : 'Promouvoir'"
+  :class="{'disabled-role-btn': user.roles.includes('Admin') && adminCount <= 1}"
+  :disabled="user.roles.includes('Admin') && adminCount <= 1"
+>
+  <i :class="user.roles.includes('Admin') ? 'bi bi-person-down' : 'bi bi-person-up'"></i>
+</button>
+<button 
+  class="btn-delete" 
+  @click="!user.roles.includes('Admin') && deleteUser(user)"  
+  :title="user.roles.includes('Admin') ? 'Impossible de supprimer un admin' : 'Supprimer'"
+  :class="{'admin-delete-btn': user.roles.includes('Admin')}"
+>
+  <i class="bi bi-trash"></i>
+</button>
                   </div>
                 </td>
               </tr>
@@ -250,14 +254,23 @@ export default {
     const editingUserId = ref(null);
     const formSubmitted = ref(false);
     const serverErrors = ref([]);
+    const currentUserId = ref(null);
 
     // Computed
     const adminCount = computed(() => users.value.filter(u => u.roles.includes('Admin')).length);
     
     const filteredUsers = computed(() => {
-      if (!searchQuery.value) return users.value;
       const query = searchQuery.value.toLowerCase();
-      return users.value.filter(user => 
+      let filtered = users.value;
+      
+      // Exclure l'utilisateur courant si currentUserId est défini
+      if (currentUserId.value) {
+        filtered = filtered.filter(user => user.id !== currentUserId.value);
+      }
+      
+      if (!searchQuery.value) return filtered;
+      
+      return filtered.filter(user => 
         user.username.toLowerCase().includes(query) || 
         user.email.toLowerCase().includes(query) ||
         (user.phoneNumber && user.phoneNumber.includes(query))
@@ -280,6 +293,7 @@ export default {
           router.push('/dashboard');
           return false;
         }
+        currentUserId.value = payload.sub; // Stocker l'ID de l'utilisateur courant
         return true;
       } catch {
         return false;
@@ -323,25 +337,58 @@ export default {
       fetchUsers();
     };
 
-    const deleteUser = async (userId) => {
-      if (!confirm("Confirmez la suppression de cet utilisateur ?")) return;
-      
+    const deleteUser = async (user) => {
       try {
+        const userId = user.id;
+        console.log("Attempting to delete user ID:", userId);
+        
+        if (!userId) {
+          throw new Error("ID utilisateur manquant");
+        }
+
+        // Empêcher la suppression du dernier admin
+        if (user.roles.includes('Admin') && adminCount.value <= 1) {
+          alert("Vous ne pouvez pas supprimer le dernier administrateur");
+          return;
+        }
+
+        if (!confirm(`Confirmez la suppression de ${user.username} (ID: ${userId}) ?`)) {
+          return;
+        }
+
         const token = Cookies.get('token');
-        await axios.delete(`/api/users/delete/${userId}`, {
+        const response = await axios.delete(`/api/users/delete/${userId}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
-        
-        users.value = users.value.filter(u => u.id !== userId);
-        alert("Utilisateur supprimé avec succès");
+
+        console.log("Delete response:", response.data);
+
+        if (response.data?.success) {
+          // Suppression optimiste
+          users.value = users.value.filter(u => u.id !== userId);
+          alert("Utilisateur supprimé avec succès");
+          
+          // Rafraîchir après 1 seconde
+          setTimeout(fetchUsers, 1000);
+        } else {
+          throw new Error(response.data?.message || "Échec de la suppression");
+        }
       } catch (error) {
-        handleError(error);
+        console.error("Delete error:", error);
+        alert(`Erreur: ${error.message}\nL'utilisateur sera rechargé.`);
+        fetchUsers();
       }
     };
 
     const toggleRole = async (user) => {
       const newRole = user.roles.includes('Admin') ? ['User'] : ['Admin'];
       const action = newRole[0] === 'Admin' ? 'promouvoir' : 'rétrograder';
+      
+      // Empêcher la rétrogradation du dernier admin
+      if (user.roles.includes('Admin') && adminCount.value <= 1) {
+        alert("Vous ne pouvez pas rétrograder le dernier administrateur");
+        return;
+      }
       
       if (!confirm(`Confirmez-vous vouloir ${action} cet utilisateur ?`)) return;
       
@@ -723,18 +770,43 @@ export default {
   background: #fff8e1;
   color: #ffa000;
 }
+.disabled-role-btn {
+  background: #f5f5f5 !important;
+  color: #bdbdbd !important;
+  cursor: not-allowed !important;
+}
 
 .btn-role:hover {
   background: #ffecb3;
 }
 
 .btn-delete {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
   background: #ffebee;
   color: #d32f2f;
 }
 
+
 .btn-delete:hover {
   background: #ffcdd2;
+}
+.admin-delete-btn {
+  background: #f5f5f5 !important;
+  color: #bdbdbd !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+.admin-delete-btn i::before {
+  content: "\F47A"; /* Icône de verrou de Bootstrap Icons */
 }
 
 /* Loading State */
@@ -942,7 +1014,7 @@ export default {
 
 .btn-cancel {
   padding: 0.75rem 1.5rem;
-  background: #f8f9fa;
+  background: #ddd;
   border: 1px solid #ddd;
   border-radius: 8px;
   cursor: pointer;

@@ -36,10 +36,22 @@ namespace Docvision.Services
                 return new ResponseModel { Success = false, Message = "Utilisateur non trouvé." };
             }
 
-            // Mise à jour des informations de base
-            user.UserName = request.UserName ?? user.UserName;
-            user.Email = request.Email ?? user.Email;
-            user.PhoneNumber = request.PhoneNumber ?? user.PhoneNumber;
+            // Vérifier qu'au moins un champ est modifié (nom OU numéro)
+            if (request.UserName == null && request.PhoneNumber == null && request.Email == null &&
+                (string.IsNullOrEmpty(request.CurrentPassword) || string.IsNullOrEmpty(request.NewPassword)))
+            {
+                return new ResponseModel { Success = false, Message = "Aucune modification fournie." };
+            }
+
+            // Mise à jour des informations de base (uniquement si fournies)
+            if (request.UserName != null)
+                user.UserName = request.UserName;
+
+            if (request.Email != null)
+                user.Email = request.Email;
+
+            if (request.PhoneNumber != null)
+                user.PhoneNumber = request.PhoneNumber;
 
             // Changement de mot de passe (si fourni)
             if (!string.IsNullOrEmpty(request.CurrentPassword) && !string.IsNullOrEmpty(request.NewPassword))
@@ -57,11 +69,14 @@ namespace Docvision.Services
                 }
             }
 
-            // Mise à jour de l'utilisateur dans la base de données
-            var updateResult = await _profileRepository.UpdateUserAsync(user);
-            if (!updateResult.Succeeded)
+            // Mise à jour de l'utilisateur dans la base de données (seulement si au moins un champ non-password est modifié)
+            if (request.UserName != null || request.PhoneNumber != null || request.Email != null)
             {
-                return new ResponseModel { Success = false, Message = string.Join(", ", updateResult.Errors.Select(e => e.Description)) };
+                var updateResult = await _profileRepository.UpdateUserAsync(user);
+                if (!updateResult.Succeeded)
+                {
+                    return new ResponseModel { Success = false, Message = string.Join(", ", updateResult.Errors.Select(e => e.Description)) };
+                }
             }
 
             return new ResponseModel { Success = true, Message = "Profil mis à jour avec succès." };

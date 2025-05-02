@@ -35,7 +35,7 @@ namespace Docvision.Controllers
         [HttpPut("edit/{userId}")]
         public async Task<IActionResult> EditUser(string userId, [FromBody] EditUserRequest model)
         {
-            var result = await _userService.EditUserAsync(userId, model.Username, model.Email, model.PhoneNumber, model.Roles);
+            var result = await _userService.EditUserAsync(userId, model);
             return Ok(result);
         }
 
@@ -75,13 +75,11 @@ namespace Docvision.Controllers
         public string Password { get; set; }
         public List<string> Roles { get; set; }
     }
-
     public class EditUserRequest
     {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
-
-        public List<string> Roles { get; set; }
+        public string? Username { get; set; }
+        public string? Email { get; set; }
+        public string? PhoneNumber { get; set; }
+        public List<string>? Roles { get; set; }
     }
 }

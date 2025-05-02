@@ -4,6 +4,7 @@ using Docvision.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Docvision.Migrations
 {
     [DbContext(typeof(DocContext))]
-    partial class DocContextModelSnapshot : ModelSnapshot
+    [Migration("20250430151403_EnableCascadeDeleteForUserDocumentsImages")]
+    partial class EnableCascadeDeleteForUserDocumentsImages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

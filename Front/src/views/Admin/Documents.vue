@@ -3,7 +3,10 @@
     <div class="card">
       <div class="card-content">
         <div class="header">
-          <h2 class="title">Documents</h2>
+          <div class="title-section">
+          <h2><i class="bi bi-file-earmark-richtext"></i> Gestion des Documents</h2>
+          <p>Gérez tous les documents de votre système</p>
+        </div>
           <div class="search-container">
             <div class="search-box">
               <input type="text" class="search-input" placeholder="Rechercher des documents..." v-model="searchQuery" />
@@ -667,10 +670,18 @@ onMounted(() => {
   gap: 1rem;
 }
 
-.title {
+.title-section h2 {
   margin: 0;
   font-size: 1.5rem;
   color: #2c3e50;
+  display: flex;
+  align-items: center;
+}
+
+.title-section p {
+  margin: 0.25rem 0 0;
+  color: #6c757d;
+  font-size: 0.9rem;
 }
 
 .search-container {

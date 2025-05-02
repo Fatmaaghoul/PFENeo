@@ -23,12 +23,18 @@ namespace Docvision.Persistance
                 .HasMany(r => r.Images)
                 .WithOne(i => i.Document)
                 .HasForeignKey(d => d.DocumentId)
-                .OnDelete(DeleteBehavior.Restrict);
+        .OnDelete(DeleteBehavior.Cascade); // Changed from Restrict to Cascade
+            /* modelBuilder.Entity<Document>()
+        .HasOne(d => d.User)
+        .WithMany() // Utilise .WithMany() ou .HasMany() selon la direction de la relation
+        .HasForeignKey(d => d.UserId) // Utilise UserId comme clé étrangère
+        .OnDelete(DeleteBehavior.Restrict);*/
+            // Relation Document -> User (CHANGER ICI)
             modelBuilder.Entity<Document>()
-       .HasOne(d => d.User)
-       .WithMany() // Utilise .WithMany() ou .HasMany() selon la direction de la relation
-       .HasForeignKey(d => d.UserId) // Utilise UserId comme clé étrangère
-       .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(d => d.User)
+                .WithMany(u => u.Documents) // Supposant qu'ApplicationUser a une liste de Documents
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade); // ⚠️ Supprime les documents si l'utilisateur est supprimé
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Docvision.Repositories
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
+
         public UserRepository(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;

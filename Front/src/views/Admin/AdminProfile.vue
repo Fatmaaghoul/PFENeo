@@ -1,21 +1,21 @@
 <template>
-  <div class="container-fluid">
+  <div class="admin-profile-container">
     <!-- Header with navigation -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1 class="h3 mb-0">Admin Profile</h1>
+      <h1 class="h3 mb-0">Profil d'administrateur</h1>
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb mb-0">
-          <li class="breadcrumb-item active">Admin Profile</li>
+          <li class="breadcrumb-item active">Profil</li>
         </ol>
       </nav>
     </div>
 
     <!-- Profile section -->
-    <div class="card shadow-sm mb-4">
+    <div class="card shadow-sm mb-4 profile-header-card">
       <div class="card-body">
         <div class="d-flex align-items-center mb-4">
           <!-- Avatar avec la première lettre de l'email -->
-          <div class="avatar-circle bg-primary text-white me-2">
+          <div class="avatar-circle bg-primary text-white me-3">
             {{ user?.email?.charAt(0).toUpperCase() }}
           </div>
           <div>
@@ -27,19 +27,19 @@
     </div>
 
     <!-- Personal Information -->
-    <div class="card shadow-sm">
+    <div class="card shadow-sm profile-info-card">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <h3 class="h5 mb-0">Personal Information</h3>
+          <h3 class="h5 mb-0">Informations personnelles</h3>
           <button class="btn btn-outline-primary btn-sm rounded-pill" @click="toggleEditMode">
-            <i class="bi bi-pencil me-2"></i>{{ isEditing ? 'Cancel' : 'Edit' }}
+            <i class="bi bi-pencil me-2"></i>{{ isEditing ? 'Annuler' : 'Modifier' }}
           </button>
         </div>
 
         <div class="row g-4">
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label text-muted small">User Name</label>
+              <label class="form-label text-muted small">Nom</label>
               <input 
                 v-model="editUser.userName" 
                 :readonly="!isEditing" 
@@ -50,7 +50,7 @@
         
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label text-muted small">Email address</label>
+              <label class="form-label text-muted small">Email</label>
               <input 
                 v-model="editUser.email" 
                 :readonly="!isEditing" 
@@ -60,7 +60,7 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label class="form-label text-muted small">Phone</label>
+              <label class="form-label text-muted small">Téléphone</label>
               <input 
                 v-model="editUser.phoneNumber" 
                 :readonly="!isEditing" 
@@ -72,7 +72,7 @@
           <!-- Mode Édition : Ajout des champs de mot de passe -->
           <div v-if="isEditing" class="col-12">
             <div class="mb-3">
-              <label class="form-label text-muted small">Current Password</label>
+              <label class="form-label text-muted small">Mot de passe actuel</label>
               <div class="input-group">
                 <input 
                   v-model="editUser.currentPassword" 
@@ -93,7 +93,7 @@
 
           <div v-if="isEditing" class="col-12">
             <div class="mb-3">
-              <label class="form-label text-muted small">New Password</label>
+              <label class="form-label text-muted small">Nouveau mot de passe</label>
               <div class="input-group">
                 <input 
                   v-model="editUser.newPassword" 
@@ -114,7 +114,7 @@
           <!-- Bouton de sauvegarde en mode édition -->
           <div v-if="isEditing" class="col-12">
             <button class="btn btn-primary" @click="saveProfile">
-              <i class="bi bi-save me-2"></i>Save Changes
+              <i class="bi bi-save me-2"></i>Enregistrer
             </button>
           </div>
         </div>
@@ -237,15 +237,31 @@ export default {
 </script>
 
 <style scoped>
+.admin-profile-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.profile-header-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: none;
+}
+
+.profile-info-card {
+  border: none;
+}
+
 .avatar-circle {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: bold;
+  background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
 }
 
 .form-control-plaintext {
@@ -254,6 +270,7 @@ export default {
   padding: 0.375rem 0;
   background-color: transparent;
   border: none;
+  border-bottom: 1px solid #eee;
 }
 
 .btn-outline-secondary {
@@ -263,23 +280,73 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-color: #dee2e6;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #f8f9fa;
 }
 
 .breadcrumb {
   background: transparent;
+  padding: 0;
 }
 
 .card {
-  border: none;
   border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
 }
 
 .btn-outline-primary {
   border-radius: 20px;
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 1.25rem;
+  border-width: 2px;
+  font-weight: 500;
+}
+
+.btn-outline-primary:hover {
+  background-color: rgba(78, 115, 223, 0.1);
+}
+
+.btn-primary {
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+  border: none;
 }
 
 .text-muted {
   color: #6c757d !important;
+}
+
+.input-group {
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.form-control {
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #dee2e6;
+  transition: all 0.2s;
+}
+
+.form-control:focus {
+  border-color: #4e73df;
+  box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+@media (max-width: 768px) {
+  .admin-profile-container {
+    padding: 1rem;
+  }
+  
+  .avatar-circle {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
 }
 </style>

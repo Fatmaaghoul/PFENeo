@@ -7,8 +7,8 @@
           <div class="logo-section">
             <img src="@/assets/logo.png" alt="Your Logo" class="logo" />
           </div>
-          <h2>Login</h2>
-          <p class="subtitle">Sign in to access your account</p>
+          <h2>Se connecter</h2>
+          <p class="subtitle">Connectez-vous pour accéder à votre compte</p>
 
           <!-- Messages d'erreur et de succès -->
           <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
@@ -29,7 +29,7 @@
                 <input 
                   v-model="data.password" 
                   :type="showPassword ? 'text' : 'password'"
-                  placeholder="Password"
+                  placeholder="Mot de passe"
                   class="form-input"
                   required 
                 />
@@ -48,20 +48,19 @@
                 <input type="checkbox" v-model="rememberMe">
                 <span>Remember me</span>
               </label>
-              <router-link to="/forgot-password" class="forgot-link">Forgot Password?</router-link>
+              <router-link to="/forgot-password" class="forgot-link">Mot de passe oublié ?</router-link>
             </div>
 
-            <button type="submit" class="submit-btn">Login</button>
+            <button type="submit" class="submit-btn">Se connecter</button>
           </form>
 
           <p class="signup-text">
-            Don't have an account? 
-         
-            <router-link to="/register" class="signup-link">Sign up</router-link>
+            Vous n'avez pas de compte ?         
+            <router-link to="/register" class="signup-link">S'inscrire</router-link>
           </p>
           <div>
             <br>
-            <button class="submit-btn-g" @click="loginWithGoogle">Login via Google</button>
+            <button class="submit-btn-g" @click="loginWithGoogle">Connexion via Google</button>
           </div>
         </div>
 

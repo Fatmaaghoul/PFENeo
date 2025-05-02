@@ -17,7 +17,9 @@ import Cookies from 'js-cookie'; // Import de js-cookie
 import Documents from '@/views/Admin/Documents.vue';
 import Document from '@/views/Documents/ContentDocument/Document.vue';
 import ListDocument from '@/views/Documents/ListDocument/ListDocument.vue';
-
+import MyDocuments from '@/views/Admin/MyDocuments.vue';
+import ConsultDocument from '@/views/Admin/ConsultDocument.vue';
+import Parametre from '@/views/Admin/Parametre.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -106,6 +108,22 @@ const router = createRouter({
           path: 'documents',
           name: 'Documents',
           component: Documents
+        },
+        {
+          path: 'my-documents',
+          name: 'MyDocuments',
+          component: MyDocuments
+        },
+        {
+          path: 'documents/:id',
+          name: 'ConsultDocument',
+          component: ConsultDocument,
+          //props: true
+        },
+        {
+          path: 'parametre',
+          name: 'Parametre',
+          component: Parametre,
         }
       ]
     }

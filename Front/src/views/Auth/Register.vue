@@ -7,15 +7,15 @@
           <div class="logo-section">
             <img src="@/assets/logo.png" alt="Your Logo" class="logo" />
           </div>
-          <h2>Sign Up</h2>
-          <p class="subtitle">Create your account</p>
+          <h2>S'inscrire</h2>
+          <p class="subtitle">Créez votre compte</p>
 
           <form @submit.prevent="submit">
             <div class="form-group">
               <input 
                 v-model="data.name" 
                 type="text" 
-                placeholder="Full Name"
+                placeholder="Nom"
                 class="form-input"
                 required 
               />
@@ -24,7 +24,7 @@
               <input 
                 v-model="data.phone" 
                 type="text" 
-                placeholder="Phone Number"
+                placeholder="Telephone"
                 class="form-input"
                 required 
               />
@@ -43,7 +43,7 @@
                 <input 
                   v-model="data.password" 
                   type="password"
-                  placeholder="Password"
+                  placeholder="Mot de passe"
                   class="form-input"
                   required 
                 />
@@ -54,19 +54,19 @@
                 <input 
                   v-model="data.confirmPassword" 
                   type="password"
-                  placeholder="Confirm Password"
+                  placeholder="Confirme Mot de passe"
                   class="form-input"
                   required 
                 />
               </div>
             </div>
 
-            <button type="submit" class="submit-btn">Create Account</button>
+            <button type="submit" class="submit-btn">Inscription</button>
           </form>
 
           <p class="signup-text">
-            Already have an account? 
-            <router-link to="/login" class="signup-link">Log in</router-link>
+            Vous avez déjà un compte ?
+                        <router-link to="/login" class="signup-link">Se connecter</router-link>
           </p>
         </div>
 
@@ -97,23 +97,31 @@ export default {
     const router = useRouter();
     
     const submit = async () => {
-      if (data.password !== data.confirmPassword) {
-        alert("Les mots de passe ne correspondent pas !");
-        return;
-      }
-      try {
-        await axios.post('/api/auth/register', {
-          username: data.name,
-          password: data.password,
-          email: data.phone,
-          email: data.email,
-        });
-        router.push('/login');
-      } catch (error) {
-        alert("Une erreur est survenue. Veuillez essayer à nouveau.");
-      }
-    };
+  if (data.password !== data.confirmPassword) {
+    alert("Les mots de passe ne correspondent pas !");
+    return;
+  }
+  
+  try {
+    const response = await axios.post('/api/auth/register', {
+      userName: data.name,
+      email: data.email,
+      phoneNumber: data.phone, 
+      password: data.password
+    });
 
+    if (response.data.success) {
+      router.push('/login');
+    } else {
+      alert(response.data.message || "Erreur lors de l'inscription");
+    }
+  } catch (error) {
+    const errorMsg = error.response?.data?.message 
+      || error.response?.data 
+      || "Une erreur est survenue. Veuillez essayer à nouveau.";
+    alert(errorMsg);
+  }
+};
     return { data, submit };
   },
 };
