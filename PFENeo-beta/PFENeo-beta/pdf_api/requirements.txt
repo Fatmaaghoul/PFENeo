@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+pymupdf
+requests
+python-dotenv
+cloudinary
+aiohttp
+deep-translator
+ultralytics
+pillow
+torch
+torchvision
+ollama
+transformers
+nltk
