@@ -12,6 +12,8 @@ import 'bootstrap';
 import '@fortawesome/fontawesome-free/css/all.css';
 import store from './Store'; // Import du store (Vuex?)
 import Cookies from 'js-cookie'; // Import de js-cookie pour gérer les cookies
+import './assets/theme.css'; // Import des styles de thème
+import { useThemeStore } from './Store/theme'; // Import du store de thème
 
 // Créer l'application Vue
 const app = createApp(App);
@@ -19,6 +21,10 @@ const app = createApp(App);
 // Initialiser Pinia
 const pinia = createPinia();
 app.use(pinia);
+
+// Initialiser le thème
+const themeStore = useThemeStore();
+themeStore.initTheme();
 
 // Définir l'URL de base pour Axios
 axios.defaults.baseURL = "https://localhost:7036";
@@ -34,12 +40,7 @@ axios.interceptors.request.use(
       config.headers.Accept = 'application/json';
       config.headers['Content-Type'] = 'application/json';
     }
-    console.log('Request Config:', {
-      url: config.url,
-      method: config.method,
-      headers: config.headers,
-      baseURL: config.baseURL
-    });
+  
     return config;
   },
   error => {
@@ -51,13 +52,6 @@ axios.interceptors.request.use(
 // Add a response interceptor
 axios.interceptors.response.use(
   response => {
-    console.log('API Response:', {
-      url: response.config.url,
-      method: response.config.method,
-      status: response.status,
-      data: response.data,
-      headers: response.config.headers
-    });
     return response;
   },
   error => {

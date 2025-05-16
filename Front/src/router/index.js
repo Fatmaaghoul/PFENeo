@@ -34,6 +34,7 @@ const router = createRouter({
       name: 'About',
       component: About
     },
+ 
     {
       path: '/document',
       name: 'Document',

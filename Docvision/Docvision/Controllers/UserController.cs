@@ -1,4 +1,5 @@
 ﻿using Docvision.Models;
+using Docvision.Repositories;
 using Docvision.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -15,12 +16,20 @@ namespace Docvision.Controllers
         private readonly IUserService _userService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-
-        public UserController(IUserService userService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        private readonly IUserRepository _userRepository;
+        public UserController(IUserRepository userRepository, IUserService userService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
+            _userRepository = userRepository;
             _userService = userService;
             _userManager = userManager;
             _roleManager = roleManager;
+
+        }
+        [HttpGet("id")]
+        public async Task<IActionResult> GetUserById(string id)
+        {
+             var user = await _userRepository.GetUserByIdAsync(id);
+            return Ok(user);
         }
 
         // ✅ 1. Ajouter un utilisateur avec un ou plusieurs rôles

@@ -103,28 +103,26 @@ def generate_description(image_path: str, objects_to_describe: set, text: str = 
     prompt = f"""
 Analyse attentivement l'image fournie et concentre-toi exclusivement sur les objets suivants : {object_list}.
 
-Ta tâche est de :
-- Décrire uniquement ces objets, en ignorant tout autre élément, même s'il est clairement visible ou important dans l'image.
-- Ne jamais mentionner un objet ou un détail qui ne figure pas explicitement dans la liste {object_list}.
-- Pour chaque objet, précise son apparence (forme, couleur, taille, texture, état visuel...).
-- Décris sa position approximative dans l'image (ex : en haut à gauche, au centre, proche du bord inférieur, etc.).
-- Si pertinent, indique brièvement son environnement immédiat mais uniquement en lien avec l'objet concerné.
--commencer par le {object_list} est un 
+Ta tâche :
+- Décris uniquement les objets listés, en ignorant tout autre élément visible dans l'image.
+- Pour chaque objet, rédige **deux phrases maximum** :
+  1. Une phrase sur son apparence (forme, couleur, taille, texture, état visuel…).
+  2. Une phrase sur son environnement immédiat **uniquement s’il est directement lié à l'objet**.
+- Commence chaque description par : “Le/La [objet] est…”
 
-Important :
-- Ignore totalement l'arrière-plan général, les éléments non mentionnés et les détails superflus.
-- Concentre-toi uniquement sur les objets listés. Fais comme si le reste de l'image n'existait pas.
-- Ne fais aucune hypothèse sur des objets absents de la liste, même s'ils paraissent évidents.
--commencer par le {object_list} est un 
-
-Ta réponse doit être rédigée en français clair, précis et descriptif.
-Pas d'introduction, pas de conclusion. Va directement aux descriptions ciblées.
+Contraintes :
+- Ne mentionne **aucun objet** ou détail qui ne figure pas explicitement dans la liste {object_list}.
+- Ignore totalement l’arrière-plan général et les éléments non listés.
+- Ne fais **aucune hypothèse** sur des objets absents, même s’ils semblent évidents.
+- Ne fournis ni introduction ni conclusion. Donne uniquement les descriptions ciblées en français clair et précis.
 """
+
+
 
     try:
         response = ollama.chat(
             # model='llama3.2-vision',
-            model='llava',
+            model='llava:7b',
             messages=[{
                 'role': 'user',
                 'content': prompt,

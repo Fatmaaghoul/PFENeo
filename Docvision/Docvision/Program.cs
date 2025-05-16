@@ -12,8 +12,21 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Docvision.Helpers;
 using Back.Controllers;
 using System.Text.Json.Serialization;
+using doc.Controllers;
+using Serilog;
+using Docvision.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configurer Serilog
+//Log.Logger = new LoggerConfiguration()
+   // .MinimumLevel.Debug() // Niveau de log minimum
+   // .WriteTo.Console()   // Afficher les logs dans la console
+   // .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day) // Écrire dans un fichier avec rotation quotidienne
+   // .CreateLogger();
+
+//builder.Host.UseSerilog(); // Utiliser Serilog comme logger
+
 // Configuration JWT
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
@@ -83,6 +96,10 @@ builder.Services.AddHttpClient<DocumentController>(client =>
 {
     client.Timeout = TimeSpan.FromMinutes(100); 
 });
+builder.Services.AddHttpClient<ImageController>(client =>
+{
+    client.Timeout = TimeSpan.FromMinutes(100);
+});
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -124,8 +141,14 @@ var cloudinary = new Cloudinary(new Account(
     builder.Configuration["Cloudinary:ApiSecret"]
 ));
 builder.Services.AddSingleton(cloudinary);
+builder.Services.AddMemoryCache();
+
 
 var app = builder.Build();
+
+// Configurer le pipeline
+//app.UseSerilogRequestLogging(); // Optionnel, pour les logs automatiques de Serilog
+//app.UseMiddleware<RequestResponseLoggingMiddleware>();
 // Fonction pour créer les rôles par défaut au démarrage
 async Task CreateRoles(IServiceProvider serviceProvider)
 {

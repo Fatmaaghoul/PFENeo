@@ -9,6 +9,7 @@ namespace Docvision.Models
         public string RefreshToken { get; set; }
         [JsonIgnore]
         public List<Document>? Documents { get; set; } = new();
+     //   public List<Folder> Folders { get; set; }= new();
     }
 
 }

@@ -1,14 +1,10 @@
 <template>
   <div class="document-card">
-    <span :class="['status-badge', document.isAnalysed ? 'traiter' : 'non-traiter']">
-      <i :class="document.isAnalysed ? 'bi bi-check-circle' : 'bi bi-x-circle'"></i>
-    </span>
+    <div :class="['status-bar', document.isAnalysed ? 'traiter' : 'non-traiter']"></div>
 
     <div class="document-content">
       <h3 class="document-title">{{ document.name }}</h3>
       
-     
-
       <div class="page-preview-container">
         <canvas ref="pdfCanvas" class="pdf-canvas"></canvas>
         <div v-if="loading" class="loading-overlay">
@@ -47,7 +43,7 @@ export default {
   props: {
     document: {
       type: Object,
-      required: true
+       required: true
     }
   },
   data() {
@@ -85,7 +81,7 @@ export default {
         }).promise;
 
         const page = await pdf.getPage(1);
-        const viewport = page.getViewport({ scale: 0.8 }); // Zoom augmenté à 0.8
+        const viewport = page.getViewport({ scale: 0.8 });
         
         const canvas = this.$refs.pdfCanvas;
         const context = canvas.getContext('2d');
@@ -151,7 +147,7 @@ export default {
   font-size: 0.85rem;
   color: #6c757d;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -178,14 +174,10 @@ export default {
 }
 
 .pdf-canvas {
- /* max-width: 50%;
-  max-height: 50%;*/
   width: 100%;
   height: auto;
   object-fit: contain;
- /* transform: scale(6); /* Zoom supplémentaire */
- transform: none; /* Supprime le zoom excessif */
-
+  transform: none;
 }
 
 .loading-overlay {
@@ -253,32 +245,21 @@ export default {
   color: #dc3545;
 }
 
-.status-badge {
+.status-bar {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.875rem;
-  font-weight: 500;
+  top: 0;
+  right: 0;
+  width: 6px;
+  height: 100%;
   z-index: 1;
 }
 
-.status-badge.traiter {
-  background-color: #d4edda;
-  color: #155724;
+.status-bar.traiter {
+  background-color: #28a745;
 }
 
-.status-badge.non-traiter {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
-.status-badge i {
-  font-size: 1rem;
+.status-bar.non-traiter {
+  background-color: #dc3545;
 }
 
 @keyframes spin {

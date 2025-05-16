@@ -1,6 +1,5 @@
 <template>
   <div class="document-info">
-    <!-- <h2>Informations du document</h2> -->
     <div class="info-card">
       <div class="form-group">
         <label>Nom :</label>
@@ -22,20 +21,41 @@
       </div>
 
       <div class="form-group">
+        <label>Propriétaire :</label>
+        <p class="info-text">{{ ownerName || 'Chargement...' }}</p>
+      </div>
+
+      <div class="form-group">
         <label>Statut :</label>
         <p class="info-text">
           <span :class="['status-badge', document.isExtracted ? 'extracted' : 'pending']">
             {{ document.isExtracted ? 'Extrait' : 'En attente d\'extraction' }}
           </span>
           <span :class="['status-badge', document.isAnalysed ? 'traiter' : 'non-traiter']">
-            {{ document.isAnalysed ? 'Traité' : 'Non traité' }}
+            {{ document.isAnalysed ? 'Analysée' : 'Non analysée' }}
+          </span>
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label>Objets :</label>
+        <p class="info-text">
+          <span
+            v-for="obj in objects"
+            :key="obj.id"
+            class="status-badge object-tag"
+          >
+            {{ obj.name || 'Objet sans nom' }}
+          </span>
+          <span v-if="objects.length === 0" class="no-objects">
+            Aucun objet détecté
           </span>
         </p>
       </div>
 
       <div class="button-group">
         <button @click="submitUpdate" class="update-btn">
-          <i class="bi bi-save"></i> Mis a jour
+          <i class="bi bi-save"></i> Mis à jour
         </button>
       </div>
     </div>
@@ -43,8 +63,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useDocumentStore } from '@/Store/analysis'
+import axios from 'axios'
 
 const props = defineProps({
   document: {
@@ -56,6 +77,8 @@ const props = defineProps({
 const emit = defineEmits(['update-document', 'analyse-document'])
 
 const documentStore = useDocumentStore()
+const objects = ref([])
+const ownerName = ref('') // Variable pour stocker le nom du propriétaire
 
 const tempDocument = ref({
   name: props.document.name || '',
@@ -74,26 +97,51 @@ const formatDate = (dateString) => {
   })
 }
 
+const fetchObjects = async () => {
+  try {
+    const response = await axios.get(`/api/object/by-document/${props.document.id}`)
+    objects.value = response.data
+  } catch (error) {
+    console.error('Erreur lors de la récupération des objets:', error)
+    objects.value = []
+  }
+}
+
+const fetchOwner = async () => {
+  try {
+    console.log(props.document.propriétaireId);
+    if (props.document.propriétaireId) {
+      const response = await axios.get('/api/users/id', {
+        params: { id: props.document.propriétaireId }
+      })
+      console.log(response.data);
+      ownerName.value = response.data.userName || 'Propriétaire inconnu' // Ajusté selon la propriété userName
+    } else {
+      ownerName.value = 'Aucun propriétaire'
+    }
+  } catch (error) {
+    console.error('Erreur lors de la récupération du propriétaire:', error)
+    ownerName.value = 'Erreur de chargement'
+  }
+}
+
 const submitUpdate = () => {
   emit('update-document', {
     name: tempDocument.value.name,
     description: tempDocument.value.description
   })
-
 }
+
+onMounted(() => {
+  fetchObjects()
+  fetchOwner() // Charger le propriétaire au montage du composant
+})
 </script>
 
 <style scoped>
 .document-info {
   flex: 1;
   min-width: 0;
-}
-
-.document-info h2 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  color: #333;
-  font-size: 1.5rem;
 }
 
 .info-card {
@@ -150,6 +198,7 @@ const submitUpdate = () => {
   border-radius: 20px;
   font-size: 14px;
   font-weight: 600;
+  margin-right: 8px;
 }
 
 .status-badge.extracted {
@@ -165,169 +214,45 @@ const submitUpdate = () => {
 .status-badge.traiter {
   background-color: #cce5ff;
   color: #004085;
-  margin-left: 10px;
 }
 
 .status-badge.non-traiter {
   background-color: #f8d7da;
   color: #721c24;
-  margin-left: 10px;
+}
+
+.status-badge.object-tag {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.no-objects {
+  color: #6c757d;
+  font-size: 14px;
 }
 
 .button-group {
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: flex-end;
 }
 
 .update-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
   background-color: #4caf50;
   color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
   font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.update-btn:hover {
+.update-btn:hover { 
   background-color: #45a049;
 }
 
-.analyse-btn {
-  background-color: #1bc0c8;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.analyse-btn:hover {
-  background-color: #17a2b8;
-}
-
-.analyse-btn:disabled {
+.update-btn:disabled {
   background-color: #6c757d;
   cursor: not-allowed;
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  animation: modalFadeIn 0.3s ease;
-}
-
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.5rem;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.modal-header h2 {
-  margin: 0;
-  font-size: 1.5rem;
-  color: #2c3e50;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: #6c757d;
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.close-btn:hover {
-  background-color: #f8f9fa;
-  color: #dc3545;
-}
-
-.modal-body {
-  padding: 1.5rem;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  padding: 1.5rem;
-  border-top: 1px solid #f0f0f0;
-}
-
-.cancel-btn {
-  background: none;
-  border: 1px solid #ddd;
-  color: #666;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.submit-btn {
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.submit-btn:hover {
-  background-color: #45a049;
-}
-
-.error-message {
-  color: #dc3545;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
 }
 </style>

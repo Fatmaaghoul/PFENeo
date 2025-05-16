@@ -18,14 +18,17 @@ namespace Docvision.Repositories
         private readonly DocContext _Context;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly DocContext _context;
+        private readonly HttpClient _httpClient;
 
 
-        public DocumentRepository(Cloudinary cloudinary, DocContext docContext, IHttpClientFactory httpClientFactory, DocContext context)
+        public DocumentRepository(Cloudinary cloudinary, DocContext docContext, IHttpClientFactory httpClientFactory, DocContext context , HttpClient httpClient)
         {
             _cloudinary = cloudinary;
             _Context = docContext;
             _httpClientFactory = httpClientFactory;
             _context = context;
+            _httpClient = httpClient;
+
         }
 
         public async Task<Document> AddDocumentAsync(IFormFile file,string Name, string description, string userId)
@@ -48,10 +51,11 @@ namespace Docvision.Repositories
             {
                 Id = Guid.NewGuid(),
                 Name = Name,
-                UploadDate = DateTime.UtcNow,
+                UploadDate = DateTime.Now,
                 FileUrl = uploadResult.SecureUrl.ToString(),
                 UserId = userId,
                 description = description,
+                propriétaireId = userId, 
             };
 
             _Context.Documents.Add(document);
@@ -147,7 +151,7 @@ namespace Docvision.Repositories
             {
                 document.description = updatedDocument.Description;
             }
-
+            document.ModifiedAt = DateTime.Now;
             _Context.Documents.Update(document);
             await _Context.SaveChangesAsync();
 
@@ -174,7 +178,23 @@ namespace Docvision.Repositories
             {
                 textBuilder.AppendLine(page.Text);
             }
-            result.Text = textBuilder.ToString();
+
+            result.Text = textBuilder.ToString(); 
+
+            var requestBody = new
+            {
+                text = result.Text
+            };
+
+            var res = await _httpClient.PostAsJsonAsync("http://127.0.0.1:8000/translate", requestBody);
+            res.EnsureSuccessStatusCode();
+            var json = await res.Content.ReadFromJsonAsync<TranslateResponse>();
+
+            if (json != null && !string.IsNullOrWhiteSpace(json.translated_text))
+            {
+                result.Text = json.translated_text;
+            }
+
 
             // Extraction des images (sans analyse)
             foreach (var page in pdfDocument.GetPages())
@@ -214,4 +234,9 @@ namespace Docvision.Repositories
 
 
     }
+    public class TranslateResponse
+    {
+        public string translated_text { get; set; } = string.Empty;
+    }
+
 }

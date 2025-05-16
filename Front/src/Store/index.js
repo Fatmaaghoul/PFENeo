@@ -63,9 +63,6 @@ export default createStore({
         const response = await axios.get("/api/profile", {
           headers: { Authorization: `Bearer ${token}` }
         });
-
-        console.log("API response:", response.data); // Inspectez la réponse
-
         // Utilise SET_AUTH pour mettre à jour l'état
         commit("SET_AUTH", { 
           authenticated: true, 

@@ -4,61 +4,70 @@
       <div class="auth-content">
         <!-- Partie formulaire -->
         <div class="auth-form-container">
-          <h2>Set a password</h2>
-          <p class="subtitle">Your previous password has been reset. Please set a new password for your account.</p>
+          <h2>Réinitialiser le mot de passe</h2>
+          <p class="subtitle">Veuillez définir un nouveau mot de passe pour votre compte.</p>
 
           <form @submit.prevent="resetPassword">
             <div class="form-group">
-              <label>Create Password</label>
+              <label>Nouveau mot de passe</label>
               <div class="password-input">
                 <input 
                   v-model="newPassword" 
                   :type="showPassword ? 'text' : 'password'"
-                  placeholder="Enter your new password"
+                  placeholder="Entrez votre nouveau mot de passe"
                   class="form-input"
-                  required 
+                  required
+                  minlength="8"
                 />
                 <button 
                   type="button" 
                   class="toggle-password"
                   @click="showPassword = !showPassword"
+                  aria-label="Toggle password visibility"
                 >
                   <i class="bi" :class="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
                 </button>
               </div>
+              <p class="password-hint">Minimum 8 caractères</p>
             </div>
 
             <div class="form-group">
-              <label>Re-enter Password</label>
+              <label>Confirmer le mot de passe</label>
               <div class="password-input">
                 <input 
                   v-model="confirmPassword" 
                   :type="showConfirmPassword ? 'text' : 'password'"
-                  placeholder="Confirm your new password"
+                  placeholder="Confirmez votre nouveau mot de passe"
                   class="form-input"
-                  required 
+                  required
+                  minlength="8"
                 />
                 <button 
                   type="button" 
                   class="toggle-password"
                   @click="showConfirmPassword = !showConfirmPassword"
+                  aria-label="Toggle password visibility"
                 >
                   <i class="bi" :class="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
                 </button>
               </div>
             </div>
 
-            <button type="submit" class="submit-btn" :disabled="loading">
-              {{ loading ? 'Setting password...' : 'Set password' }}
+            <button type="submit" class="submit-btn" :disabled="loading || !formValid">
+              {{ loading ? 'En cours...' : 'Réinitialiser le mot de passe' }}
             </button>
           </form>
 
           <p v-if="message" :class="['message', status]">{{ message }}</p>
+          
+          <div class="back-to-login">
+            <router-link to="/login">Retour à la connexion</router-link>
+          </div>
         </div>
 
         <!-- Partie illustration -->
         <div class="illustration">
-          <img src="@/assets/reset-password-illustration.png" alt="Reset Password" />
+          <img src="@/assets/reset-password-illustration.png" alt="Réinitialisation de mot de passe" />
         </div>
       </div>
     </div>
@@ -67,7 +76,7 @@
 
 <script>
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 export default {
@@ -84,61 +93,107 @@ export default {
     const token = ref('');
     const email = ref('');
 
-    onMounted(() => {
-      // Récupérer et nettoyer le token
-      const rawToken = route.query.token || '';
-      token.value = decodeURIComponent(rawToken).replace(/ /g, '+');
+    const formValid = computed(() => {
+      return newPassword.value.length >= 8 && 
+             confirmPassword.value.length >= 8 &&
+             newPassword.value === confirmPassword.value;
+    });
+
+const isValidToken = (token) => {
+  return token && token.length > 30 && token.includes('.');
+};
+
+   onMounted(async () => {
+      token.value = cleanToken(route.query.token);
       email.value = route.query.email || '';
       
       if (!token.value || !email.value) {
-        message.value = "Token ou email manquant dans l'URL";
-        status.value = 'error';
-      }
-    });
-
-    const resetPassword = async () => {
-      if (newPassword.value !== confirmPassword.value) {
-        message.value = "Les mots de passe ne correspondent pas";
-        status.value = 'error';
+        showError("Lien de réinitialisation incomplet");
         return;
       }
 
-      if (!token.value || !email.value) {
-        message.value = "Token ou email manquant";
-        status.value = 'error';
+      await validateToken();
+    });
+
+
+    const validateToken = async () => {
+      try {
+        const response = await axios.get(
+          'https://localhost:7036/api/auth/validate-reset-token',
+          {
+            params: {
+              token: encodeURIComponent(token.value), // Nettoyage avant envoi
+              email: email.value
+            }
+          }
+        );
+        
+        if (!response.data?.valid) {
+          showError(response.data?.message || "Lien expiré ou invalide");
+          return false;
+        }
+        return true;
+      } catch (error) {
+        showError("Erreur de vérification du token");
+        return false;
+      }
+    };
+
+    const resetPassword = async () => {
+      if (!(await validateToken())) return;
+
+      if (newPassword.value.length < 8) {
+        showError("Le mot de passe doit contenir au moins 8 caractères");
         return;
       }
 
       loading.value = true;
+      
       try {
-        const response = await axios.post('https://localhost:7036/api/auth/reset-password', {
-          email: email.value,
-          token: token.value,
-          newPassword: newPassword.value
-        });
+        const response = await axios.post(
+          'https://localhost:7036/api/auth/reset-password',
+          {
+            email: email.value,
+            token: encodeURIComponent(token.value),
+            newPassword: newPassword.value
+          },
+          {
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
 
-        message.value = "Mot de passe réinitialisé avec succès";
-        status.value = 'success';
-        setTimeout(() => {
-          router.push('/login');
-        }, 3000);
+        if (response.data.success) {
+          showSuccess("Mot de passe réinitialisé avec succès!");
+          setTimeout(() => router.push('/login'), 2000);
+        } else {
+          showError(response.data.message || "Échec de la réinitialisation");
+        }
       } catch (error) {
-        message.value = error.response?.data?.message || error.response?.data || "Une erreur est survenue";
-        status.value = 'error';
+        showError(error.response?.data?.message || "Erreur serveur");
       } finally {
         loading.value = false;
       }
     };
 
+    const showError = (msg) => {
+      message.value = msg;
+      status.value = "error";
+    };
+
+    const showSuccess = (msg) => {
+      message.value = msg;
+      status.value = "success";
+    };
     return { 
       newPassword,
       confirmPassword,
       message,
-      resetPassword,
       status,
       loading,
       showPassword,
-      showConfirmPassword
+      showConfirmPassword,
+      formValid,
+      resetPassword
     };
   }
 };
@@ -197,6 +252,13 @@ label {
   margin-bottom: 0.5rem;
   color: #4b5563;
   font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.password-hint {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.25rem;
 }
 
 .form-input {
@@ -228,6 +290,7 @@ label {
   color: #64748b;
   cursor: pointer;
   padding: 0;
+  font-size: 1rem;
 }
 
 .submit-btn {
@@ -252,6 +315,7 @@ label {
 .submit-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+  background-color: #c7d2fe;
 }
 
 .message {
@@ -259,6 +323,7 @@ label {
   padding: 0.75rem;
   border-radius: 6px;
   font-size: 0.95rem;
+  text-align: center;
 }
 
 .message.success {
@@ -273,13 +338,30 @@ label {
   border: 1px solid #fee2e2;
 }
 
+.back-to-login {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.back-to-login a {
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.back-to-login a:hover {
+  text-decoration: underline;
+}
+
 .illustration {
   flex: 1;
-  background-color: #ffffff;
+  background-color: #f9fafb;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  border-left: 1px solid #e2e8f0;
 }
 
 .illustration img {

@@ -187,14 +187,8 @@ namespace Docvision.Services
 
             var token = await _authRepository.GeneratePasswordResetTokenAsync(user);
 
-            // Générer le lien de réinitialisation
-            var urlHelper = GetUrlHelper();
-            var resetLink = urlHelper.Action(
-                "ResetPassword",
-                "Auth",
-                new { token, email = user.Email },
-                protocol: _httpContextAccessor.HttpContext.Request.Scheme
-            );
+            // Générer le lien de réinitialisation avec le nouvel endpoint GET
+            var resetLink = $"https://localhost:7036/api/Auth/reset-password?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(user.Email)}";
 
             await _emailService.SendEmailAsync(user.Email, "Réinitialisation de mot de passe",
                 $"Cliquez ici pour réinitialiser votre mot de passe : <a href='{resetLink}'>Réinitialiser</a>");
@@ -204,17 +198,38 @@ namespace Docvision.Services
 
         public async Task<ResponseModel> ResetPasswordAsync(ResetPasswordRequest request)
         {
-            var user = await _authRepository.GetUserByEmailAsync(request.Email);
-            if (user == null)
-                return new ResponseModel { Success = false, Message = "Email non trouvé." };
+            try
+            {
+                var user = await _authRepository.GetUserByEmailAsync(request.Email);
+                if (user == null)
+                    return new ResponseModel { Success = false, Message = "Email non trouvé." };
 
-            var decodedToken = Uri.UnescapeDataString(request.Token);
-            var result = await _authRepository.ResetPasswordAsync(user, decodedToken, request.NewPassword);
+                // Décodage spécial pour les tokens
+                var decodedToken = Uri.UnescapeDataString(request.Token).Replace(" ", "+");
 
-            if (!result.Succeeded)
-                return new ResponseModel { Success = false, Message = string.Join(", ", result.Errors.Select(e => e.Description)) };
+                var result = await _authRepository.ResetPasswordAsync(user, decodedToken, request.NewPassword);
 
-            return new ResponseModel { Success = true, Message = "Mot de passe réinitialisé avec succès !" };
+                if (!result.Succeeded)
+                    return new ResponseModel
+                    {
+                        Success = false,
+                        Message = "Token invalide ou expiré. Veuillez demander un nouveau lien."
+                    };
+
+                return new ResponseModel
+                {
+                    Success = true,
+                    Message = "Mot de passe réinitialisé avec succès !"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ResponseModel
+                {
+                    Success = false,
+                    Message = $"Erreur de traitement: {ex.Message}"
+                };
+            }
         }
 
 

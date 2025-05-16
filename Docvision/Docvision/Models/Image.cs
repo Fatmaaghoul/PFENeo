@@ -8,11 +8,12 @@ namespace Docvision.Models
     {
         public Guid Id { get; set; }
         public string FileUrl { get; set; }
-        public string? Description { get; set; }
-        public string? Objects { get; set; }
+   
         public Guid DocumentId { get; set; }
         [ForeignKey("DocumentId")]
         [JsonIgnore]
         public Document? Document { get; set; }
+        public ICollection<ObjectImage>? Objects { get; set; }
+
     }
 }

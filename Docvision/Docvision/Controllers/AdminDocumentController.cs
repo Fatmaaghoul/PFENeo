@@ -6,11 +6,16 @@ using Docvision.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Docvision.Controllers
 {
     [ApiController]
     [Route("api/admin/documents")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     public class DocumentAdminController : ControllerBase
     {
         private readonly IDocumentService _documentService;
@@ -54,6 +59,11 @@ namespace Docvision.Controllers
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] CreateDocumentRequest request)
         {
+            var AdminId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+            if (string.IsNullOrEmpty(AdminId))
+            {
+                return Unauthorized("Utilisateur non authentifié.");
+            }
             // if (!IsAdmin()) return Forbid();
 
             // Validate input
@@ -90,7 +100,7 @@ namespace Docvision.Controllers
 
             try
             {
-                var created = await _documentService.AddDocumentAsync(request.File, request.Name, request.Description, request.UserId);
+                var created = await _documentService.AddDocumentAsync(request.File, request.Name, request.Description, request.UserId,AdminId);
                 return Ok(created);
             }
             catch (Exception ex)
@@ -227,6 +237,7 @@ namespace Docvision.Controllers
             public string Description { get; set; }
             [Required]
             public string UserId { get; set; }
+          
         }
 
         public class UpdateDocumentRequest

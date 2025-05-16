@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Docvision.Models;  // Document et DocumentImage
+using Docvision.Models;
 
 namespace Docvision.Persistance
 {
@@ -11,30 +11,52 @@ namespace Docvision.Persistance
         {
         }
 
-        // Ajout des entités Document et DocumentImage
-        public DbSet<DocumentImage> Images { get; set; } = null!;
+        // Déclaration des DbSet
         public DbSet<Document> Documents { get; set; } = null!;
+        public DbSet<DocumentImage> Images { get; set; } = null!;
+        public DbSet<ObjectImage> Objects { get; set; } = null!;
+        public DbSet<Description> Descriptions { get; set; } = null!;
+        public DbSet<DescriptionObject> DescriptionObjects { get; set; } = null!;
+        public DbSet<ModelConfiguration> ModelConfigurations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder); // Appel de la configuration de IdentityDbContext
+            base.OnModelCreating(modelBuilder); // Pour Identity
 
+            // Document -> Images (1:N)
             modelBuilder.Entity<Document>()
-                .HasMany(r => r.Images)
+                .HasMany(d => d.Images)
                 .WithOne(i => i.Document)
-                .HasForeignKey(d => d.DocumentId)
-        .OnDelete(DeleteBehavior.Cascade); // Changed from Restrict to Cascade
-            /* modelBuilder.Entity<Document>()
-        .HasOne(d => d.User)
-        .WithMany() // Utilise .WithMany() ou .HasMany() selon la direction de la relation
-        .HasForeignKey(d => d.UserId) // Utilise UserId comme clé étrangère
-        .OnDelete(DeleteBehavior.Restrict);*/
-            // Relation Document -> User (CHANGER ICI)
+                .HasForeignKey(i => i.DocumentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Document -> User (1:N)
             modelBuilder.Entity<Document>()
                 .HasOne(d => d.User)
-                .WithMany(u => u.Documents) // Supposant qu'ApplicationUser a une liste de Documents
+                .WithMany(u => u.Documents)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.Cascade); // ⚠️ Supprime les documents si l'utilisateur est supprimé
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // DocumentImage -> ObjectImage (1:N)
+            modelBuilder.Entity<DocumentImage>()
+                .HasMany(img => img.Objects)
+                .WithOne(o => o.Image)
+                .HasForeignKey(o => o.ImageId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // DescriptionObject (jointure N:N entre Description et ObjectImage)
+            modelBuilder.Entity<DescriptionObject>()
+                .HasKey(doj => new { doj.DescriptionId, doj.ObjectId });
+
+            modelBuilder.Entity<DescriptionObject>()
+                .HasOne(doj => doj.Description)
+                .WithMany(d => d.DescriptionObjects)
+                .HasForeignKey(doj => doj.DescriptionId);
+
+            modelBuilder.Entity<DescriptionObject>()
+                .HasOne(doj => doj.DetectedObject)
+                .WithMany(o => o.DescriptionObjects)
+                .HasForeignKey(doj => doj.ObjectId);
         }
     }
 }

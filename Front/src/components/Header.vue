@@ -23,6 +23,8 @@
                 A propos
               </RouterLink>
             </li>
+        
+            
             <li v-if="authenticated" class="nav-item">
               <RouterLink to="/document" class="nav-link">
                 <i class="bi bi-files me-1"></i> Documents
@@ -64,8 +66,8 @@
                 </button>
               </div>
             </div>
-            <div v-else>
-              <RouterLink to="/login" class="btn btn-outline-primary rounded-pill px-4 py-2">
+            <div v-else >
+              <RouterLink v-if="route.path !== '/login'" to="/login" class="btn btn-outline-primary rounded-pill px-4 py-2">
   Se connecter
 </RouterLink>
             </div>
@@ -136,11 +138,14 @@ onUnmounted(() => {
   z-index: 1000;
   padding: 1rem 0;
   transition: all 0.3s ease;
+  background-color: var(--background-color) !important;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .navbar-brand {
   font-size: 1.5rem;
   transition: all 0.3s ease;
+  color: var(--text-color) !important;
 }
 
 .navbar-brand:hover {
@@ -152,15 +157,16 @@ onUnmounted(() => {
   padding: 0.5rem 1rem !important;
   transition: all 0.3s ease;
   border-radius: 8px;
+  color: var(--text-color) !important;
 }
 
 .nav-link:hover {
-  background-color: rgba(13, 110, 253, 0.1);
+  background-color: var(--secondary-background);
   transform: translateY(-2px);
 }
 
 .nav-link.router-link-active {
-  color: #0d6efd !important;
+  color: var(--primary-color) !important;
   font-weight: 500;
 }
 
@@ -177,10 +183,24 @@ onUnmounted(() => {
 
 .btn-outline-primary {
   border-width: 2px;
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  color: white;
 }
 
 .btn-outline-danger {
   border-width: 2px;
+  color: var(--error-color);
+  border-color: var(--error-color);
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--error-color);
+  color: white;
 }
 
 .user-menu {
@@ -190,7 +210,7 @@ onUnmounted(() => {
 .user-avatar {
   width: 40px;
   height: 40px;
-  background-color: #0d6efd;
+  background-color: var(--primary-color);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -203,36 +223,37 @@ onUnmounted(() => {
 
 .user-avatar:hover {
   transform: scale(1.1);
-  background-color: #0b5ed7;
+  background-color: var(--secondary-color);
 }
 
 .user-dropdown {
   position: absolute;
   top: 100%;
   right: 0;
-  background: white;
+  background: var(--background-color);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
   min-width: 200px;
   margin-top: 0.5rem;
   z-index: 1001;
   animation: slideDown 0.2s ease;
+  border: 1px solid var(--border-color);
 }
 
 .user-info {
   padding: 1rem;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .user-email {
   font-size: 0.9rem;
-  color: #6c757d;
+  color: var(--text-secondary);
   word-break: break-all;
 }
 
 .dropdown-divider {
   height: 1px;
-  background-color: #e9ecef;
+  background-color: var(--border-color);
   margin: 0.5rem 0;
 }
 
@@ -240,7 +261,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   padding: 0.75rem 1rem;
-  color: #2c3e50;
+  color: var(--text-color);
   text-decoration: none;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -251,8 +272,8 @@ onUnmounted(() => {
 }
 
 .dropdown-item:hover {
-  background-color: #f8f9fa;
-  color: #0d6efd;
+  background-color: var(--secondary-background);
+  color: var(--primary-color);
 }
 
 .dropdown-item i {
@@ -272,11 +293,12 @@ onUnmounted(() => {
 
 @media (max-width: 991.98px) {
   .navbar-collapse {
-    background: white;
+    background: var(--background-color);
     padding: 1rem;
     border-radius: 8px;
     margin-top: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border-color);
   }
 
   .user-dropdown {

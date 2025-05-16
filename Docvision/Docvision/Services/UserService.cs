@@ -23,6 +23,7 @@ namespace Docvision.Services
             _roleManager = roleManager;
 
         }
+      
 
         public async Task<ResponseModel> AddUserAsync(string username, string email, string phonenumber, string password, List<string> roles)
         {

@@ -32,7 +32,7 @@ export default {
 
 <style>
 :root {
-  --primary-color: #4CAF50;
+  --primary-color: #7C3AED;
   --background-color: #ffffff;
   --text-color: #333333;
   --secondary-background: #f5f5f5;
@@ -40,7 +40,7 @@ export default {
 }
 
 .dark-theme {
-  --primary-color: #66bb6a;
+  --primary-color: #7445c5;
   --background-color: #121212;
   --text-color: #ffffff;
   --secondary-background: #1e1e1e;

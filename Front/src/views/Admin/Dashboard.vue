@@ -1,3 +1,4 @@
+```vue
 <template>
   <div class="dashboard-container">
     <!-- Cartes de statistiques -->
@@ -10,10 +11,6 @@
           <h3 class="stat-value">{{ stats.totalUsers }}</h3>
           <p class="stat-label">Utilisateurs totaux</p>
         </div>
-        <div class="stat-trend positive">
-          <i class="bi bi-arrow-up"></i>
-          <span class="trend-value">+{{ stats.userGrowth }}%</span>
-        </div>
       </div>
 
       <div class="stat-card">
@@ -24,10 +21,6 @@
           <h3 class="stat-value">{{ stats.totalDocuments }}</h3>
           <p class="stat-label">Documents totaux</p>
         </div>
-        <div class="stat-trend positive">
-          <i class="bi bi-arrow-up"></i>
-          <span class="trend-value">+{{ stats.documentGrowth }}%</span>
-        </div>
       </div>
 
       <div class="stat-card">
@@ -35,57 +28,64 @@
           <i class="bi bi-hdd-fill"></i>
         </div>
         <div class="stat-content">
-          <h3 class="stat-value">{{ formatStorage(stats.totalStorage) }}</h3>
+          <h3 class="stat-value">{{ formatStorage(stats.totalStorage) }}/{{ formatStorage(stats.maxStorage) }}</h3>
           <p class="stat-label">Stockage utilisé</p>
-        </div>
-        <div class="stat-trend neutral">
-          <i class="bi bi-dash"></i>
-          <span class="trend-value">{{ stats.storageGrowth }}%</span>
         </div>
       </div>
     </div>
 
     <!-- Section des graphiques -->
     <div class="charts-grid">
-    <div class="chart-card modern">
-      <div class="chart-header">
-        <h3>Activité des documents</h3>
-        <div class="time-filter">
-          <button 
-            v-for="period in timePeriods" 
-            :key="period" 
-            class="time-btn"
-            :class="{ active: selectedPeriod === period }"
-            @click="changePeriod(period)"
-          >
-            {{ period }}
-          </button>
+      <div class="chart-card modern">
+        <div class="chart-header">
+          <h3>Ajout des documents</h3>
+          <div class="time-filter">
+           
+          </div>
+        </div>
+        <div class="chart-content">
+          <canvas ref="barChart"></canvas>
         </div>
       </div>
-      <div class="chart-content">
-        <canvas ref="barChart"></canvas>
-      </div>
-    </div>
 
-    <div class="chart-card modern">
-      <div class="chart-header">
-        <h3>Utilisation du stockage</h3>
-        <div class="chart-legend">
-          <span class="legend-item">
-            <span class="legend-color used"></span>
-            Utilisé ({{ storagePercentage }}%)
-          </span>
-          <span class="legend-item">
-            <span class="legend-color free"></span>
-            Libre ({{ 100 - storagePercentage }}%)
-          </span>
+      <div class="chart-card modern">
+        <div class="chart-header">
+          <h3>Utilisation du stockage</h3>
+          <div class="chart-legend">
+            <span class="legend-item">
+              <span class="legend-color used"></span>
+              Utilisé ({{ storagePercentage }}%)
+            </span>
+            <span class="legend-item">
+              <span class="legend-color free"></span>
+              Libre ({{ 100 - storagePercentage }}%)
+            </span>
+          </div>
+        </div>
+        <div class="chart-content">
+          <canvas ref="pieChart"></canvas>
         </div>
       </div>
-      <div class="chart-content">
-        <canvas ref="pieChart"></canvas>
+
+      <div class="chart-card modern">
+        <div class="chart-header">
+          <h3>Analyse des documents</h3>
+          <div class="chart-legend">
+            <span class="legend-item">
+              <span class="legend-color analyzed"></span>
+              Analysé ({{ analysisPercentage.analyzed }}%)
+            </span>
+            <span class="legend-item">
+              <span class="legend-color not-analyzed"></span>
+              Non analysé ({{ analysisPercentage.notAnalyzed }}%)
+            </span>
+          </div>
+        </div>
+        <div class="chart-content">
+          <canvas ref="analysisChart"></canvas>
+        </div>
       </div>
     </div>
-  </div>
 
     <!-- Activité récente -->
     <div class="activity-card">
@@ -127,15 +127,19 @@ const stats = ref({
   documentGrowth: 0,
   totalStorage: 0,
   maxStorage: 10,
-  storageGrowth: 0
+  storageGrowth: 0,
+  analyzedDocuments: 0,
+  notAnalyzedDocuments: 0
 })
 
 const barChart = ref(null)
 const pieChart = ref(null)
+const analysisChart = ref(null)
 const allActivities = ref([])
 const showAllActivities = ref(false)
 const barChartInstance = ref(null)
 const pieChartInstance = ref(null)
+const analysisChartInstance = ref(null)
 const isLoading = ref(true)
 const timePeriods = ['7j', '30j', '90j']
 const selectedPeriod = ref('7j')
@@ -152,6 +156,15 @@ const recentActivities = computed(() => {
 const storagePercentage = computed(() => {
   if (stats.value.maxStorage === 0 || stats.value.totalStorage < 0) return 0
   return Math.round((stats.value.totalStorage / stats.value.maxStorage) * 100)
+})
+
+const analysisPercentage = computed(() => {
+  const total = stats.value.analyzedDocuments + stats.value.notAnalyzedDocuments
+  if (total === 0) return { analyzed: 0, notAnalyzed: 0 }
+  return {
+    analyzed: Math.round((stats.value.analyzedDocuments / total) * 100),
+    notAnalyzed: Math.round((stats.value.notAnalyzedDocuments / total) * 100)
+  }
 })
 
 // Fonctions utilitaires
@@ -261,6 +274,7 @@ const initBarChart = (data) => {
     }
   })
 }
+
 const initPieChart = () => {
   if (pieChartInstance.value) {
     pieChartInstance.value.destroy()
@@ -308,6 +322,55 @@ const initPieChart = () => {
     }
   })
 }
+
+const initAnalysisChart = () => {
+  if (analysisChartInstance.value) {
+    analysisChartInstance.value.destroy()
+  }
+
+  const ctx = analysisChart.value.getContext('2d')
+  analysisChartInstance.value = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Analysé', 'Non analysé'],
+      datasets: [{
+        data: [analysisPercentage.value.analyzed, analysisPercentage.value.notAnalyzed],
+        backgroundColor: [
+          'rgba(28, 200, 138, 0.8)', // Vert pour analysé
+          'rgba(231, 74, 59, 0.8)'   // Rouge pour non analysé
+        ],
+        borderColor: [
+          'rgba(28, 200, 138, 1)',
+          'rgba(231, 74, 59, 1)'
+        ],
+        borderWidth: 1,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '75%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          bodyFont: { size: 12 },
+          padding: 10,
+          cornerRadius: 8,
+          callbacks: {
+            label: (context) => `${context.label}: ${context.parsed}%`
+          }
+        }
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true
+      }
+    }
+  })
+}
+
 const changePeriod = (period) => {
   selectedPeriod.value = period
   // Ici vous pourriez ajouter la logique pour recharger les données
@@ -350,6 +413,8 @@ const fetchDocuments = async () => {
     const documents = response.data
     stats.value.totalDocuments = documents.length
     stats.value.documentGrowth = Math.round(Math.random() * 10)
+    stats.value.analyzedDocuments = documents.filter(doc => doc.isAnalysed).length
+    stats.value.notAnalyzedDocuments = documents.filter(doc => !doc.isAnalysed).length
     return documents
   } catch (error) {
     console.error('Erreur lors de la récupération des documents :', error)
@@ -359,33 +424,42 @@ const fetchDocuments = async () => {
 
 const fetchRecentActivities = async (documents) => {
   try {
-    // Transformer les données des documents en format d'activité
-    allActivities.value = await Promise.all(
-      documents
-        .filter(doc => doc.uploadDate && !isNaN(new Date(doc.uploadDate).getTime()))
-        .map(async (doc) => {
-          try {
-            const userResponse = await axios.get(`${apiBaseUrl}/api/admin/documents/${doc.id}/user`)
-            const user = userResponse.data
-            return {
-              id: doc.id,
-              type: 'upload',
-              description: `${user.userName || 'Utilisateur'} a ajouté le document "${doc.name}"`,
-              timestamp: doc.uploadDate,
-              isNew: new Date() - new Date(doc.uploadDate) < 24 * 60 * 60 * 1000
-            }
-          } catch (error) {
-            console.error(`Erreur lors de la récupération de l'utilisateur pour le document ${doc.id} :`, error)
-            return {
-              id: doc.id,
-              type: 'upload',
-              description: `Utilisateur a téléversé le document "${doc.name}"`,
-              timestamp: doc.uploadDate,
-              isNew: new Date() - new Date(doc.uploadDate) < 24 * 60 * 60 * 1000
-            }
-          }
-        })
+    // Transformer les données des documents en format d'activité (upload et edit)
+    const activities = await Promise.all(
+      documents.flatMap(async (doc) => {
+        const activityItems = []
+        const userResponse = await axios.get(`${apiBaseUrl}/api/admin/documents/${doc.id}/user`).catch(() => ({
+          data: { userName: 'Utilisateur' }
+        }))
+        const user = userResponse.data
+
+        // Activité de téléversement
+        if (doc.uploadDate && !isNaN(new Date(doc.uploadDate).getTime())) {
+          activityItems.push({
+            id: `upload-${doc.id}`,
+            type: 'upload',
+            description: `${user.userName || 'Utilisateur'} a ajouté le document "${doc.name}"`,
+            timestamp: doc.uploadDate,
+            isNew: new Date() - new Date(doc.uploadDate) < 24 * 60 * 60 * 1000
+          })
+        }
+
+        // Activité de modification
+        if (doc.modifiedAt && !isNaN(new Date(doc.modifiedAt).getTime())) {
+          activityItems.push({
+            id: `edit-${doc.id}`,
+            type: 'edit',
+            description: `${user.userName || 'Utilisateur'} a modifié le document "${doc.name}"`,
+            timestamp: doc.modifiedAt,
+            isNew: new Date() - new Date(doc.modifiedAt) < 24 * 60 * 60 * 1000
+          })
+        }
+
+        return activityItems
+      })
     )
+
+    allActivities.value = activities.flat()
   } catch (error) {
     console.error('Erreur lors de la récupération des activités :', error)
   }
@@ -437,6 +511,7 @@ const fetchData = async () => {
     const chartData = prepareChartData(documents)
     initBarChart(chartData)
     initPieChart()
+    initAnalysisChart()
   } catch (error) {
     console.error('Erreur lors du chargement des données:', error)
   } finally {
@@ -456,11 +531,21 @@ onMounted(() => {
   fetchData()
 })
 
-// Mise à jour du graphique camembert quand le pourcentage change
+// Mise à jour des graphiques camembert quand les pourcentages changent
 watch(storagePercentage, () => {
   if (pieChartInstance.value) {
     pieChartInstance.value.data.datasets[0].data = [storagePercentage.value, 100 - storagePercentage.value]
     pieChartInstance.value.update()
+  }
+})
+
+watch(analysisPercentage, () => {
+  if (analysisChartInstance.value) {
+    analysisChartInstance.value.data.datasets[0].data = [
+      analysisPercentage.value.analyzed,
+      analysisPercentage.value.notAnalyzed
+    ]
+    analysisChartInstance.value.update()
   }
 })
 </script>
@@ -670,6 +755,8 @@ watch(storagePercentage, () => {
 
 .legend-color.used { background: #4e73df; }
 .legend-color.free { background: #e0e0e0; }
+.legend-color.analyzed { background: #1cc88a; }
+.legend-color.not-analyzed { background: #e74a3b; }
 
 .chart-content {
   height: 300px;
@@ -826,6 +913,7 @@ watch(storagePercentage, () => {
     align-self: flex-end;
   }
 }
+
 .chart-card.modern {
   background: white;
   border-radius: 16px;
@@ -914,6 +1002,16 @@ watch(storagePercentage, () => {
   box-shadow: 0 2px 4px rgba(224, 224, 224, 0.3);
 }
 
+.legend-color.analyzed { 
+  background: #1cc88a;
+  box-shadow: 0 2px 4px rgba(28, 200, 138, 0.3);
+}
+
+.legend-color.not-analyzed { 
+  background: #e74a3b;
+  box-shadow: 0 2px 4px rgba(231, 74, 59, 0.3);
+}
+
 .chart-content {
   height: 300px;
   position: relative;
@@ -923,7 +1021,7 @@ watch(storagePercentage, () => {
 /* Animation pour les cartes */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: translate 0; }
 }
 
 .chart-card.modern {
@@ -932,6 +1030,10 @@ watch(storagePercentage, () => {
 
 .chart-card.modern:nth-child(2) {
   animation-delay: 0.2s;
+}
+
+.chart-card.modern:nth-child(3) {
+  animation-delay: 0.4s;
 }
 
 /* Responsive */
@@ -949,3 +1051,4 @@ watch(storagePercentage, () => {
   }
 }
 </style>
+```

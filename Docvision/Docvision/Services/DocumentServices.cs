@@ -27,7 +27,7 @@ namespace Docvision.Services
             return await _context.Documents.FindAsync(id);
         }
 
-        public async Task<Document> AddDocumentAsync(IFormFile file,string name, string description, string userId)
+        public async Task<Document> AddDocumentAsync(IFormFile file,string name, string description, string userId, string AdminId)
         {
             using var stream = file.OpenReadStream();
 
@@ -37,7 +37,6 @@ namespace Docvision.Services
                 Folder = "documents",
                 UseFilename = true,
                 UniqueFilename = false,
-
                 Overwrite = true
             };
 
@@ -51,6 +50,7 @@ namespace Docvision.Services
                 FileUrl = uploadResult.SecureUrl.ToString(),
                 UserId = userId,
                 description = description,
+                propriétaireId = AdminId,
             };
 
             _context.Documents.Add(document);
@@ -78,6 +78,7 @@ namespace Docvision.Services
             {
                 doc.UserId = user.Id;
             }
+            doc.ModifiedAt = DateTime.Now;
             _context.Documents.Update(doc);
             await _context.SaveChangesAsync();
 

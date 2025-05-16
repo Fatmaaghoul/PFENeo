@@ -20,6 +20,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.Extensions.Logging;
+using System.Text.Json.Serialization;
 
 namespace Back.Controllers
 {
@@ -42,6 +45,94 @@ namespace Back.Controllers
             _logger = logger;
 
         }
+        [HttpPost("analyze/{id}")]
+        public async Task<IActionResult> Analyze(Guid id)
+        {
+            try
+            {
+                var document = await _context.Documents
+                    .Include(d => d.Images)
+                    .FirstOrDefaultAsync(d => d.Id == id);
+
+                if (document == null)
+                    return NotFound("Document non trouvé.");
+
+                if (string.IsNullOrEmpty(document.Text))
+                    return BadRequest("Le texte du document n'a pas été extrait. Veuillez d'abord extraire le document.");
+
+                foreach (var image in document.Images)
+                {
+                    var requestBody = new
+                    {
+                        image_url = image.FileUrl,
+                        text = document.Text
+                    };
+
+                    var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:8000/analyze", requestBody);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var error = await response.Content.ReadAsStringAsync();
+                        _logger.LogError("Erreur lors de l'analyse de l'image {ImageId} : {Error}", image.Id, error);
+                        continue;
+                    }
+
+                    var result = await response.Content.ReadFromJsonAsync<DescribeImageResult>();
+
+                    // Vider les objets existants liés à cette image
+                    var existingObjects = await _context.Objects
+                        .Where(o => o.ImageId == image.Id)
+                        .ToListAsync();
+                    _context.Objects.RemoveRange(existingObjects);
+
+                    if (result?.Result != null)
+                    {
+                        int totalTextOccurrences = result.Result.Sum(r => r.Value.OccurenceText);
+
+                        foreach (var kvp in result.Result)
+                        {
+                            var objectName = kvp.Key;
+                            var occurrenceData = kvp.Value;
+
+                            var pourcentageText = totalTextOccurrences > 0
+                                     ? (float)occurrenceData.OccurenceText / totalTextOccurrences * 100
+                                     : 0;
+
+                            var imageObject = new ObjectImage
+                            {
+                                Id = Guid.NewGuid(),
+                                Name = objectName,
+                                OccurenceText = occurrenceData.OccurenceText,
+                                OccurenceImage = occurrenceData.OccurenceImage,
+                                Pourcentage = pourcentageText,
+                                ImageId = image.Id
+                            };
+
+                            _context.Objects.Add(imageObject);
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Résultat null ou vide pour l'image {ImageId}.", image.Id);
+                    }
+                }
+
+                document.isAnalysed = true;
+                document.ModifiedAt = DateTime.Now;
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Analyse effectuée avec succès." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur lors de l'analyse du document");
+                return StatusCode(500, $"Erreur serveur : {ex.Message}");
+            }
+        }
+
+
+
+
 
         [HttpPost("add")]
         [Consumes("multipart/form-data")]
@@ -54,11 +145,7 @@ namespace Back.Controllers
                 {
                     return Unauthorized("Utilisateur non authentifié.");
                 }
-                if (string.IsNullOrWhiteSpace(request.Description))
-                {
-                    ModelState.AddModelError("Description", "The description field is required.");
-                }
-                var document = await _idocumentRepository.AddDocumentAsync(request.File,request.Name, request.Description, userId);
+                var document = await _idocumentRepository.AddDocumentAsync(request.File, request.Name, request.Description, userId);
 
                 return Ok(document);
             }
@@ -89,13 +176,14 @@ namespace Back.Controllers
                     IsAnalysed = d.isAnalysed,
                     IsExtracted = d.isExtracted,
                     FileUrl = d.FileUrl,
+                    propriétaireId = d.propriétaireId,
                     Text = d.Text,
+                    ModifiedAt = d.ModifiedAt,
                     Images = d.Images?.Select(i => new DocumentImageDto
                     {
                         Id = i.Id,
                         FileUrl = i.FileUrl,
-                        Description = i.Description,
-                        Objects = i.Objects
+                       
                     }).ToList() ?? new List<DocumentImageDto>()
                 }).ToList();
 
@@ -126,15 +214,17 @@ namespace Back.Controllers
                 UploadDate = document.UploadDate,
                 Description = document.description,
                 IsAnalysed = document.isAnalysed,
+                resumer = document.resumer,
                 IsExtracted = document.isExtracted,
+                propriétaireId = document.propriétaireId,
                 FileUrl = document.FileUrl,
                 Text = document.Text,
+                ModifiedAt = document.ModifiedAt,
                 Images = document.Images?.Select(i => new DocumentImageDto
                 {
                     Id = i.Id,
                     FileUrl = i.FileUrl,
-                    Description = i.Description,
-                    Objects = i.Objects
+
                 }).ToList() ?? new List<DocumentImageDto>()
             };
 
@@ -188,6 +278,7 @@ namespace Back.Controllers
                 document.Text = result.Text;
                 document.isExtracted = true; // Marquer comme extrait
                 document.isAnalysed = false;  // Aucune analyse effectuée
+                
 
                 // Remplacer les anciennes images
                 var oldImages = await _context.Images.Where(i => i.DocumentId == id).ToListAsync();
@@ -200,8 +291,8 @@ namespace Back.Controllers
                         Id = Guid.NewGuid(),
                         FileUrl = imageUrl,
                         DocumentId = id,
-                        Description = "Image extraite", 
-                        Objects = null 
+                       // Description = "Image non analysée",
+                        Objects = null
                     });
                 }
 
@@ -221,54 +312,8 @@ namespace Back.Controllers
             }
         }
 
-        /*  [HttpPost("extract/{id}")]
-          public async Task<IActionResult> Extract(Guid id)
-          {
-              var document = await _context.Documents.FirstOrDefaultAsync(d => d.Id == id);
-              if (document == null) return NotFound();
-
-              var requestBody = new { pdf_url = document.FileUrl };
-
-              var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:8000/extract", requestBody);
-              if (!response.IsSuccessStatusCode)
-                  return StatusCode((int)response.StatusCode, "Erreur appel FastAPI");
-
-              var result = await response.Content.ReadFromJsonAsync<ExtractedResult>();
-              if (result == null)
-                  return StatusCode(500, "Réponse invalide");
-
-              // Mise à jour du texte
-              document.Text = result.text;
-              document.isExtracted = true;
-
-              // Supprimer les anciennes images liées au document
-              var existingImages = await _context.Images.Where(i => i.DocumentId == document.Id).ToListAsync();
-              _context.Images.RemoveRange(existingImages);
-
-              // Ajouter les nouvelles images
-              foreach (var imageUrl in result.images)
-              {
-                  var image = new DocumentImage
-                  {
-                      Id = Guid.NewGuid(),
-                      FileUrl = imageUrl,
-                      DocumentId = document.Id
-                  };
-                  _context.Images.Add(image);
-              }
-
-              await _context.SaveChangesAsync();
-
-              return Ok(new
-              {
-                  message = "Extraction réussie",
-                  text = document.Text,
-                  images = result.images
-              });
-          }*/
-
-        [HttpPost("describe/{id}")]
-        public async Task<IActionResult> DescribeImages(Guid id)
+        [HttpPost("summarize/{id}")]
+        public async Task<IActionResult> Summarize(Guid id)
         {
             try
             {
@@ -277,152 +322,80 @@ namespace Back.Controllers
                 if (document == null)
                     return NotFound("Document non trouvé.");
 
+                // Vérifier si le texte est extrait
                 if (string.IsNullOrEmpty(document.Text))
                     return BadRequest("Le document n'a pas de texte extrait. Veuillez d'abord extraire le document.");
 
-                // Récupérer les images associées
-                var images = await _context.Images.Where(i => i.DocumentId == id).ToListAsync();
-                if (!images.Any())
-                    return NotFound("Aucune image trouvée pour ce document.");
+                // Préparer la requête pour l'API FastAPI
+                var requestBody = new { text = document.Text };
+                var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:8000/resumer", requestBody);
 
-                // Traiter les images en parallèle
-                var tasks = images.Select(async image =>
+                // Vérifier la réponse de l'API
+                if (!response.IsSuccessStatusCode)
                 {
-                    try
-                    {
-                        // Valider l'URL de l'image
-                        if (string.IsNullOrEmpty(image.FileUrl) || !Uri.IsWellFormedUriString(image.FileUrl, UriKind.Absolute))
-                        {
-                            return new
-                            {
-                                ImageId = image.Id,
-                                Success = false,
-                                Error = $"URL de l'image {image.FileUrl} invalide."
-                            };
-                        }
-
-                        var requestBody = new
-                        {
-                            image_url = image.FileUrl,
-                            text = document.Text
-                        };
-
-                        var response = await _httpClient.PostAsJsonAsync("http://127.0.0.1:8000/describe_image", requestBody);
-                        if (!response.IsSuccessStatusCode)
-                        {
-                            return new
-                            {
-                                ImageId = image.Id,
-                                Success = false,
-                                Error = $"Erreur lors de l'appel à l'API FastAPI pour l'image {image.FileUrl}: {(int)response.StatusCode}"
-                            };
-                        }
-
-                        var result = await response.Content.ReadFromJsonAsync<DescribeImageResult>();
-                        if (result == null)
-                        {
-                            return new
-                            {
-                                ImageId = image.Id,
-                                Success = false,
-                                Error = $"Réponse invalide de l'API pour l'image {image.FileUrl}"
-                            };
-                        }
-
-                        // Mettre à jour l'image
-                        image.Description = result.description;
-                        image.Objects = JsonSerializer.Serialize(result.detected_objects);
-                        document.isAnalysed = true;
-
-                        return new
-                        {
-                            ImageId = image.Id,
-                            Success = true,
-                            Error = (string?)null
-                        };
-                    }
-                    catch (TaskCanceledException)
-                    {
-                        return new
-                        {
-                            ImageId = image.Id,
-                            Success = false,
-                            Error = $"La requête pour l'image {image.FileUrl} a expiré."
-                        };
-                    }
-                    catch (HttpRequestException ex)
-                    {
-                        return new
-                        {
-                            ImageId = image.Id,
-                            Success = false,
-                            Error = $"Erreur réseau lors du traitement de l'image {image.FileUrl}: {ex.Message}"
-                        };
-                    }
-                    catch (Exception ex)
-                    {
-                        return new
-                        {
-                            ImageId = image.Id,
-                            Success = false,
-                            Error = $"Erreur inattendue lors du traitement de l'image {image.FileUrl}: {ex.Message}"
-                        };
-                    }
-                });
-
-                // Attendre que toutes les requêtes soient terminées
-                var results = await Task.WhenAll(tasks);
-
-                // Sauvegarder les modifications pour les images traitées avec succès
-                await _context.SaveChangesAsync();
-
-                // Vérifier s'il y a des erreurs
-                var errors = results.Where(r => !r.Success).ToList();
-                if (errors.Any())
-                {
-                    return Ok(new
-                    {
-                        Message = "Certaines images n'ont pas pu être traitées, mais les images valides ont été enregistrées.",
-                        Results = results.Select(r => new
-                        {
-                            r.ImageId,
-                            r.Success,
-                            r.Error
-                        })
-                    });
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    _logger.LogError("Erreur lors de l'appel à l'API /resumer : {StatusCode} - {Error}", response.StatusCode, errorContent);
+                    return StatusCode((int)response.StatusCode, $"Erreur lors de la génération du résumé : {errorContent}");
                 }
 
-                // Retourner les détails des images traitées
+                // Lire la réponse
+                var result = await response.Content.ReadFromJsonAsync<SummaryResult>();
+                if (result == null || string.IsNullOrEmpty(result.Summary))
+                {
+                    _logger.LogError("Réponse invalide de l'API /resumer");
+                    return StatusCode(500, "Réponse invalide de l'API de résumé.");
+                }
+
+                // Mettre à jour le champ resumer du document
+                document.resumer = result.Summary;
+                document.ModifiedAt = DateTime.Now;
+                await _context.SaveChangesAsync();
+
+                // Retourner le résumé
                 return Ok(new
                 {
-                    Message = "Toutes les images ont été traitées et enregistrées avec succès.",
-                    Images = images.Select(i => new
-                    {
-                        i.Id,
-                        i.FileUrl,
-                        i.Description,
-                        Objects = string.IsNullOrEmpty(i.Objects) ? new List<string>() : JsonSerializer.Deserialize<List<string>>(i.Objects)
-                    })
+                    Message = "Résumé généré et enregistré avec succès.",
+                    Summary = document.resumer
                 });
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Erreur réseau lors de l'appel à l'API /resumer");
+                return StatusCode(500, $"Erreur réseau : {ex.Message}");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Erreur inattendue lors de la génération du résumé");
                 return StatusCode(500, $"Erreur serveur : {ex.Message}");
             }
         }
+
+        // Classe pour désérialiser la réponse de l'API /resumer
+        public class SummaryResult
+        {
+            public string Summary { get; set; }
+        }
         public class ExtractedResult
         {
-            public string Text { get; set; }  
-            public List<string> ImageUrls { get; set; }  
+            public string Text { get; set; }
+            public List<string> ImageUrls { get; set; }
         }
 
         public class DescribeImageResult
         {
-            public List<string> detected_objects { get; set; } = new();
-            public List<string> mentioned_objects { get; set; } = new();
-            public List<string> objects_to_describe { get; set; } = new();
-            public string description { get; set; } = "";
+            public Dictionary<string, OccurrenceData> Result { get; set; } = new Dictionary<string, OccurrenceData>();
         }
+
+        public class OccurrenceData
+        {
+            [JsonPropertyName("occurence_text")]
+            public int OccurenceText { get; set; }
+
+            [JsonPropertyName("occurence_image")]
+            public int OccurenceImage { get; set; }
+        }
+
+
 
         public class CreateDocumentRequest
         {
@@ -430,9 +403,9 @@ namespace Back.Controllers
             public IFormFile File { get; set; }
             [Required]
             public string Name { get; set; }
-            [Required]
-            public string Description { get; set; }
-            
-        }
+          
+             public string Description { get; set; } = "";
+
+        } 
     }
 }

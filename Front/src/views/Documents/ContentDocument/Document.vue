@@ -1,22 +1,10 @@
 <template>
   <div class="container">
-    <!-- Message pendant l'extraction -->
-    <div v-if="isExtracting" class="loading-bar">
-      <div class="spinner"></div>
-      <p>⏳ Extraction en cours, veuillez patienter...</p>
-    </div>
-
-    <!-- Message pendant l'analyse
-    <div v-if="documentStore.isAnalysing" class="loading-bar">
-      <div class="spinner"></div>
-      <p>⏳ Analyse en cours, veuillez patienter...</p>
-    </div> -->
-
-    <!-- Disposition du contenu principal -->
-    <div v-else class="content-layout">
-      <!-- Moitié gauche : boutons et contenu dynamique -->
+    <!-- Main content layout -->
+    <div class="content-layout">
+      <!-- Left half: buttons and dynamic content -->
       <div class="left-content">
-        <!-- Barre de boutons horizontale en haut -->
+        <!-- Horizontal button bar at the top -->
         <div class="button-bar">
           <button
             class="content-btn"
@@ -27,12 +15,18 @@
           </button>
           <button
             class="content-btn"
+            :class="{ active: activeSection === 'résumé' }"
+            @click="activeSection = 'résumé'"
+          >
+            Résumé
+          </button>
+          <button
+            class="content-btn"
             :class="{ active: activeSection === 'information' }"
             @click="activeSection = 'information'"
           >
             Information
           </button>
-          
           <button
             class="content-btn"
             :class="{ active: activeSection === 'text' }"
@@ -40,19 +34,21 @@
           >
             Texte
           </button>
-
-          <!-- Bouton Analyser avec icône tournante -->
+          <!-- Analyse button with spinning icon -->
           <button
             class="analyse-btn"
             @click="analyseDocument"
-            :disabled="documentStore.isAnalysing"
+            :disabled="documentStore.isAnalysing || document.isAnalysed"
           >
             <i class="bi bi-gear" :class="{ 'spin-icon': documentStore.isAnalysing }"></i> Analyser
           </button>
         </div>
 
-        <!-- Zone de contenu dynamique -->
+        <!-- Dynamic content area -->
         <div class="dynamic-content">
+          <div v-if="isLoadingImages && activeSection === 'images'" class="loading">
+            <p>Chargement des images...</p>
+          </div>
           <Information
             v-if="activeSection === 'information'"
             :document="document"
@@ -60,23 +56,38 @@
             @analyse-document="analyseDocument"
           />
           <Images
-            v-if="activeSection === 'images' && !isExtracting && !documentStore.isAnalysing"
+            v-if="activeSection === 'images' && !isLoadingImages"
             :images="images"
             @show-full-image="showFullImage"
           />
           <Text
-            v-if="activeSection === 'text' && !isExtracting && !documentStore.isAnalysing && document.text"
+            v-if="activeSection === 'text' && document.text"
             :text="document.text"
             @copy-text="copyText"
+          />
+          <Résumé
+            v-if="activeSection === 'résumé' && !isExtracting"
+            :resumer="document.resumer"
+            :document-id="documentId"
+            @update-resumer="updateResumer"
           />
         </div>
       </div>
 
-      <!-- Aperçu à droite -->
+      <!-- Right preview -->
       <Preview :document="document" />
     </div>
 
-    <!-- Modal pour l'image -->
+    <!-- Loading bar at the bottom with incrementing timer -->
+    <div v-if="isExtracting || documentStore.isAnalysing" class="loading-bar">
+      <div class="loading-progress"></div>
+      <p>
+        {{ isExtracting ? 'Extraction en cours...' : 'Analyse en cours...' }}
+        <span>({{ timer }}s écoulées)</span>
+      </p>
+    </div>
+
+    <!-- Image modal -->
     <div v-if="selectedImage" class="image-modal" @click="closeModal">
       <div class="modal-content" @click.stop>
         <button class="close-btn" @click="closeModal">
@@ -89,21 +100,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import axios from 'axios'
-import { useDocumentStore } from '@/Store/analysis'
-import Preview from './Preview.vue'
-import Information from './Information.vue'
-import Images from './Images.vue'
-import Text from './Text.vue'
+import { ref, onMounted, watch, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
+import { useDocumentStore } from '@/Store/analysis';
+import Preview from './Preview.vue';
+import Information from './Information.vue';
+import Images from './Images.vue';
+import Text from './Text.vue';
+import Résumé from './Resumer.vue';
 
-const route = useRoute()
-const documentId = route.params.id
-const selectedImage = ref(null)
-const isCopied = ref(false)
-const documentStore = useDocumentStore()
-const activeSection = ref('images') // Section active par défaut
+const route = useRoute();
+const documentId = route.params.id;
+const selectedImage = ref(null);
+const isCopied = ref(false);
+const documentStore = useDocumentStore();
+const activeSection = ref('images'); // Default active section to images
+const isLoadingImages = ref(true); // Loading state for images
 
 const document = ref({
   name: '',
@@ -112,107 +125,150 @@ const document = ref({
   isAnalysed: false,
   uploadDate: null,
   fileUrl: null,
-  text: null
-})
-const images = ref([])
-const isExtracting = ref(false)
+  text: null,
+  resumer: null,
+});
+const images = ref([]);
+const isExtracting = ref(false);
+const timer = ref(0); // Timer in seconds (incrementing)
+let timerInterval = null; // Interval for timer increment
+
+// Start the timer
+const startTimer = () => {
+  if (timerInterval) clearInterval(timerInterval); // Clear any existing interval
+  timer.value = 0;
+  timerInterval = setInterval(() => {
+    timer.value += 1;
+  }, 1000);
+};
+
+// Stop and reset the timer
+const stopTimer = () => {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  timer.value = 0;
+};
+
+// Watch for changes in isExtracting or isAnalysing to control the timer
+watch([isExtracting, () => documentStore.isAnalysing], ([newExtracting, newAnalysing]) => {
+  if (newExtracting || newAnalysing) {
+    startTimer();
+  } else {
+    stopTimer();
+  }
+});
 
 const fetchDocument = async () => {
   try {
-    const res = await axios.get(`api/documents/${documentId}`)
-    document.value = res.data
+    const res = await axios.get(`api/documents/${documentId}`);
+    document.value = res.data;
+    console.log(res.data);
     if (!document.value.isExtracted) {
-      await extractDocumentContent()
+      await extractDocumentContent();
     } else {
-      await fetchImages()
+      await fetchImages();
     }
   } catch (error) {
-    console.error('Erreur lors de la récupération du document :', error)
-    alert('❌ Erreur lors de la récupération du document')
+    console.error('Erreur lors de la récupération du document :', error);
+    alert('❌ Erreur lors de la récupération du document');
   }
-}
+};
 
 const fetchImages = async () => {
   try {
-    const res = await axios.get(`api/images/${documentId}`)
-    images.value = res.data
+    isLoadingImages.value = true;
+    const res = await axios.get(`api/images/${documentId}`);
+    images.value = res.data;
   } catch (error) {
-    console.error('Erreur lors de la récupération des images :', error)
+    console.error('Erreur lors de la récupération des images :', error);
+  } finally {
+    isLoadingImages.value = false;
   }
-}
+};
 
 const extractDocumentContent = async () => {
-  isExtracting.value = true
+  isExtracting.value = true;
   try {
     if (!document.value.isExtracted) {
-      await axios.post(`api/documents/extract/${documentId}`)
-      document.value.isExtracted = true
-      const res = await axios.get(`api/documents/${documentId}`)
-      document.value = res.data
-      await fetchImages()
+      await axios.post(`api/documents/extract/${documentId}`);
+      document.value.isExtracted = true;
+      const res = await axios.get(`api/documents/${documentId}`);
+      document.value = res.data;
+      await fetchImages();
     }
   } catch (error) {
-    console.error('Erreur lors de l\'extraction du contenu :', error)
-    alert('❌ Erreur lors de l\'extraction du contenu')
+    console.error('Erreur lors de l\'extraction du contenu :', error);
+    alert('❌ Erreur lors de l\'extraction du contenu');
   } finally {
-    isExtracting.value = false
+    isExtracting.value = false;
   }
-}
+};
 
-const updateDocument = async (updatedData) => {
+const updateDocument = async updatedData => {
   try {
-    await axios.put(`api/documents/${documentId}`, updatedData)
-    document.value.name = updatedData.name
-    document.value.description = updatedData.description
-    alert('Document mis à jour avec succès ✅')
+    await axios.put(`api/documents/${documentId}`, updatedData);
+    document.value.name = updatedData.name;
+    document.value.description = updatedData.description;
+    alert('Document mis à jour avec succès ✅');
   } catch (error) {
-    console.error('Erreur lors de la mise à jour du document :', error)
-    alert('❌ Échec de la mise à jour')
+    console.error('Erreur lors de la mise à jour du document :', error);
+    alert('❌ Échec de la mise à jour');
   }
-}
+};
 
 const analyseDocument = async () => {
   try {
-    documentStore.startAnalysing()
-    await axios.post(`api/documents/describe/${documentId}`)
-    const res = await axios.get(`api/documents/${documentId}`)
-    document.value = res.data
-    await fetchImages() // Rafraîchir les descriptions des images
-    alert('Document analysé avec succès ✅')
+    documentStore.startAnalysing();
+    const response = await axios.post(`api/documents/analyze/${documentId}`);
+    const res = await axios.get(`api/documents/${documentId}`);
+    document.value = res.data;
+    await fetchImages(); // Refresh images to include updated objects
+    alert('Document analysé avec succès ✅');
   } catch (error) {
-    console.error('Erreur lors de l\'analyse du document :', error)
-    alert(`❌ Échec de l'analyse : ${error.response?.data?.message || error.message}`)
+    console.error('Erreur lors de l\'analyse du document :', error);
+    alert(`❌ Échec de l'analyse : ${error.response?.data?.message || error.message}`);
   } finally {
-    documentStore.stopAnalysing()
+    documentStore.stopAnalysing();
   }
-}
+};
+
+const updateResumer = newResumer => {
+  document.value.resumer = newResumer; // Mise à jour du résumé
+};
 
 const copyText = () => {
   navigator.clipboard.writeText(document.value.text).then(() => {
-    isCopied.value = true
+    isCopied.value = true;
     setTimeout(() => {
-      isCopied.value = false
-    }, 2000)
-  })
-}
+      isCopied.value = false;
+    }, 2000);
+  });
+};
 
-const showFullImage = (imageUrl) => {
-  selectedImage.value = imageUrl
-}
+const showFullImage = imageUrl => {
+  selectedImage.value = imageUrl;
+};
 
 const closeModal = () => {
-  selectedImage.value = null
-}
+  selectedImage.value = null;
+};
+
+// Cleanup on component unmount
+onUnmounted(() => {
+  stopTimer(); // Clear timer interval to prevent memory leaks
+});
 
 onMounted(() => {
-  fetchDocument()
-})
+  fetchDocument();
+});
 </script>
 
 <style scoped>
 .container {
   max-width: 100%;
-  margin-top: 42px;
+  margin-top: 42px; /* Preserved original margin */
   padding: 10px;
   font-family: Arial, sans-serif;
   display: flex;
@@ -221,32 +277,52 @@ onMounted(() => {
 }
 
 .loading-bar {
-  background-color: #fff3cd;
-  color: #856404;
-  padding: 20px;
-  margin-bottom: 20px;
-  border: 1px solid #ffeeba;
-  border-radius: 8px;
-  font-weight: bold;
-  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  background: #e2e8f0; /* Grey rectangle */
+  color: #1e293b;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: 10px;
+  z-index: 1000;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
-.spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  border-top-color: #856404;
-  animation: spin 1s ease-in-out infinite;
+.loading-bar p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+.loading-bar span {
+  font-size: 0.9rem;
+  color: #4b5563; /* Slightly lighter color for timer */
+}
+
+.loading-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(to right, #3b82f6 0%, #3b82f6 50%, transparent 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: progress 2s linear infinite;
+}
+
+@keyframes progress {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: 0 0;
   }
 }
 
@@ -257,31 +333,30 @@ onMounted(() => {
 }
 
 .left-content {
-  margin-top: 50px;
+  margin-top: 25px;
   width: 50%;
   display: flex;
   flex-direction: column;
 }
 
 .button-bar {
+  background-color: rgb(255, 255, 255);
   z-index: 99;
   position: fixed;
   display: flex;
-  gap: 20px; /* Espacement similaire à l'image */
+  gap: 20px;
   padding: 10px;
-  background: none; /* Supprimer le fond */
-  border-bottom: none; /* Supprimer la bordure */
-  width: calc(50% - 20px); /* Aligner avec .left-content (50% - padding) */
+  width: calc(50% - 20px);
 }
 
 .content-btn {
-  background: none; /* Pas de fond */
-  border: none; /* Pas de bordure */
-  padding: 5px; /* Padding minimal */
+  background: none;
+  border: none;
+  padding: 5px;
   cursor: pointer;
-  position: relative; /* Pour la barre active */
-  font-size: 16px; /* Taille de texte ajustée */
-  color: #5f6368; /* Gris comme dans l'image */
+  position: relative;
+  font-size: 16px;
+  color: #5f6368;
   transition: color 0.3s;
 }
 
@@ -291,19 +366,19 @@ onMounted(() => {
   bottom: -2px;
   left: 0;
   width: 100%;
-  height: 2px; /* Épaisseur de la barre */
-  background-color: #1a73e8; /* Bleu comme dans l'image */
+  height: 2px;
+  background-color: #1a73e8;
 }
 
 .content-btn:hover {
-  color: #1a73e8; /* Bleu au survol */
+  color: #1a73e8;
 }
 
 .analyse-btn {
-  margin-left: auto; /* Pousse le bouton à droite */
-  background-color: #1bc0c8; /* Cyan pour être remarquable */
+  margin-left: auto;
+  background-color: #1bc0c8;
   color: white;
-  padding: 8px 16px; /* Ajusté pour correspondre à la barre */
+  padding: 8px 16px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -324,7 +399,7 @@ onMounted(() => {
 }
 
 .spin-icon {
-  animation: spin 1s ease-in-out infinite; /* Applique l'animation de rotation */
+  animation: spin 1s ease-in-out infinite;
 }
 
 .dynamic-content {
@@ -332,6 +407,16 @@ onMounted(() => {
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #6c757d;
+  font-style: italic;
+  font-size: 1rem;
 }
 
 .preview {
@@ -416,12 +501,12 @@ onMounted(() => {
   .button-bar {
     flex-wrap: wrap;
     justify-content: center;
-    width: 100%; /* Ajuster pour petits écrans */
+    width: 100%;
   }
 
   .analyse-btn {
-    margin-left: 0; /* Centrer sur petits écrans */
-    margin-top: 10px; /* Espacement vertical */
+    margin-left: 0;
+    margin-top: 10px;
   }
 
   .dynamic-content {
@@ -431,7 +516,7 @@ onMounted(() => {
   .preview {
     position: static;
     width: 100%;
-    height: 100%;
+    height: auto;
     border-left: none;
     border-top: 1px solid #ddd;
   }
@@ -443,7 +528,7 @@ onMounted(() => {
   }
 
   .button-bar {
-    flex-direction: row; /* Garder les boutons en ligne */
+    flex-direction: row;
     justify-content: center;
     gap: 15px;
   }

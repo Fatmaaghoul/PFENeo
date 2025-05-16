@@ -91,6 +91,44 @@ namespace Docvision.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Docvision.Models.Description", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModelUsed")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Descriptions");
+                });
+
+            modelBuilder.Entity("Docvision.Models.DescriptionObject", b =>
+                {
+                    b.Property<Guid>("DescriptionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ObjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("DescriptionId", "ObjectId");
+
+                    b.HasIndex("ObjectId");
+
+                    b.ToTable("DescriptionObjects");
+                });
+
             modelBuilder.Entity("Docvision.Models.Document", b =>
                 {
                     b.Property<Guid>("Id")
@@ -100,6 +138,9 @@ namespace Docvision.Migrations
                     b.Property<string>("FileUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -124,6 +165,12 @@ namespace Docvision.Migrations
                     b.Property<bool>("isExtracted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("propriétaireId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("resumer")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
@@ -137,9 +184,6 @@ namespace Docvision.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("DocumentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -147,14 +191,61 @@ namespace Docvision.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Objects")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DocumentId");
 
                     b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("Docvision.Models.ModelConfiguration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ModelName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ModelValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ModelConfigurations");
+                });
+
+            modelBuilder.Entity("Docvision.Models.ObjectImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OccurenceImage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OccurenceText")
+                        .HasColumnType("int");
+
+                    b.Property<float?>("Pourcentage")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("Objects");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -290,6 +381,25 @@ namespace Docvision.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Docvision.Models.DescriptionObject", b =>
+                {
+                    b.HasOne("Docvision.Models.Description", "Description")
+                        .WithMany("DescriptionObjects")
+                        .HasForeignKey("DescriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Docvision.Models.ObjectImage", "DetectedObject")
+                        .WithMany("DescriptionObjects")
+                        .HasForeignKey("ObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Description");
+
+                    b.Navigation("DetectedObject");
+                });
+
             modelBuilder.Entity("Docvision.Models.Document", b =>
                 {
                     b.HasOne("Docvision.Models.ApplicationUser", "User")
@@ -310,6 +420,17 @@ namespace Docvision.Migrations
                         .IsRequired();
 
                     b.Navigation("Document");
+                });
+
+            modelBuilder.Entity("Docvision.Models.ObjectImage", b =>
+                {
+                    b.HasOne("Docvision.Models.DocumentImage", "Image")
+                        .WithMany("Objects")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -368,9 +489,24 @@ namespace Docvision.Migrations
                     b.Navigation("Documents");
                 });
 
+            modelBuilder.Entity("Docvision.Models.Description", b =>
+                {
+                    b.Navigation("DescriptionObjects");
+                });
+
             modelBuilder.Entity("Docvision.Models.Document", b =>
                 {
                     b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("Docvision.Models.DocumentImage", b =>
+                {
+                    b.Navigation("Objects");
+                });
+
+            modelBuilder.Entity("Docvision.Models.ObjectImage", b =>
+                {
+                    b.Navigation("DescriptionObjects");
                 });
 #pragma warning restore 612, 618
         }
