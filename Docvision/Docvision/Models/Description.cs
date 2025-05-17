@@ -13,6 +13,7 @@ namespace Docvision.Models
         public DateTime? Created { get; set; }
         public DateTime? Updated { get; set; }
 
+
         public ICollection<DescriptionObject>? DescriptionObjects { get; set; }
         public string? ModelUsed { get; set; } // model
 

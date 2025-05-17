@@ -97,12 +97,13 @@ namespace Docvision.Services
 
             // Générer le lien de confirmation
             var urlHelper = GetUrlHelper();
-            var confirmationLink = urlHelper.Action(
-                "ConfirmEmail",
-                "Auth",
-                new { userId = user.Id, token = confirmationToken },
-                protocol: _httpContextAccessor.HttpContext.Request.Scheme
-            );
+            var confirmationLink = $"https://localhost:7036/api/auth/confirm-email?userId={user.Id}&token={Uri.EscapeDataString(confirmationToken)}";
+            /* var confirmationLink = urlHelper.Action(
+                 "ConfirmEmail",
+                 "Auth",
+                 new { userId = user.Id, token = confirmationToken },
+                 protocol: _httpContextAccessor.HttpContext.Request.Scheme
+             );*/
 
             await _emailService.SendEmailAsync(user.Email, "Confirmez votre e-mail",
                 $"Cliquez ici pour confirmer votre e-mail : <a href='{confirmationLink}'>Confirmer</a>");
@@ -120,12 +121,13 @@ namespace Docvision.Services
             {
                 var confirmationToken = await _authRepository.GenerateEmailConfirmationTokenAsync(user);
                 var urlHelper = GetUrlHelper();
-                var confirmationLink = urlHelper.Action(
-                    "ConfirmEmail",
-                    "Auth",
-                    new { userId = user.Id, token = confirmationToken },
-                    protocol: _httpContextAccessor.HttpContext.Request.Scheme
-                );
+                var confirmationLink = $"https://localhost:7036/api/auth/confirm-email?userId={user.Id}&token={Uri.EscapeDataString(confirmationToken)}";
+                /* var confirmationLink = urlHelper.Action(
+                     "ConfirmEmail",
+                     "Auth",
+                     new { userId = user.Id, token = confirmationToken },
+                     protocol: _httpContextAccessor.HttpContext.Request.Scheme
+                 );*/
 
                 await _emailService.SendEmailAsync(user.Email, "Confirmez votre e-mail",
                     $"Cliquez ici pour confirmer votre e-mail : <a href='{confirmationLink}'>Confirmer</a>");
@@ -174,11 +176,18 @@ namespace Docvision.Services
             var result = await _authRepository.ConfirmEmailAsync(user, decodedToken);
 
             if (!result.Succeeded)
-                return new ResponseModel { Success = false, Message = string.Join(", ", result.Errors.Select(e => e.Description)) };
+                return new ResponseModel
+                {
+                    Success = false,
+                    Message = string.Join(", ", result.Errors.Select(e => e.Description))
+                };
 
-            return new ResponseModel { Success = true, Message = "E-mail confirmé avec succès !" };
+            return new ResponseModel
+            {
+                Success = true,
+                Message = "E-mail confirmé avec succès !"
+            };
         }
-
         public async Task<ResponseModel> ForgotPasswordAsync(string email)
         {
             var user = await _authRepository.GetUserByEmailAsync(email);
@@ -187,8 +196,15 @@ namespace Docvision.Services
 
             var token = await _authRepository.GeneratePasswordResetTokenAsync(user);
 
-            // Générer le lien de réinitialisation avec le nouvel endpoint GET
-            var resetLink = $"https://localhost:7036/api/Auth/reset-password?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(user.Email)}";
+            // Générer le lien de réinitialisation
+            var urlHelper = GetUrlHelper();
+            var resetLink = $"http://localhost:5173/reset-password?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(user.Email)}";
+            /*var resetLink = urlHelper.Action(
+                "ResetPassword",
+                "Auth",
+                new { token, email = user.Email },
+                protocol: _httpContextAccessor.HttpContext.Request.Scheme
+            );*/
 
             await _emailService.SendEmailAsync(user.Email, "Réinitialisation de mot de passe",
                 $"Cliquez ici pour réinitialiser votre mot de passe : <a href='{resetLink}'>Réinitialiser</a>");
@@ -198,38 +214,17 @@ namespace Docvision.Services
 
         public async Task<ResponseModel> ResetPasswordAsync(ResetPasswordRequest request)
         {
-            try
-            {
-                var user = await _authRepository.GetUserByEmailAsync(request.Email);
-                if (user == null)
-                    return new ResponseModel { Success = false, Message = "Email non trouvé." };
+            var user = await _authRepository.GetUserByEmailAsync(request.Email);
+            if (user == null)
+                return new ResponseModel { Success = false, Message = "Email non trouvé." };
 
-                // Décodage spécial pour les tokens
-                var decodedToken = Uri.UnescapeDataString(request.Token).Replace(" ", "+");
+            var decodedToken = Uri.UnescapeDataString(request.Token);
+            var result = await _authRepository.ResetPasswordAsync(user, decodedToken, request.NewPassword);
 
-                var result = await _authRepository.ResetPasswordAsync(user, decodedToken, request.NewPassword);
+            if (!result.Succeeded)
+                return new ResponseModel { Success = false, Message = string.Join(", ", result.Errors.Select(e => e.Description)) };
 
-                if (!result.Succeeded)
-                    return new ResponseModel
-                    {
-                        Success = false,
-                        Message = "Token invalide ou expiré. Veuillez demander un nouveau lien."
-                    };
-
-                return new ResponseModel
-                {
-                    Success = true,
-                    Message = "Mot de passe réinitialisé avec succès !"
-                };
-            }
-            catch (Exception ex)
-            {
-                return new ResponseModel
-                {
-                    Success = false,
-                    Message = $"Erreur de traitement: {ex.Message}"
-                };
-            }
+            return new ResponseModel { Success = true, Message = "Mot de passe réinitialisé avec succès !" };
         }
 
 

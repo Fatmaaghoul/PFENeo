@@ -237,6 +237,7 @@ namespace doc.Controllers
         public class DescribeRequest
         {
             public string ImageUrl { get; set; }
+
             public List<string> Objects { get; set; }
         }
 

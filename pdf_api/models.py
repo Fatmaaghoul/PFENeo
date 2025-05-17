@@ -16,13 +16,14 @@ AVAILABLE_MODELS: List[ModelInfo] = [
         name="LLaVA 7B",
         value="llava:7b",
         type="vision",
-        description="Modèle vision pour analyse d'images"
+        description="Modèle vision pour analyse d'images llava"
     ),
     ModelInfo(
         name="Gemma3 4B",
         value="gemma3:4b",
-        type="text",
-        description="Modèle texte optimisé pour traitement linguistique"
+        type="vision",
+        #type="text",
+        description="Modèle vision pour analyse d'images gemma"
     )
 ]
 

@@ -20,10 +20,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configurer Serilog
 //Log.Logger = new LoggerConfiguration()
-   // .MinimumLevel.Debug() // Niveau de log minimum
-   // .WriteTo.Console()   // Afficher les logs dans la console
-   // .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day) // Écrire dans un fichier avec rotation quotidienne
-   // .CreateLogger();
+// .MinimumLevel.Debug() // Niveau de log minimum
+// .WriteTo.Console()   // Afficher les logs dans la console
+// .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day) // ?crire dans un fichier avec rotation quotidienne
+// .CreateLogger();
 
 //builder.Host.UseSerilog(); // Utiliser Serilog comme logger
 
@@ -50,13 +50,13 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 
-    // Lire le token à partir du cookie
+    // Lire le token ? partir du cookie
     options.Events = new JwtBearerEvents
     {
         OnMessageReceived = context =>
         {
             context.Token = context.Request.Cookies["AuthToken"];
-            Console.WriteLine($"Token from cookie: {context.Token}"); // Log pour déboguer
+            Console.WriteLine($"Token from cookie: {context.Token}"); // Log pour d?boguer
             return Task.CompletedTask;
         }
     };
@@ -94,7 +94,7 @@ builder.Services.AddScoped<IDocumentService, DocumentService>();
 //builder.Services.AddHttpClient(); // Ajouter IHttpClientFactory
 builder.Services.AddHttpClient<DocumentController>(client =>
 {
-    client.Timeout = TimeSpan.FromMinutes(100); 
+    client.Timeout = TimeSpan.FromMinutes(100);
 });
 builder.Services.AddHttpClient<ImageController>(client =>
 {
@@ -131,6 +131,8 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddControllers();
+builder.Services.AddMemoryCache();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -141,15 +143,13 @@ var cloudinary = new Cloudinary(new Account(
     builder.Configuration["Cloudinary:ApiSecret"]
 ));
 builder.Services.AddSingleton(cloudinary);
-builder.Services.AddMemoryCache();
-
 
 var app = builder.Build();
 
 // Configurer le pipeline
 //app.UseSerilogRequestLogging(); // Optionnel, pour les logs automatiques de Serilog
 //app.UseMiddleware<RequestResponseLoggingMiddleware>();
-// Fonction pour créer les rôles par défaut au démarrage
+// Fonction pour cr?er les r?les par d?faut au d?marrage
 async Task CreateRoles(IServiceProvider serviceProvider)
 {
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -166,11 +166,11 @@ async Task CreateRoles(IServiceProvider serviceProvider)
     }
 }
 
-// Créer les rôles par défaut au démarrage
+// Cr?er les r?les par d?faut au d?marrage
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    await CreateRoles(services); // Éviter d'appeler `await` directement dans `Main`
+    await CreateRoles(services); // ?viter d'appeler `await` directement dans `Main`
 }
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -185,5 +185,69 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+// Création du compte admin (juste avant app.Run())
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var configuration = services.GetRequiredService<IConfiguration>();
+
+        // 1. Vérifier/Créer le rôle Admin
+        if (!await roleManager.RoleExistsAsync("Admin"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+            Console.WriteLine("Rôle Admin créé");
+        }
+
+        // 2. Vérifier si l'admin existe déjà
+        var adminEmail = configuration["AdminCredentials:Email"] ?? "adocvision.min@gmail.com";
+        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+        if (adminUser == null)
+        {
+            // 3. Créer l'utilisateur admin
+            var adminPassword = configuration["AdminCredentials:Password"] ?? "Admin123!";
+
+            var user = new ApplicationUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                EmailConfirmed = true, // Pas besoin de confirmation
+                PhoneNumber = "00000000"
+            };
+
+            var result = await userManager.CreateAsync(user, adminPassword);
+
+            if (result.Succeeded)
+            {
+                // 4. Assigner le rôle
+                await userManager.AddToRoleAsync(user, "Admin");
+                Console.WriteLine($"Compte admin créé avec email: {adminEmail}");
+            }
+            else
+            {
+                Console.WriteLine("Erreur lors de la création de l'admin:");
+                foreach (var error in result.Errors)
+                {
+                    Console.WriteLine($"- {error.Description}");
+                }
+            }
+        }
+        else
+        {
+            Console.WriteLine("Un compte admin existe déjà");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Erreur lors de l'initialisation de l'admin: {ex.Message}");
+    }
+}
 
 app.Run();

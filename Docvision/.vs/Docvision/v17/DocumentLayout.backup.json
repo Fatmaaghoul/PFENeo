@@ -3,10 +3,6 @@
   "WorkspaceRootPath": "C:\\docvision-master\\Docvision\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -15,16 +11,12 @@
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\dtos\\resetpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\dtos\\resetpasswordrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\repositories\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\repositories\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\migrations\\20250511114816_updatedb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\migrations\\20250511114816_updatedb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\controllers\\descriptioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -35,8 +27,16 @@
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\models\\description.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\controllers\\modelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\controllers\\modelcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\repositories\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\repositories\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\models\\modelconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -93,10 +93,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|c:\\docvision-master\\docvision\\docvision\\migrations\\20250511114816_updatedb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0710C739-E7DB-4C02-B33C-404176034417}|Docvision\\Docvision.csproj|solutionrelative:docvision\\migrations\\20250511114816_updatedb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -106,7 +102,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -126,52 +122,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ResetPasswordRequest.cs",
-              "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Dtos\\ResetPasswordRequest.cs",
-              "RelativeDocumentMoniker": "Docvision\\Dtos\\ResetPasswordRequest.cs",
-              "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Dtos\\ResetPasswordRequest.cs",
-              "RelativeToolTip": "Docvision\\Dtos\\ResetPasswordRequest.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T21:28:11.654Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AuthService.cs",
-              "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Services\\AuthService.cs",
-              "RelativeDocumentMoniker": "Docvision\\Services\\AuthService.cs",
-              "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Services\\AuthService.cs",
-              "RelativeToolTip": "Docvision\\Services\\AuthService.cs",
-              "ViewState": "AgIAAEgAAAAAAAAAAAAowOgAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T21:16:31.265Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AuthController.cs",
-              "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\AuthController.cs",
-              "RelativeDocumentMoniker": "Docvision\\Controllers\\AuthController.cs",
-              "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\AuthController.cs",
-              "RelativeToolTip": "Docvision\\Controllers\\AuthController.cs",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAmwGIAAABKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-15T21:17:17.391Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Program.cs",
               "RelativeDocumentMoniker": "Docvision\\Program.cs",
               "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Program.cs",
               "RelativeToolTip": "Docvision\\Program.cs",
-              "ViewState": "AgIAAJEAAAAAAAAAAAAYwLwAAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAAK4AAAAAAAAAAAAYwLwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-11T11:39:57.793Z",
               "EditorCaption": ""
@@ -179,67 +136,84 @@
             {
               "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "DescriptionController.cs",
+              "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\DescriptionController.cs",
+              "RelativeDocumentMoniker": "Docvision\\Controllers\\DescriptionController.cs",
+              "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\DescriptionController.cs",
+              "RelativeToolTip": "Docvision\\Controllers\\DescriptionController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD4AAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T15:38:54.835Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ImageController.cs",
+              "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\ImageController.cs",
+              "RelativeDocumentMoniker": "Docvision\\Controllers\\ImageController.cs",
+              "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\ImageController.cs",
+              "RelativeToolTip": "Docvision\\Controllers\\ImageController.cs",
+              "ViewState": "AgIAAOwAAAAAAAAAAAA1wO8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T15:38:21.83Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Description.cs",
+              "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Models\\Description.cs",
+              "RelativeDocumentMoniker": "Docvision\\Models\\Description.cs",
+              "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Models\\Description.cs",
+              "RelativeToolTip": "Docvision\\Models\\Description.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T15:55:54.629Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "AuthRepository.cs",
               "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Repositories\\AuthRepository.cs",
               "RelativeDocumentMoniker": "Docvision\\Repositories\\AuthRepository.cs",
               "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Repositories\\AuthRepository.cs",
               "RelativeToolTip": "Docvision\\Repositories\\AuthRepository.cs",
-              "ViewState": "AgIAACcAAAAAAAAAAAAQwDcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACYAAAAAAAAAAAAowDAAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-15T21:17:08.527Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ImageController.cs",
-              "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\ImageController.cs",
-              "RelativeDocumentMoniker": "Docvision\\Controllers\\ImageController.cs",
-              "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\ImageController.cs",
-              "RelativeToolTip": "Docvision\\Controllers\\ImageController.cs",
-              "ViewState": "AgIAANQAAAAAAAAAAAAowO0AAAAJAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Docvision\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Docvision\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAGQAAAAAAAAAAAAmwIgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-10T15:38:21.83Z"
+              "WhenOpened": "2025-05-15T21:17:17.391Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "ModelController.cs",
-              "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\ModelController.cs",
-              "RelativeDocumentMoniker": "Docvision\\Controllers\\ModelController.cs",
-              "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\ModelController.cs",
-              "RelativeToolTip": "Docvision\\Controllers\\ModelController.cs",
-              "ViewState": "AgIAAPIAAAAAAAAAAAAswA8BAAABAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "Docvision\\Services\\AuthService.cs",
+              "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Services\\AuthService.cs",
+              "RelativeToolTip": "Docvision\\Services\\AuthService.cs",
+              "ViewState": "AgIAANcAAAAAAAAAAAAIwP0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-10T15:44:44.184Z"
+              "WhenOpened": "2025-05-15T21:16:31.265Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "DescriptionController.cs",
-              "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\DescriptionController.cs",
-              "RelativeDocumentMoniker": "Docvision\\Controllers\\DescriptionController.cs",
-              "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\DescriptionController.cs",
-              "RelativeToolTip": "Docvision\\Controllers\\DescriptionController.cs",
-              "ViewState": "AgIAAC4AAAAAAAAAAAAgwEEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-10T15:38:54.835Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Description.cs",
-              "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Models\\Description.cs",
-              "RelativeDocumentMoniker": "Docvision\\Models\\Description.cs",
-              "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Models\\Description.cs",
-              "RelativeToolTip": "Docvision\\Models\\Description.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-10T15:55:54.629Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 3,
               "Title": "20250511114816_updateDB.cs",
               "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Migrations\\20250511114816_updateDB.cs",
               "RelativeDocumentMoniker": "Docvision\\Migrations\\20250511114816_updateDB.cs",
@@ -247,7 +221,21 @@
               "RelativeToolTip": "Docvision\\Migrations\\20250511114816_updateDB.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-11T11:48:17.099Z"
+              "WhenOpened": "2025-05-11T11:48:17.099Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ModelController.cs",
+              "DocumentMoniker": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\ModelController.cs",
+              "RelativeDocumentMoniker": "Docvision\\Controllers\\ModelController.cs",
+              "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\ModelController.cs",
+              "RelativeToolTip": "Docvision\\Controllers\\ModelController.cs",
+              "ViewState": "AgIAAPsAAAAAAAAAAAAmwP8AAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T15:44:44.184Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -259,7 +247,8 @@
               "RelativeToolTip": "Docvision\\Models\\ModelConfiguration.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-10T15:45:09.287Z"
+              "WhenOpened": "2025-05-10T15:45:09.287Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -271,7 +260,8 @@
               "RelativeToolTip": "Docvision\\Persistance\\Context.cs",
               "ViewState": "AgIAABQAAAAAAAAAAAAAwD4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-10T15:43:34.368Z"
+              "WhenOpened": "2025-05-10T15:43:34.368Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -283,7 +273,8 @@
               "RelativeToolTip": "Docvision\\Models\\ObjectImage.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-10T15:40:02.884Z"
+              "WhenOpened": "2025-05-10T15:40:02.884Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -295,7 +286,8 @@
               "RelativeToolTip": "Docvision\\Models\\DescriptionObject.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-10T15:40:00.402Z"
+              "WhenOpened": "2025-05-10T15:40:00.402Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -307,7 +299,8 @@
               "RelativeToolTip": "Docvision\\Models\\Image.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-10T16:09:44.42Z"
+              "WhenOpened": "2025-05-10T16:09:44.42Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -319,7 +312,8 @@
               "RelativeToolTip": "Docvision\\Migrations\\20250510130810_InitialCreate.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-10T13:08:11.111Z"
+              "WhenOpened": "2025-05-10T13:08:11.111Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -329,9 +323,10 @@
               "RelativeDocumentMoniker": "Docvision\\Repositories\\DocumentRepository.cs",
               "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Repositories\\DocumentRepository.cs",
               "RelativeToolTip": "Docvision\\Repositories\\DocumentRepository.cs",
-              "ViewState": "AQIAAC0AAAAAAAAAAAAYwDUAAAAqAAAA",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAYwDUAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-09T23:37:28.739Z"
+              "WhenOpened": "2025-05-09T23:37:28.739Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -343,7 +338,8 @@
               "RelativeToolTip": "Docvision\\Repositories\\IDocumentRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-09T23:39:23.567Z"
+              "WhenOpened": "2025-05-09T23:39:23.567Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -355,7 +351,8 @@
               "RelativeToolTip": "Docvision\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-05-09T14:50:34.13Z"
+              "WhenOpened": "2025-05-09T14:50:34.13Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -365,9 +362,10 @@
               "RelativeDocumentMoniker": "Docvision\\Controllers\\AdminDocumentController.cs",
               "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\AdminDocumentController.cs",
               "RelativeToolTip": "Docvision\\Controllers\\AdminDocumentController.cs",
-              "ViewState": "AQIAAFQAAAAAAAAAAAAowEUAAABBAAAA",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAowEUAAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-09T23:38:23.682Z"
+              "WhenOpened": "2025-05-09T23:38:23.682Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -377,9 +375,10 @@
               "RelativeDocumentMoniker": "Docvision\\Repositories\\IAuthRepository.cs",
               "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Repositories\\IAuthRepository.cs",
               "RelativeToolTip": "Docvision\\Repositories\\IAuthRepository.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-09T23:37:27.624Z"
+              "WhenOpened": "2025-05-09T23:37:27.624Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -389,9 +388,10 @@
               "RelativeDocumentMoniker": "Docvision\\Controllers\\DocumentController.cs",
               "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Controllers\\DocumentController.cs",
               "RelativeToolTip": "Docvision\\Controllers\\DocumentController.cs",
-              "ViewState": "AQIAAIoAAAAAAAAAAAAYwJMAAABKAAAA",
+              "ViewState": "AgIAAIoAAAAAAAAAAAAzwJMAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-09T18:38:07.461Z"
+              "WhenOpened": "2025-05-09T18:38:07.461Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -401,9 +401,10 @@
               "RelativeDocumentMoniker": "Docvision\\Middleware\\RequestResponseLoggingMiddleware.cs",
               "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\Middleware\\RequestResponseLoggingMiddleware.cs",
               "RelativeToolTip": "Docvision\\Middleware\\RequestResponseLoggingMiddleware.cs",
-              "ViewState": "AQIAAB4AAAAAAAAAAAAuwCoAAAAiAAAA",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAuwCoAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-09T14:52:42.25Z"
+              "WhenOpened": "2025-05-09T14:52:42.25Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -413,9 +414,10 @@
               "RelativeDocumentMoniker": "Docvision\\WeatherForecast.cs",
               "ToolTip": "C:\\docvision-master\\Docvision\\Docvision\\WeatherForecast.cs",
               "RelativeToolTip": "Docvision\\WeatherForecast.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-09T14:50:38.562Z"
+              "WhenOpened": "2025-05-09T14:50:38.562Z",
+              "EditorCaption": ""
             }
           ]
         }

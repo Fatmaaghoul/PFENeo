@@ -2,10 +2,12 @@
   <div class="text-tab">
     <div class="text-section">
       <h3>Texte extrait</h3>
-      <textarea readonly :value="document.text"></textarea>
-      <button @click="copyText" class="copy-btn">
-        <i class="bi bi-copy"></i> Copier le texte
-      </button>
+      <div class="textarea-container">
+        <textarea readonly :value="document.text"></textarea>
+        <button @click="copyText" class="copy-btn" title="Copier le texte">
+          <i :class="showTextCopied ? 'bi bi-check' : 'bi bi-clipboard'"></i>
+        </button>
+      </div>
       <div v-if="showTextCopied" class="notification">Texte copié !</div>
     </div>
 
@@ -32,10 +34,10 @@
           <p>Génération du résumé en cours...</p>
         </div>
         <template v-else>
-          <div v-if="document.resumer">
+          <div v-if="document.resumer" class="resume-text-container">
             <p class="resume-text">{{ document.resumer }}</p>
-            <button @click="copyResume" class="copy-resume-btn">
-              <i class="bi bi-copy"></i> Copier le résumé
+            <button @click="copyResume" class="copy-btn" title="Copier le résumé">
+              <i :class="showResumeCopied ? 'bi bi-check' : 'bi bi-clipboard'"></i>
             </button>
             <div v-if="showResumeCopied" class="notification">Résumé copié !</div>
           </div>
@@ -89,6 +91,14 @@ export default {
   padding: 20px;
 }
 
+.text-section {
+  position: relative;
+}
+
+.textarea-container {
+  position: relative;
+}
+
 .text-section textarea {
   width: 100%;
   min-height: 300px;
@@ -108,26 +118,36 @@ export default {
 }
 
 .copy-btn {
-  margin-top: 12px;
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  display: inline-flex;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #4F46E5;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  transition: all 0.2s ease;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 2;
 }
 
 .copy-btn:hover {
-  background: #f5f5f5;
-  border-color: #d0d0d0;
+  background-color: #4338CA;
+  transform: scale(1.1);
+}
+
+.copy-btn:active {
+  transform: scale(0.95);
 }
 
 .copy-btn i {
-  font-size: 14px;
+  transition: all 0.3s ease;
 }
 
 .resume-section {
@@ -142,7 +162,7 @@ export default {
 }
 
 .generate-btn {
-  background: #2196F3;
+  background: #4F46E5;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -152,16 +172,21 @@ export default {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .generate-btn:hover:not(:disabled) {
-  background: #0d8bf2;
+  background: #4338CA;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .generate-btn:disabled {
-  opacity: 0.7;
+  background: #9CA3AF;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .resume-content {
@@ -171,6 +196,11 @@ export default {
   border: 1px solid #e9ecef;
   min-height: 150px;
   position: relative;
+}
+
+.resume-text-container {
+  position: relative;
+  padding-right: 40px;
 }
 
 .no-resume {
@@ -191,9 +221,9 @@ export default {
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid rgba(33, 150, 243, 0.2);
+  border: 3px solid rgba(79, 70, 229, 0.2);
   border-radius: 50%;
-  border-top-color: #2196F3;
+  border-top-color: #4F46E5;
   animation: spin 1s ease-in-out infinite;
 }
 
@@ -211,39 +241,31 @@ export default {
   white-space: pre-wrap;
 }
 
-.copy-resume-btn {
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s ease;
-}
-
-.copy-resume-btn:hover {
-  background: #f5f5f5;
-  border-color: #d0d0d0;
-}
-
 .notification {
-  margin-top: 8px;
-  padding: 6px 12px;
-  background: #4CAF50;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #4F46E5;
   color: white;
-  border-radius: 4px;
-  font-size: 13px;
-  animation: fadeInOut 2s ease-in-out;
-  opacity: 0;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-out;
 }
 
-@keyframes fadeInOut {
-  0% { opacity: 0; }
-  20% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

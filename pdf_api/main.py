@@ -103,7 +103,7 @@ async def api_available_models():
     return {
         "models": [
             {"name": "LLaVA 7B", "value": "llava:7b", "type": "vision", "description": "Modèle visuel basé sur LLaVA"},
-            {"name": "Gemma3 4B", "value": "gemma3:4b", "type": "text", "description": "Modèle textuel basé sur Gemma"}
+            {"name": "Gemma3 4B", "value": "gemma3:4b", "type": "vision", "description": "Modèle visuel basé sur Gemma"}
         ],
         "default": DEFAULT_MODEL
     }
@@ -122,36 +122,24 @@ async def analyze(request: AnalysisRequest):
 @app.post("/describe")
 async def describe(request: DescribeRequest):
     try:
-        # Validation des entrées
+        # Validation
         if not request.image_url or not request.objects:
             raise HTTPException(
                 status_code=400,
                 detail="URL d'image et liste d'objets sont requis"
             )
 
-        print(f"\n[DEBUG] Requête reçue pour description:")
-        print(f"URL Image: {request.image_url}")
-        print(f"Objets à décrire: {', '.join(request.objects)}")
-        print(f"Modèle demandé: {request.model or 'défaut'}")
-
-        # Téléchargement de l'image
-        image_path = await download_image_from_url(request.image_url)
-        
-        # Appel à la fonction de description
+        # Appel du traitement
         description = await describe_objects(
-            image_path=image_path,
+            image_url=request.image_url,
             objects=request.objects,
-            model=request.model or get_current_model()
+            model=request.model
         )
-        
-        print("\n[DEBUG] Résultat de la description:")
-        print(description)
-        print("-" * 50)  # Séparateur visuel
 
         return {
-            "Description": description,
-            "Model_Used": request.model or get_current_model(),
-            "Status": "success"
+            "description": description,
+            "model_used": request.model or get_current_model(),
+            "status": "success"
         }
 
     except HTTPException:

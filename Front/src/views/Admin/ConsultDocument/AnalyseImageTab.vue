@@ -58,7 +58,7 @@
                       <tbody>
                         <tr v-for="obj in img.objects" :key="obj.id">
                           <td>
-                            <label class="checkbox-container">
+                            <label class="custom-checkbox">
                               <input
                                 type="checkbox"
                                 :value="obj.id"
@@ -769,6 +769,77 @@ onUnmounted(() => {
   border-radius: 8px;
   border: 1px dashed #e2e8f0;
 }
+/* Style personnalisé pour les checkbox */
+.custom-checkbox {
+  display: block;
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  height: 20px;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: white;
+  border: 2px solid #cbd5e1;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.custom-checkbox:hover input ~ .checkmark {
+  border-color: #94a3b8;
+  background-color: #f8fafc;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #4F46E5;
+  border-color: #4F46E5;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.custom-checkbox .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* Alignement vertical des cases à cocher */
+.modern-table td:first-child {
+  vertical-align: middle;
+  text-align: center;
+}
+
 
 .no-images {
   text-align: center;

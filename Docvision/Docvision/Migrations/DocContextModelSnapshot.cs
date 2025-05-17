@@ -100,6 +100,10 @@ namespace Docvision.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DocumentText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ModelUsed")
                         .HasColumnType("nvarchar(max)");
 
